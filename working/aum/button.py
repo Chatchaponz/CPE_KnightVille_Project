@@ -1,10 +1,26 @@
+'''
+button.py - Create an button object with button ability
+last updated: 07 oct 2021
+'''
 import pygame
 
 '''
-Button - Create button object.
-
+Button - Create a button object.
 '''
 class Button():
+    '''
+    __init__ - Constructor for create an object
+    + x, y - the coordinate position of button on screen.
+    + width, height - size of button.
+    + text - text for button.
+    + bgColor - background color(Color for button).
+    + textColor - color for text.
+    + image - image for button.
+    + overImage - image for button when mouse is over an object.
+    + outline - have outline for rectangle button(optional when there is no image for button) or not.
+    + bgColorOver - background color(Color for button) when mouse is over an object.
+    + textColorOver - color for text when mouse is over an object
+    '''
     def __init__(self, x, y, width, height):
         self.x, self.y = x, y
         self.width, self.height = width, height
@@ -12,16 +28,21 @@ class Button():
         self.bgColor = None
         self.textColor = (255, 255, 255)
         self.image = None
-        self.clicked = False
-        self.over = False
+        self.overImage = None
         self.outline = 0
         self.bgColorOver = None
         self.textColorOver = (255, 255, 255)
 
-
-
-
-    def addText(self, text, fontName, fontSize, textColor = (255, 255, 255), outline = 0, textColorOver = (255, 255, 255), bgColor = None, bgColorOver = None):
+    '''
+    addText - add text on button.
+    + fontPath - locate font(ttf file) for text.
+    + fontSize - text size.
+    + outline - have outline for rectangle button(optional when there is no image for button) or not.
+    + textColorOver - color for text when mouse is over an object
+    + bgColor - background color(Color for button).
+    + bgColorOver - background color(Color for button) when mouse is over an object.
+    '''
+    def addText(self, text, fontPath, fontSize, textColor = (255, 255, 255), outline = 0, textColorOver = (255, 255, 255), bgColor = None, bgColorOver = None):
         self.text = text
         if bgColor != None:
             self.bgColor = bgColor
@@ -37,12 +58,14 @@ class Button():
 
         if outline != 0:
             self.outline = outline
-        self.fontName = fontName
+        self.fontPath = fontPath
         self.fontSize = fontSize
 
-
-
-
+    '''
+    addImage - add image as a button.
+    + image - image for button.
+    + overImage - image for button when mouse is over an object.
+    '''
     def addImage(self, image, overImage = None):
         self.image = pygame.transform.scale(image, (self.width, self.height))
         if overImage != None:
@@ -50,8 +73,10 @@ class Button():
         else:
             self.overImage = pygame.transform.scale(image, (self.width, self.height))
 
-
-
+    '''
+    draw - draw object on screen.
+    + screen - screen object.
+    '''
     def draw(self, screen):
         mouseOver = self.isMouseOver()
         
@@ -67,15 +92,17 @@ class Button():
                 pygame.draw.rect(screen, self.bgColorOver, (self.x, self.y, self.width, self.height),self.outline)
 
         if self.text != None:
-            font = pygame.font.SysFont(self.fontName,self.fontSize)
+            font = pygame.font.Font(self.fontPath,self.fontSize)
             if mouseOver == False:
                 text = font.render(self.text, 1, self.textColor)
             elif self.textColorOver != None and mouseOver == True:
                 text = font.render(self.text, 1, self.textColorOver)
             screen.blit(text, (self.x + (self.width/2 - text.get_width()/2), self.y + (self.height/2 - text.get_height()/2)))
 
-    # isMouseOver - checked if mouse is over the button
-    # return state if mouseover
+    '''
+    isMouseOver - checked mouse position is over a button or not.
+    + mpos - current mouse position.
+    '''
     def isMouseOver(self):
         mpos = pygame.mouse.get_pos()
 
@@ -85,11 +112,11 @@ class Button():
         return False
 
     '''
-    isButtonClick - checked mouseclick state on button object
-    event - event
-    return True or False
-        if MouseOver then mouse is being click for True
-        if not for False
+    isButtonClick - checked mouseclick state on button object.
+    + event - event from client.
+    return True or False.
+        if MouseOver then mouse is being click for True.
+        if not for False.
     '''
     def isButtonClick(self,event):
         action = False
