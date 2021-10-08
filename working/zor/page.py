@@ -40,6 +40,7 @@ class Page():
 
         self.black = (0, 0, 0)
         self.white = (255, 255, 255)
+        self.blue = (10, 10, 200)
 
         self.currentState = self.mainMenu
 
@@ -48,7 +49,7 @@ class Page():
 
     def getCurrentState(self):
         if self.currentState == self.mainMenu:
-            return 'main menu'
+            return 'main Menu'
         elif self.currentState == self.option:
             return 'option'
         elif self.currentState == self.credits:
@@ -70,14 +71,6 @@ class Page():
             self.checkEvent()
             if self.enterKey:
                 self.loopRunning = False
-            # for event in pygame.event.get():
-            #    if event.type == pygame.KEYDOWN:
-            #        if self.previousState == self.mainMenu:
-            #            if self.currentState == self.option:
-            #                self.currentState.displayOption()
-            #        elif self.previousState == self.option:
-            #            if self.currentState == self.mainMenu:
-            #                self.currentState.displayMenu()
             self.display.fill(self.black)
             self.drawText('no state', 50, self.textPositionW, self.textPositionH)
             self.screne.blit(self.display, (0,0))
