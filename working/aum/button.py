@@ -3,6 +3,7 @@ button.py - Create an button object with button ability
 last updated: 07 oct 2021
 '''
 import pygame
+from pygame.constants import MOUSEBUTTONDOWN
 
 '''
 Button - Create a button object.
@@ -97,7 +98,7 @@ class Button():
                 text = font.render(self.text, 1, self.textColor)
             elif self.textColorOver != None and mouseOver == True:
                 text = font.render(self.text, 1, self.textColorOver)
-            screen.blit(text, (self.x + (self.width/2 - text.get_width()/2), self.y + (self.height/2 - text.get_height()/2)))
+            screen.blit(text, (self.x + (self.width/2 - text.get_width()/2), self.y + (self.height/2 - text.get_height()/3)))
 
     '''
     isMouseOver - checked mouse position is over a button or not.
@@ -113,15 +114,16 @@ class Button():
 
     '''
     isButtonClick - checked mouseclick state on button object.
-    + event - event from client.
+    + timeRes - time to wait for response in millisec
     return True or False.
         if MouseOver then mouse is being click for True.
         if not for False.
     '''
-    def isButtonClick(self,event):
+    def isButtonClick(self, timeRes):
         action = False
-
+        event = pygame.event.wait(timeRes)
         if self.isMouseOver():
             if event.type == pygame.MOUSEBUTTONUP:
-                action = True   
+                action = True
+
         return action
