@@ -1,4 +1,4 @@
-import pygame
+import pygame, sys
 
 
 class GameScreen():
@@ -23,21 +23,28 @@ class GameScreen():
     def biltScreen(self):
         self.screen.blit(self.display, (0, 0))
         pygame.display.update()
-        # self.state.resetKeys()
     
     def changePageByButton(self, button, page):
         buttonClick = button.isButtonClick(50) # wait 50 ms
         self.changePageByInput(buttonClick, page)
     
     def changePageByInput(self, input, state):
-        if input: 
+        if input:
+            self.state.saveState() 
             self.state.currentState = state
             self.displayRunning = False
-        # self.state.resetKeys()
-    
+
     def drawText(self, text, size, x, y):
         font = pygame.font.Font(self.font, size)
         textSurface = font.render(text, True, self.white)
         textRect = textSurface.get_rect()
         textRect.center = (x, y)
         self.display.blit(textSurface, textRect)
+
+    def checkEvent(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.Running = False
+                self.state.currentState.displayRunning = False
+                pygame.quit()
+                sys.exit()

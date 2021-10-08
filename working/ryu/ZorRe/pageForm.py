@@ -16,7 +16,7 @@ class PageName(GameScreen):
         
         while self.displayRunning:
 
-            self.state.checkEvent()
+            self.checkEvent()
 
             # page blackground
             self.display.fill((0, 0, 0))

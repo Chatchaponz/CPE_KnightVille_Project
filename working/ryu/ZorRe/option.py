@@ -17,7 +17,7 @@ class OptionMenu(GameScreen):
 
         while self.displayRunning:
 
-            self.state.checkEvent()
+            self.checkEvent()
             self.display.fill((0, 0, 0))
 
             self.buttonMenu.draw(self.display)
