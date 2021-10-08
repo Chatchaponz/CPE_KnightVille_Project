@@ -21,6 +21,7 @@ class Button():
     + outline - have outline for rectangle button(optional when there is no image for button) or not.
     + bgColorOver - background color(Color for button) when mouse is over an object.
     + textColorOver - color for text when mouse is over an object
+    + rect - area of an object.
     '''
     def __init__(self, x, y, width, height):
         self.x, self.y = x, y
@@ -33,6 +34,7 @@ class Button():
         self.outline = 0
         self.bgColorOver = None
         self.textColorOver = (255, 255, 255)
+        self.rect =  pygame.Rect(x, y, width, height)
 
     '''
     addText - add text on button.
@@ -107,9 +109,9 @@ class Button():
     def isMouseOver(self):
         mpos = pygame.mouse.get_pos()
 
-        if mpos[0] > self.x and mpos[0] < self.x + self.width:
-            if mpos[1] > self.y and mpos[1] < self.y + self.height:
-                return True
+        if self.rect.collidepoint(mpos):
+            return True
+
         return False
 
     '''
