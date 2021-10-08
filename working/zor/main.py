@@ -5,8 +5,8 @@ pro = Page()
 
 while pro.programRunning:
     pro.currentState.display()
-    pro.loop()
-    pro.checkEvent()
+    #pro.loop()
+    #pro.checkEvent()
 
 pygame.quit()
 
