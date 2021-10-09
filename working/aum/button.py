@@ -3,7 +3,6 @@ button.py - Create an button object with button ability
 last updated: 07 oct 2021
 '''
 import pygame
-from pygame.constants import MOUSEBUTTONDOWN
 
 '''
 Button - Create a button object.
