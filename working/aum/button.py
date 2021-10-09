@@ -1,6 +1,6 @@
 '''
 button.py - Create an button object with button ability
-last updated: 07 oct 2021
+last updated: 09 oct 2021
 '''
 import pygame
 
@@ -21,6 +21,7 @@ class Button():
     + bgColorOver - background color(Color for button) when mouse is over an object.
     + textColorOver - color for text when mouse is over an object
     + rect - area of an object.
+    + clicked - Mouse being clicked.
     '''
     def __init__(self, x, y, width, height):
         self.x, self.y = x, y
@@ -34,6 +35,7 @@ class Button():
         self.bgColorOver = None
         self.textColorOver = (255, 255, 255)
         self.rect =  pygame.Rect(x, y, width, height)
+        self.clicked = False
 
     '''
     addText - add text on button.
@@ -96,9 +98,9 @@ class Button():
         if self.text != None:
             font = pygame.font.Font(self.fontPath,self.fontSize)
             if mouseOver == False:
-                text = font.render(self.text, 1, self.textColor)
+                text = font.render(self.text, True, self.textColor)
             elif self.textColorOver != None and mouseOver == True:
-                text = font.render(self.text, 1, self.textColorOver)
+                text = font.render(self.text, True, self.textColorOver)
             screen.blit(text, (self.x + (self.width/2 - text.get_width()/2), self.y + (self.height/2 - text.get_height()/3)))
 
     '''
@@ -115,16 +117,19 @@ class Button():
 
     '''
     isButtonClick - checked mouseclick state on button object.
-    + timeRes - time to wait for response in millisec
+    + action - Button being clicked.
+    + clicked - Mouse being clicked.
     return True or False.
         if MouseOver then mouse is being click for True.
         if not for False.
     '''
-    def isButtonClick(self, timeRes):
+    def isButtonClick(self):
         action = False
-        event = pygame.event.wait(timeRes)
         if self.isMouseOver():
-            if event.type == pygame.MOUSEBUTTONUP:
+            if pygame.mouse.get_pressed()[0] == True:
+                self.clicked = True
+            elif pygame.mouse.get_pressed()[0] == False and self.clicked == True:
+                self.clicked = False
                 action = True
 
         return action
