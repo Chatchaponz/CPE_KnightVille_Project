@@ -61,7 +61,6 @@ class Join(GameScreen):
                             tempPlayer.setRole(thisInfo[1][4])
                             playersData.append(tempPlayer)
                         if len(playersData) > 0:
-                            print(playersData)
                             playersData[count].updatePosition(thisInfo[1][0], thisInfo[1][1])
                             playersData[count].draw(self.display)
                     
