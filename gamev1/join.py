@@ -33,6 +33,7 @@ class Join(GameScreen):
         
         clock = pygame.time.Clock()
         while self.displayRunning:
+            playersData = []
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -40,10 +41,12 @@ class Join(GameScreen):
                     sys.exit()
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_z:
-                        player.revealRole([player])
+                        if playersData != []:
+                            player.revealRole(playersData)
                 if event.type == pygame.KEYUP:
                     if event.key == pygame.K_z:
-                        player.unrevealRole([player])
+                        if playersData != []:
+                            player.unrevealRole(playersData)
                 player.playerMovement(event)
 
             # page blackground
@@ -51,10 +54,11 @@ class Join(GameScreen):
             self.display.blit(blackground,(0,0))
 
             # Things in page vvv
-            playersData = []
             if bConnect:
                 othersPlayerInfo =  GameScreen.b.send([player.x,player.y,player.skin, player.name, player.getRole()])
                 if othersPlayerInfo != None:
+                    if len(playersData) > len(othersPlayerInfo):
+                        playersData.pop(len(playersData) - 1)
                     for count, thisInfo in enumerate(othersPlayerInfo):
                         if count >= len(playersData) and thisInfo[1] != '':
                             tempPlayer = Player(thisInfo[1][0], thisInfo[1][1],thisInfo[1][2],thisInfo[1][3])
