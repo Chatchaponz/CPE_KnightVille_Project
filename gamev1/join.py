@@ -18,7 +18,7 @@ class Join(GameScreen):
     
     def displayScreen(self):
         if self.state.previousState != self.state.host:
-            GameScreen.b = Client('192.168.1.5')
+            GameScreen.b = Client('25.66.152.97')
             GameScreen.b.connect()
             GameScreen.b.join()
 
@@ -66,7 +66,7 @@ class Join(GameScreen):
                             playersData[count].draw(self.display)
                     
             player.draw(self.display)
-            
+
             player.update()
 
             self.buttonBack.draw(self.display)
