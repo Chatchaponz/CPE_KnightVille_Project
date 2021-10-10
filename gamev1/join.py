@@ -32,8 +32,8 @@ class Join(GameScreen):
         blackground = pygame.transform.scale(blackground, (1280,720))
         
         clock = pygame.time.Clock()
+        playersData = []
         while self.displayRunning:
-            playersData = []
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
