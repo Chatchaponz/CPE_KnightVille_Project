@@ -21,7 +21,7 @@ class Host(GameScreen):
     
     def displayScreen(self):
         #Set up
-        GameScreen.b = Client('192.168.1.5')
+        GameScreen.b = Client('25.66.152.97')
         GameScreen.b.connect()
 
         self.displayRunning = True
