@@ -106,8 +106,7 @@ class Player:
             player.setUnknownReveal(False)
 
     def updatePosition(self, x, y):
-        self.x = int(x)
-        self.y = int(y)
+        self.playerRect = self.playerSkin.get_rect(bottomleft = (int(x), int(y)))
     
     # 'event' should be event in pygame.event.get()
     def playerMovement(self, event):
