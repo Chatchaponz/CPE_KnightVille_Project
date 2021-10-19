@@ -109,15 +109,6 @@ class Game(GameManager):
                 evilIndex += 1
         random.shuffle(randomRoles)
         return randomRoles
-
-    def isOthersSetRole(self):
-        isSync = True
-        # phase 0 -> 1
-        for player in self.playersData:
-            if player.syncSignal < 1:
-                isSync = False
-                break
-        return isSync
     
     def waitForOthers(self, phase):
         isSync = True
@@ -202,7 +193,7 @@ class Game(GameManager):
     def isChoiceReady(self, phase):
         ready = True
         for player in self.playersData:
-            if player.choose in [ 1, 2] and player.syncSignal != phase:
+            if( player.choose in [ 1, 2] and player.syncSignal != phase ):
                 print(player.address, player.choose)
                 ready = False
         return ready
@@ -424,7 +415,6 @@ class Game(GameManager):
         
         return checkPass
 
-        
     
     # Phase 0 : random role
 
@@ -484,7 +474,7 @@ class Game(GameManager):
                         self.currentLeader,
                         [self.targetPlayer, self.isKilled]]
             if (self.player.host == True and 
-                self.isOthersSetRole() == False):
+                self.waitForOthers(1) == False):
                 sendData += [randomRoles]
             
             # page blackground
@@ -494,7 +484,7 @@ class Game(GameManager):
             self.phaseEvent()
 
             #[TEST PRINT]
-            # print(self.currentLeader,self.gamePhase, self.player.choose, self.missionSuccess, self.goodScore, self.evilScore, self.partyMember)
+            print(self.currentLeader,self.gamePhase, self.player.choose, self.missionSuccess, self.goodScore, self.evilScore, self.partyMember)
             # print(self.currentLeader, self.gamePhase, self.player.syncSignal, self.player.choose,self.roundCount, self.round, self.goodScore, self.evilScore)
             # if self.player.host == True:
             #     print(sendData)

@@ -27,7 +27,8 @@ class Lobby(GameManager):
 
         self.displayRunning = True
         
-        self.playersData.append(self.player)
+        if(self.player not in self.playersData):
+            self.playersData.append(self.player)
 
         while self.displayRunning:
 
@@ -62,6 +63,7 @@ class Lobby(GameManager):
                     if self.network.connectStatus == True:
                         currentPlayer = len(self.playersData)
                         maxPlayer = self.matchSetting[0] 
+                        print(currentPlayer, maxPlayer)
                         if currentPlayer == maxPlayer:
                             self.network.startGame()
                             self.changePageByInput(True, self.control.game)
