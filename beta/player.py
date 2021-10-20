@@ -45,6 +45,8 @@ class Player:
 
         self.host = False
 
+        self.isPlaying = False
+
         self.choose = 0
 
         self.syncSignal = 0

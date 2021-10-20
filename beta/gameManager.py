@@ -42,10 +42,20 @@ class GameManager(GameScreen):
             self.partyMember = []
     
     def drawPlayers(self):
+        canUpdate = False
         self.playersData.sort(key = lambda player: player.y, reverse = False)
+        
         for player in self.playersData:
-            player.draw(self.display)
-        self.player.update()
+            
+            if ((self.control.currentState == self.control.lobby and
+                 player.isPlaying == False) or
+                (self.control.currentState == self.control.game and
+                 player.isPlaying == True)):
+                player.draw(self.display)
+                if player == self.player:
+                    canUpdate = True
+        if canUpdate:
+            self.player.update()
     
     def checkExistPlayer(self, currentPlayerInMatch):
         # check player in match (if they are leave// remove their data)
@@ -73,12 +83,12 @@ class GameManager(GameScreen):
             othersPlayerId.append(thisPlayerId)
             if isHost == 1:
                 foundHost = True
-                if gameStart and len(thisPlayer) > 11 and self.gamePhase == 0:
-                    self.setAllPlayersRole(thisPlayer[11])
-                if gameStart and len(thisPlayer) > 9:
-                    if self.currentLeader != thisPlayer[9]:
-                        self.currentLeader = thisPlayer[9]
-                        self.setPartyLeader(thisPlayer[9])
+                if gameStart and len(thisPlayer) > 12 and self.gamePhase == 0:
+                    self.setAllPlayersRole(thisPlayer[12])
+                if gameStart and len(thisPlayer) > 10:
+                    if self.currentLeader != thisPlayer[10]:
+                        self.currentLeader = thisPlayer[10]
+                        self.setPartyLeader(thisPlayer[10])
                 
             if thisAddr not in self.othersPlayerInMatch and thisPlayer != "":
                 tempPlayer = Player(thisPlayer[0], thisPlayer[1], thisPlayer[2], thisPlayer[3])
@@ -91,17 +101,19 @@ class GameManager(GameScreen):
                     if player != self.player and player.address == thisAddr:
                         player.updateByPosition(thisPlayer[0], thisPlayer[1])
                         player.id = thisPlayerId
-                        if gameStart and len(thisPlayer) > 9:
-                            player.choose = thisPlayer[4]
-                            player.syncSignal = thisPlayer[5]
-                            player.isSelected = thisPlayer[6]
-                            player.partyLeader = thisPlayer[7]
+                        player.isPlaying = thisPlayer[4]
+                        if gameStart and len(thisPlayer) > 11:
+                            player.choose = thisPlayer[5]
+                            player.syncSignal = thisPlayer[6]
+                            player.isSelected = thisPlayer[7]
+                            player.partyLeader = thisPlayer[8]
                             if player.partyLeader == True and player.syncSignal == self.gamePhase:
-                                self.partyMember = thisPlayer[8]
-                            othersLeader.append(thisPlayer[9])
-                            if player.getRole().getName() == "Assassin":
-                                self.targetPlayer = thisPlayer[10][0]
-                                self.isKilled = thisPlayer[10][1]
+                                self.partyMember = thisPlayer[9]
+                            othersLeader.append(thisPlayer[10])
+                            if player.getRole() != None:
+                                if player.getRole().getName() == "Assassin":
+                                    self.targetPlayer = thisPlayer[11][0]
+                                    self.isKilled = thisPlayer[11][1]
                         break
             else:
                 if thisPlayer != "":
@@ -123,11 +135,12 @@ class GameManager(GameScreen):
         if data != None:
             currentPlayerInMatch = data[0]
             othersPlayerData = data[1]
-            if self.matchSetting == []:
-                self.matchSetting += data[2]
-            else:
-                self.matchSetting.clear()
-                self.matchSetting += data[2] 
+            if data[2] != None:
+                if self.matchSetting == []:
+                    self.matchSetting += data[2]
+                else:
+                    self.matchSetting.clear()
+                    self.matchSetting += data[2] 
 
         if othersPlayerData != None and currentPlayerInMatch != None:
             

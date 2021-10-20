@@ -20,6 +20,7 @@ class CreatePlayer(GameScreen):
 
         
         self.player.setAttribute(50, 700, 0, "Test player")
+        self.player.isPlaying = False
 
         
         while self.displayRunning:

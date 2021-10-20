@@ -46,17 +46,16 @@ class Game(GameManager):
                 if event.key == pygame.K_z:
                     self.player.revealRole(self.playersData)
 
-                if event.key == pygame.K_RETURN and self.gameEnded:
+                if event.key == pygame.K_RETURN and self.gameEnded and self.matchSetting[2] == False:
                     if self.network.connectStatus == True:
                         self.resetAll()
-                        self.network.stopThisGame()
                     self.changePageByInput(True, self.control.lobby)
 
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_z:
                     self.player.unrevealRole(self.playersData)
-
-            self.player.playerMovement(event)
+            if self.matchSetting[2] == True:
+                self.player.playerMovement(event)
     
     def resetAll(self):
         self.gamePhase = 0
@@ -74,7 +73,9 @@ class Game(GameManager):
         self.missionSuccess = None
         self.gameEnded = False
         self.nameList = []
-        for player in self.playersData:
+        self.player.isPlaying = False 
+        self.player.updateByPosition(50, 700)
+        for player in self.playersData:   
             player.setRole(None)
             player.choose = 0
             player.syncSignal = 0
@@ -127,9 +128,9 @@ class Game(GameManager):
             self.currentLeader = 0
         self.setPartyLeader(self.currentLeader)
 
-    def resetPlayersActivity(self, missionStatus):
+    def resetPlayersActivity(self, status):
         for player in self.playersData:
-            if missionStatus == False:
+            if status == False:
                 self.partyMember = []
                 if player.isSelected == True:
                     player.isSelected = False
@@ -156,6 +157,7 @@ class Game(GameManager):
 
     def revealAllPlayerRole(self):
         player_x = 10
+        self.playersData.sort(key = lambda player: player.id, reverse = False)
         for player in self.playersData:
             player.updateByPosition(player_x, 700)
             player.setRoleReveal(True)
@@ -190,13 +192,20 @@ class Game(GameManager):
                 player.setRoleReveal(True)
                 break
     
-    def isChoiceReady(self, phase):
+    def isChoiceReady(self, phase, choice = []):
         ready = True
         for player in self.playersData:
-            if( player.choose in [ 1, 2] and player.syncSignal != phase ):
+            if( player.choose in choice and player.syncSignal != phase ):
                 print(player.address, player.choose)
                 ready = False
         return ready
+
+    # choose = 0 : no Vote
+    # choose = 1 : accept
+    # choose = 2 : reject
+    # choose = 3 : summit
+    # choose = 4 : success
+    # choose = 5 : fail
     
     def phaseEvent(self):
         playerNumber = self.matchSetting[0]
@@ -224,7 +233,7 @@ class Game(GameManager):
             else:
                 self.updateSelectedPlayer(self.partyMember)
         
-        if self.gamePhase == 4 and self.isChoiceReady(4):
+        if self.gamePhase == 4 and self.isChoiceReady(4, [1, 2]):
             if self.player.choose not in [1, 2]:
                 self.accept.draw(self.display)
                 self.reject.draw(self.display)
@@ -245,16 +254,16 @@ class Game(GameManager):
                     self.doMission = True
                     self.resetPlayersActivity(self.doMission)
         
-        if self.gamePhase == 6 and self.isChoiceReady(6):
+        if self.gamePhase == 6 and self.isChoiceReady(6, [4, 5]):
             if self.player.id in self.partyMember:
-                if self.player.choose not in [1, 2]:
+                if self.player.choose not in [4, 5]:
                     self.success.draw(self.display)
                     if self.success.isButtonClick():
-                        self.player.choose = 1
+                        self.player.choose = 4
                     if self.player.getRole().getIdentity() == "Evil":
                         self.fail.draw(self.display)
                         if self.fail.isButtonClick():
-                            self.player.choose = 2
+                            self.player.choose = 5
             else:
                 self.resetPlayersActivity(True)
 
@@ -263,7 +272,7 @@ class Game(GameManager):
                 failCount = 0
                 for player in self.playersData:
                     if (player.id in self.partyMember and
-                        player.choose == 2):
+                        player.choose == 5):
                         failCount += 1
                 if failCount > 0:
                     if playerNumber > 6 and self.roundCount == 4:
@@ -286,6 +295,9 @@ class Game(GameManager):
                 self.drawText('Evil Win!!!', 50 , 500, 300)
                 self.drawText('Enter to exit', 30 , 500, 700)
                 self.revealAllPlayerRole()
+
+                if self.player.host == True and self.matchSetting[2] == True:
+                    self.network.stopThisGame()
             
             if self.goodScore == 3:
                 killedPlayer = None
@@ -307,7 +319,7 @@ class Game(GameManager):
                     self.revealAssassin()
                     self.updateTargetPlayer(self.targetPlayer)
                     killedPlayer = self.killPlayer(self.isKilled)
-
+                    
                 if killedPlayer != None:
                     self.gameEnded = True
                     if killedPlayer.getRole().getName() == "Merlin":
@@ -316,6 +328,9 @@ class Game(GameManager):
                         self.drawText('Good Win!!!', 50 , 500, 300)
                     self.drawText('Enter to exit', 30 , 500, 700)
                     self.revealAllPlayerRole()
+                    
+                    if self.player.host == True and self.matchSetting[2] == True:
+                        self.network.stopThisGame()
     
     def checkCondition(self):
         checkPass = False
@@ -385,7 +400,7 @@ class Game(GameManager):
             voteCount = 0
             for player in self.playersData:
                 if( player.id in self.partyMember and
-                    player.choose in [1, 2] and 
+                    player.choose in [4, 5] and 
                     player.syncSignal >= 6):
                     voteCount += 1
 
@@ -439,6 +454,7 @@ class Game(GameManager):
         self.displayRunning = True
         # inintial
         self.player.updateByPosition(50, 700)
+        self.player.isPlaying = True
 
         if self.player.host == True:
             randomRoles = self.randomRoles()
@@ -466,6 +482,7 @@ class Game(GameManager):
                         self.player.y,
                         self.player.skin,
                         self.player.name,
+                        self.player.isPlaying,
                         self.player.choose,
                         self.player.syncSignal,
                         self.player.isSelected,

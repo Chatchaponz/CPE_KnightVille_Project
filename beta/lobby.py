@@ -37,7 +37,8 @@ class Lobby(GameManager):
             sendData = [self.player.x,
                         self.player.y,
                         self.player.skin,
-                        self.player.name]
+                        self.player.name,
+                        self.player.isPlaying]
 
             # page blackground
             self.display.fill((0, 0, 0))
@@ -63,7 +64,9 @@ class Lobby(GameManager):
                     if self.network.connectStatus == True:
                         currentPlayer = len(self.playersData)
                         maxPlayer = self.matchSetting[0] 
+
                         print(currentPlayer, maxPlayer)
+                        
                         if currentPlayer == maxPlayer:
                             self.network.startGame()
                             self.changePageByInput(True, self.control.game)
