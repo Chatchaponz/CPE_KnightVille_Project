@@ -27,6 +27,7 @@ class GameManager(GameScreen):
         self.doMission = None
         self.missionSuccess = None
         self.gameEnded = False
+        self.othersGameStatus = []
     
     def setAllPlayersRole(self, randomRoles):
         for player in self.playersData:
@@ -72,6 +73,7 @@ class GameManager(GameScreen):
         foundHost = False
         othersPlayerId = []
         othersLeader = []
+        othersStatus = []
         gameStart = self.matchSetting[2]
 
         for thisData in othersPlayerData:
@@ -83,8 +85,8 @@ class GameManager(GameScreen):
             othersPlayerId.append(thisPlayerId)
             if isHost == 1:
                 foundHost = True
-                if gameStart and len(thisPlayer) > 12 and self.gamePhase == 0:
-                    self.setAllPlayersRole(thisPlayer[12])
+                if gameStart and len(thisPlayer) > 13 and self.gamePhase == 0:
+                    self.setAllPlayersRole(thisPlayer[13])
                 if gameStart and len(thisPlayer) > 10:
                     if self.currentLeader != thisPlayer[10]:
                         self.currentLeader = thisPlayer[10]
@@ -102,7 +104,7 @@ class GameManager(GameScreen):
                         player.updateByPosition(thisPlayer[0], thisPlayer[1])
                         player.id = thisPlayerId
                         player.isPlaying = thisPlayer[4]
-                        if gameStart and len(thisPlayer) > 11:
+                        if gameStart and len(thisPlayer) > 12:
                             player.choose = thisPlayer[5]
                             player.syncSignal = thisPlayer[6]
                             player.isSelected = thisPlayer[7]
@@ -114,11 +116,13 @@ class GameManager(GameScreen):
                                 if player.getRole().getName() == "Assassin":
                                     self.targetPlayer = thisPlayer[11][0]
                                     self.isKilled = thisPlayer[11][1]
+                            othersStatus.append(thisPlayer[12])
                         break
             else:
                 if thisPlayer != "":
                     print("[GAME] Something wrong with update player data")
         self.othersCurrentLeader = othersLeader
+        self.othersGameStatus = othersStatus
 
         # set my host
         if foundHost == False:

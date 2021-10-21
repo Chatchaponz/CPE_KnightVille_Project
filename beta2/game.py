@@ -72,6 +72,7 @@ class Game(GameManager):
         self.missionSuccess = None
         self.gameEnded = False
         self.nameList = []
+        self.othersGameStatus = []
         self.player.isPlaying = False 
         self.player.updateByPosition(50, 700)
         for player in self.playersData:   
@@ -127,13 +128,14 @@ class Game(GameManager):
             self.currentLeader = 0
         self.setPartyLeader(self.currentLeader)
 
-    def resetPlayersActivity(self, status):
-        for player in self.playersData:
-            if status == False:
-                self.partyMember = []
-                if player.isSelected == True:
-                    player.isSelected = False
-            player.choose = 0
+    # def resetPlayersActivity(self, status):
+    #     for player in self.playersData:
+    #         if status == False:
+    #             self.partyMember = []
+    #             if player.isSelected == True:
+    #                 player.isSelected = False
+    #         player.choose = 0
+    
 
     # vvv May change later
     def makeNameList(self):
@@ -191,20 +193,37 @@ class Game(GameManager):
                 player.setRoleReveal(True)
                 break
     
-    def isChoiceReady(self, phase, choice = []):
+    # def isChoiceReady(self, phase, choice = []):
+    #     ready = True
+    #     for player in self.playersData:
+    #         if( player.choose in choice and player.syncSignal != phase ):
+    #             print(player.address, player.choose)
+    #             ready = False
+    #     return ready
+    
+    def isChoiceReady(self):
         ready = True
         for player in self.playersData:
-            if( player.choose in choice and player.syncSignal != phase ):
-                print(player.address, player.choose)
+            if player.choose != 0:
                 ready = False
+                break
         return ready
-    
+
     def isSignalSync(self):
         sync = True
         for player in self.playersData:
             if player.syncSignal != self.gamePhase:
                 sync = False
+                break
         return sync
+    
+    def isOthersGameEnded(self):
+        status = True
+        for gameStatus in self.othersGameStatus:
+            if gameStatus == False:
+                status = False
+                break
+        return status
 
     # choose = 0 : no Vote
     # choose = 1 : accept
@@ -216,7 +235,17 @@ class Game(GameManager):
     def phaseEvent(self):
         playerNumber = self.matchSetting[0]
 
+        if self.gamePhase == 2 and self.isSignalSync():
+            if self.partyMember != []:
+                self.partyMember = []
+            if self.player.isSelected == True:
+                self.player.isSelected = False
+
         if self.gamePhase == 3 and self.isSignalSync():
+            if self.player.choose != 0:
+                self.player.choose = 0
+
+        if self.gamePhase == 4 and self.isSignalSync():
             if self.player.partyLeader == True:
                 memberLimit = self.assignment[playerNumber][self.roundCount]
                 if self.nameList == []:
@@ -239,7 +268,11 @@ class Game(GameManager):
             else:
                 self.updateSelectedPlayer(self.partyMember)
         
-        if self.gamePhase == 4 and self.isSignalSync():
+        if self.gamePhase == 5 and self.isSignalSync():
+            if self.player.choose != 0:
+                self.player.choose = 0
+        
+        if self.gamePhase == 6 and self.isSignalSync():
             if self.player.choose not in [1, 2]:
                 self.accept.draw(self.display)
                 self.reject.draw(self.display)
@@ -248,19 +281,21 @@ class Game(GameManager):
                 if self.reject.isButtonClick():
                     self.player.choose = 2
         
-        if self.gamePhase == 5 and self.isSignalSync():
+        if self.gamePhase == 7 and self.isSignalSync():
             if self.doMission == None:
                 passScore = playerNumber * 0.5
                 rejectVote = self.countScore()
                 if rejectVote >= passScore:
                     self.doMission = False
-                    self.resetPlayersActivity(self.doMission)
                     self.changeLeader()
                 else:
                     self.doMission = True
-                    self.resetPlayersActivity(self.doMission)
         
-        if self.gamePhase == 6 and self.isSignalSync():
+        if self.gamePhase == 8 and self.isSignalSync():
+            if self.player.choose != 0:
+                self.player.choose = 0
+        
+        if self.gamePhase == 9 and self.isSignalSync():
             if self.player.id in self.partyMember:
                 if self.player.choose not in [4, 5]:
                     self.success.draw(self.display)
@@ -270,10 +305,8 @@ class Game(GameManager):
                         self.fail.draw(self.display)
                         if self.fail.isButtonClick():
                             self.player.choose = 5
-            else:
-                self.resetPlayersActivity(True)
 
-        if self.gamePhase == 7 and self.isSignalSync():
+        if self.gamePhase == 10 and self.isSignalSync():
             if self.missionSuccess == None:
                 failCount = 0
                 for player in self.playersData:
@@ -291,19 +324,29 @@ class Game(GameManager):
                 elif failCount == 0:
                     self.missionSuccess = True
 
-                self.resetPlayersActivity(False)
                 self.changeLeader()
         
-        if self.gamePhase == 8 and self.isSignalSync():
+        if self.gamePhase == 11 and self.isSignalSync():
+            if self.player.choose != 0:
+                self.player.choose
+        
+        if self.gamePhase == 12 and self.isSignalSync():
 
+            if self.player.partyLeader == True:
+                self.player.partyLeader = False
+            if self.player.isSelected == True:
+                self.player.isSelected = False
+                
             if self.evilScore == 3:
                 self.gameEnded = True
                 self.drawText('Evil Win!!!', 50 , 500, 300)
                 self.drawText('Enter to exit', 30 , 500, 700)
                 self.revealAllPlayerRole()
 
-                if self.player.host == True and self.matchSetting[2] == True:
-                    self.network.stopThisGame()
+                if (self.player.host == True and 
+                        self.matchSetting[2] == True and
+                        self.isOthersGameEnded()):
+                        self.network.stopThisGame()
             
             if self.goodScore == 3:
                 killedPlayer = None
@@ -327,7 +370,6 @@ class Game(GameManager):
                     killedPlayer = self.killPlayer(self.isKilled)
                     
                 if killedPlayer != None:
-                    print("aaa")
                     self.gameEnded = True
                     if killedPlayer.getRole().getName() == "Merlin":
                         self.drawText('Evil Win!!!', 50 , 500, 300)
@@ -336,7 +378,9 @@ class Game(GameManager):
                     self.drawText('Enter to exit', 30 , 500, 700)
                     self.revealAllPlayerRole()
                     
-                    if self.player.host == True and self.matchSetting[2] == True:
+                    if (self.player.host == True and 
+                        self.matchSetting[2] == True and
+                        self.isOthersGameEnded()):
                         self.network.stopThisGame()
     
     def checkCondition(self):
@@ -352,27 +396,35 @@ class Game(GameManager):
             self.doMission = None
             if self.roundCount <= 5:
                 if self.goodScore == 3 or self.evilScore == 3:
-                    self.gamePhase = 8
-                    self.player.syncSignal = 8
+                    self.gamePhase = 12
+                    self.player.syncSignal = 12
             checkPass = True
         
         # =============== PHASE 2 =============== #
         if self.gamePhase == 2:
             # is current leader are he same with others
             if (self.othersCurrentLeader.count(self.currentLeader)
-                == len(self.othersCurrentLeader)):
+                == len(self.othersCurrentLeader) and self.partyMember == []):
                 checkPass = True
-
         # =============== PHASE 3 =============== #
         if self.gamePhase == 3:
+            if self.isChoiceReady():
+                checkPass = True
+
+        # =============== PHASE 4 =============== #
+        if self.gamePhase == 4:
             for player in self.playersData:
                 if (player.partyLeader == True and
                     player.choose == 3):
                     checkPass = True
                     break
+        # =============== PHASE 5 =============== #
+        if self.gamePhase == 5:
+            if self.isChoiceReady():
+                checkPass = True
 
-        # =============== PHASE 4 =============== #
-        if self.gamePhase == 4:
+        # =============== PHASE 6 =============== #
+        if self.gamePhase == 6:
             isVote = 1
             for player in self.playersData:
                 if player.choose not in [1, 2]:
@@ -383,8 +435,8 @@ class Game(GameManager):
             else:
                 checkPass = False
         
-        # =============== PHASE 5 =============== #
-        if self.gamePhase == 5:
+        # =============== PHASE 7 =============== #
+        if self.gamePhase == 7:
             if self.doMission == True:
                 self.doMission = None
                 if self.voteRejected != 0:
@@ -401,9 +453,13 @@ class Game(GameManager):
                 self.player.syncSignal = 1
             else:
                 checkPass = False
+        # =============== PHASE 8 =============== #
+        if self.gamePhase == 8:
+            if self.isChoiceReady():
+                checkPass = True
         
-        # =============== PHASE 6 =============== #
-        if self.gamePhase == 6:
+        # =============== PHASE 9 =============== #
+        if self.gamePhase == 9:
             voteCount = 0
             for player in self.playersData:
                 if( player.id in self.partyMember and
@@ -416,8 +472,8 @@ class Game(GameManager):
             else:
                 checkPass = False
         
-        # =============== PHASE 7 =============== #
-        if self.gamePhase == 7 :
+        # =============== PHASE 10 =============== #
+        if self.gamePhase == 10 :
             if self.missionSuccess != None:
                 if self.missionSuccess:
                     self.goodScore += 1
@@ -430,9 +486,13 @@ class Game(GameManager):
                 self.player.syncSignal = 1
             else:
                 checkPass = False
+        # =============== PHASE 11 =============== #
+        if self.gamePhase == 11:
+            if self.isChoiceReady():
+                checkPass = True
         
-        # =============== PHASE 8 =============== #
-        if self.gamePhase == 8:
+        # =============== PHASE 12 =============== #
+        if self.gamePhase == 12:
             checkPass = False
         
         return checkPass
@@ -442,19 +502,27 @@ class Game(GameManager):
 
     # Phase 1 : check score if their is a winner go to phase 8
 
-    # Phase 2 : get party leader
+    # Phase 2 : get party leader and reset party member
+    
+    # Phase 3 : phase buffer
+    
+    # Phase 4 : party leader select party member and summit
+    
+    # Phase 5 : phase buffer
+    
+    # Phase 6 : each player vote accept or reject
 
-    # Phase 3 : party leader select party member and summit
-
-    # Phase 4 : each player vote accept or reject
-
-    # Phase 5 : calculate vote and decide to go next phase or back to phase 1
-
-    # Phase 6 : party member vote
-
-    # Phase 7 : calculate score and go to phase 1 again
-
-    # Phase 8 : conclusion
+    # Phase 7 : calculate vote and decide to go next phase or back to phase 1
+    
+    # Phase 8 : phase buffer
+    
+    # Phase 9 : party member vote
+    
+    # Phase 10 : calculate score and go to phase 1 again
+    
+    # Phase 11 : phase buffer
+    
+    # Phase 12 : conclusion
     
     def displayScreen(self):
 
@@ -496,7 +564,8 @@ class Game(GameManager):
                         self.player.partyLeader,
                         self.partyMember,
                         self.currentLeader,
-                        [self.targetPlayer, self.isKilled]]
+                        [self.targetPlayer, self.isKilled],
+                        self.gameEnded]
             if (self.player.host == True and 
                 self.waitForOthers(1) == False):
                 sendData += [randomRoles]

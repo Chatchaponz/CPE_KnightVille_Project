@@ -33,14 +33,14 @@ class MainMenu(GameScreen):
             # NEED POPUP HERE
             self.buttonHost.draw(self.display)
             if self.buttonHost.isButtonClick():
-                if self.network.tryConnectServer("192.168.1.5", 5555):
+                if self.network.tryConnectServer("25.66.152.97", 5555):
                     self.changePageByInput(True, self.control.host)
                 else:
                     print("[GAME] Unable to connect server")
             
             self.buttonJoin.draw(self.display)
             if self.buttonJoin.isButtonClick():
-                if self.network.tryConnectServer("192.168.1.5", 5555):
+                if self.network.tryConnectServer("25.66.152.97", 5555):
                     self.changePageByInput(True, self.control.createPlayer)
                 else:
                     print("[GAME] Unable to connect server")
