@@ -328,7 +328,7 @@ class Game(GameManager):
         
         if self.gamePhase == 11 and self.isSignalSync():
             if self.player.choose != 0:
-                self.player.choose
+                self.player.choose = 0
         
         if self.gamePhase == 12 and self.isSignalSync():
 
@@ -582,9 +582,8 @@ class Game(GameManager):
             # if self.player.host == True:
             #     print(sendData)
             # print(self.gamePhase)
-            # for player in self.playersData:
-            #     if player.partyLeader == True:
-            #         print( player.id, player.choose)
+            for player in self.playersData:
+                print( player.syncSignal, player.choose, end= " ")
 
             if self.network.connectStatus == True:
                 self.sendAndReceiveData(sendData)
