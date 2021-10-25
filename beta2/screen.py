@@ -12,7 +12,8 @@ class GameScreen():
 
         # Font
         self.font = 'font/Taviraj-Black.TTF'
-
+        self.font1 = 'font\FastSagaDemoRegular.TTF'
+        self.font2 = 'font\FastSagaDemoItalic.TTF'
     
     def biltScreen(self):
         self.control.screen.blit(self.display, (0, 0))
@@ -38,8 +39,8 @@ class GameScreen():
             self.displayRunning = False
 
     def drawText(self, text, size, x, y):
-        font = pygame.font.Font(self.font, size)
-        textSurface = font.render(text, True, self.control.white)
+        font = pygame.font.Font(self.font2, size)
+        textSurface = font.render(text, True, self.control.black)
         textRect = textSurface.get_rect()
         textRect.center = (x, y)
         self.display.blit(textSurface, textRect)
