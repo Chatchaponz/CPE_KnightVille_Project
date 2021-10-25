@@ -20,6 +20,7 @@ class GameSetting:
 
         # Default color
         self.white = (255, 255, 255)
+        self.black = (0, 0, 0)
 
         # network
         self.network = Network()
@@ -32,6 +33,13 @@ class GameSetting:
         # 1 -> players data
         # 2 -> current match setting
         self.globalData = [[], [], []]
+
+        #load game image
+        self.knightCover = pygame.image.load("images\knightCover.PNG")
+        self.BGCover = pygame.image.load("images\BGCover.PNG")
+        self.skyCover = pygame.image.load("images\skyCover.PNG")
+        self.woodBoard = pygame.image.load("images\woodBoard.PNG")
+
 
 class StateControl(GameSetting):
 
