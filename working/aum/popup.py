@@ -6,7 +6,6 @@ popup.py -  Create a popup object which have 3 type.
             click a button to submit the information.
 last updated: 25 oct 2021
 '''
-
 from textbox import *
 from button import *
 
@@ -223,7 +222,16 @@ class Popup:
 
     '''
     draw - method to draw popup object due to the type then draw with necessary object such as button etc.
-    +
+    + screen - display screen object. 
+    + newlineSpacing - space between a line.
+    + fontPath - location of font file.
+    + size - text size.
+    + textAlign - Align of text.
+    + bgColor - popup background color.
+    + bdColor - popup border color.
+    + bdSize - size of popup's border.
+    + b1, b2 - button object.
+    + t1 - textbox object.
     '''
     def draw(self, screen, newlineSpacing = 5, fontPath = None, size = 16, textAlign = 'leftAlign', bgColor = pygame.Color('white'), 
     bdColor = None, bdSize = 1):
