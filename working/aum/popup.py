@@ -39,16 +39,16 @@ class Popup:
             self.textHighlight = None
         self.type = type
         if self.type == 1:
-            self.b1 = Button(self.rect.centerx - 30 - 60, self.height + self.y - 30 - 15, 60, 30)
+            self.b1 = Button(self.rect.centerx - 30 - 60, self.height + self.y - 30 - 25, 60, 30)
             self.b1.addText('Yes', bgColor=pygame.Color('green2'), bgColorOver=pygame.Color('green3'))
-            self.b2 = Button(self.rect.centerx + 30, self.height + self.y - 30 - 15, 60, 30)
+            self.b2 = Button(self.rect.centerx + 30, self.height + self.y - 30 - 25, 60, 30)
             self.b2.addText('No', bgColor=pygame.Color('red2'), bgColorOver=pygame.Color('red3'))
         elif self.type == 2:
-            self.t1 = Textbox(self.x + 15, self.height + self.y - 30 - 15, self.width - 60 - 45, 30, pygame.Color('gainsboro'))
-            self.b1 = Button(self.x + self.width - 60 - 15, self.height + self.y - 30 - 15, 60, 30)
+            self.t1 = Textbox(self.x + 15, self.height + self.y - 30 - 15, self.width - 60 - 30, 30, pygame.Color('gainsboro'))
+            self.b1 = Button(self.x + self.width - 60 - 15, self.height + self.y - 30 - 25, 60, 30)
             self.b1.addText('DONE', bgColor=pygame.Color('black'), bgColorOver=pygame.Color('grey'))
         else:
-            self.b1 = Button(self.rect.centerx - 90//2, self.height + self.y - 30 - 15, 90, 30)
+            self.b1 = Button(self.rect.centerx - 90//2, self.height + self.y - 30 -25, 90, 30)
             self.b1.addText('Understand', bgColor=pygame.Color('black'), bgColorOver=pygame.Color('grey'))
         
     '''
@@ -152,9 +152,9 @@ class Popup:
     def modTextbox(self, inactiveColor = pygame.Color('gainsboro'), activeColor = pygame.Color('black'), x = None, y = None, 
     width = 250, height = 30, limit = None, text = ''):
         if x == None:
-            x = self.rect.centerx - width//2 - 45
+            x = self.rect.centerx - width//2 - 40
         if y == None:
-            y = self.height + self.y - 45
+            y = self.height + self.y - 55
         self.t1 = Textbox(x, y, width, height, inactiveColor, activeColor, limit, text)
 
     '''
@@ -175,7 +175,7 @@ class Popup:
     x2 = None, y = None, width = 90, height = 30, fontPath = None, size = 20, b1TextColor = pygame.Color('white'), 
     b2TextColor = pygame.Color('white'), b1TextOver = pygame.Color('white'), outline = 0, b2TextOver = pygame.Color('white')):
         if y == None:
-            y = self.height + self.y - height//2 - 30
+            y = self.height + self.y - height//2 - 40
         if self.type == 1:
             if b1Text == None:
                 b1Text = 'Yes'
