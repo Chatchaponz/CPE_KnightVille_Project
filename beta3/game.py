@@ -62,6 +62,7 @@ class Game(GameManager):
     def resetAll(self):
         self.currentPlayerInMatch = None
         self.othersPlayerData = None
+        self.sendData = []
         self.gamePhase = 0
         self.targetPlayer = None
         self.isKilled = False

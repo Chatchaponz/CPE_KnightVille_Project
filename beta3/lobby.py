@@ -22,9 +22,10 @@ class Lobby(GameManager):
                 sys.exit()
 
             self.player.playerMovement(event)   
-             
 
     def displayScreen(self):
+
+        print(self.player.skin)
 
         self.displayRunning = True
         
@@ -65,6 +66,7 @@ class Lobby(GameManager):
                 self.player.setAttribute() # reset current player
                 self.player.host = False
                 self.player.id = None
+                self.sendData = []
                 self.othersPlayerInMatch.clear()
                 self.playersData.clear()
                 self.changePageByInput(True, self.control.menu)
