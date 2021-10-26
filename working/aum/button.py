@@ -20,11 +20,10 @@ class Button():
     + outline - have outline for rectangle button(optional when there is no image for button) or not.
     + bgColorOver - background color(Color for button) when mouse is over an object.
     + textColorOver - color for text when mouse is over an object
-    + rect - scale of an object.
+    + rect - area of an object.
     + clicked - Mouse being clicked.
     '''
     def __init__(self, x, y, width, height):
-        self.x, self.y = x, y
         self.width, self.height = width, height
         self.text = None
         self.bgColor = None
@@ -49,7 +48,8 @@ class Button():
     + bgColor - background color of an object.
     + bgColorOver - background color of an object when mouse is over an object.
     '''
-    def addText(self, text, fontPath, fontSize, textColor = (255, 255, 255), outline = 0, textColorOver = (255, 255, 255), bgColor = None, bgColorOver = None):
+    def addText(self, text, fontPath = None, fontSize = 20, textColor = pygame.Color('white'), outline = 0, 
+    textColorOver = pygame.Color('white'), bgColor = None, bgColorOver = None):
         self.text = text
         if bgColor != None:
             self.bgColor = bgColor
@@ -99,14 +99,14 @@ class Button():
         mouseOver = self.isMouseOver()
         if self.image != None:
             if mouseOver == False:
-                screen.blit(self.image, (self.x, self.y))
+                screen.blit(self.image, (self.rect.x, self.rect.y))
             elif mouseOver == True:
-                screen.blit(self.overImage, (self.x, self.y))
+                screen.blit(self.overImage, (self.rect.x, self.rect.y))
         else:
             if self.bgColor != None and mouseOver == False:
-                pygame.draw.rect(screen, self.bgColor, (self.x, self.y, self.width, self.height),self.outline)
+                pygame.draw.rect(screen, self.bgColor, (self.rect.x, self.rect.y, self.width, self.height),self.outline)
             elif self.bgColorOver != None and mouseOver == True:
-                pygame.draw.rect(screen, self.bgColorOver, (self.x, self.y, self.width, self.height),self.outline)
+                pygame.draw.rect(screen, self.bgColorOver, (self.rect.x, self.rect.y, self.width, self.height),self.outline)
 
         if self.text != None:
             font = pygame.font.Font(self.fontPath,self.fontSize)
@@ -114,19 +114,20 @@ class Button():
                 textSurface = font.render(self.text, True, self.textColor)
             elif self.textColorOver != None and mouseOver == True:
                 textSurface = font.render(self.text, True, self.textColorOver)
-            screen.blit(textSurface, (self.x + (self.width/2 - textSurface.get_width()/2), self.y + (self.height/2 - textSurface.get_height()/2)))
+            screen.blit(textSurface, (self.rect.x + (self.width/2 - textSurface.get_width()/2), self.rect.y + (self.height/2 - textSurface.get_height()/2)))
 
     '''
     isMouseOver - checked mouse position is over a button or not by using the collidepoint 
     which determine is mouse in object area or not.
+    + rect - area of an object.
     + mpos - current mouse position.
     '''
     def isMouseOver(self):
         mpos = pygame.mouse.get_pos()
         if self.rect.collidepoint(mpos):
             return True
-
-        return False
+        else:
+            return False
 
     '''
     isButtonClick - checked mouseclick state on button object by checking
@@ -145,5 +146,4 @@ class Button():
             elif pygame.mouse.get_pressed()[0] == False and self.clicked == True:
                 self.clicked = False
                 action = True
-
         return action
