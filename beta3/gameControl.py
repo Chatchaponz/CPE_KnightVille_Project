@@ -40,7 +40,6 @@ class GameSetting:
         self.skyCover = pygame.image.load("images\skyCover.PNG")
         self.woodBoard = pygame.image.load("images\woodBoard.PNG")
 
-
 class StateControl(GameSetting):
 
     def __init__(self):
