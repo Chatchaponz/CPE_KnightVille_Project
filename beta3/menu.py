@@ -1,6 +1,9 @@
+import sys
 import pygame
-from button import Button 
+from button import * 
 from screen import GameScreen
+from popup import *
+from textbox import *
 
 class MainMenu(GameScreen):
     
@@ -27,12 +30,31 @@ class MainMenu(GameScreen):
         self.buttonQuit = Button(300, 550, 100, 70)
         self.buttonQuit.addText('Quit', self.font1, 40, control.white, 1, (50,50,50))
 
+        self.popupJoin = Popup((self.display.get_width() - 500)//2, (self.display.get_height() - 100)//2, 500, 100, 'Enter host/> ip address', pygame.Color('white'), pygame.Color('red'), 2)
+        self.popupJoin.modTextbox(text='IP Address here.')
+        self.popupJoin.modButton(b1Color=pygame.Color('paleturquoise4'), b1Over=pygame.Color('paleturquoise3'))
 
+        self.popupHost = Popup((self.display.get_width() - 500)//2, (self.display.get_height() - 100)//2, 500, 100, 'Enter your/> ip address', pygame.Color('white'), pygame.Color('red'), 2)
+        self.popupHost.modTextbox(text='IP Address here.')
+        self.popupHost.modButton()
+        self.hostClose = True
+        self.joinClose = True
+
+    def checkEvent(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.Running = False
+                self.control.currentState.displayRunning = False
+                pygame.quit()
+                sys.exit()
+            if not self.joinClose:
+                self.popupJoin.t1.handleEvent(event)
+            if not self.hostClose:
+                self.popupHost.t1.handleEvent(event)
     
     def displayScreen(self):
 
         self.displayRunning = True
-        
         while self.displayRunning:
 
             self.checkEvent()
@@ -56,19 +78,35 @@ class MainMenu(GameScreen):
             # NEED POPUP HERE
             self.buttonHost.draw(self.display)
             if self.buttonHost.isButtonClick():
-                if self.network.tryConnectServer("192.168.1.5", 5555):
-                    self.changePageByInput(True, self.control.host)
-                else:
-                    print("[GAME] Unable to connect server")
+                self.hostClose = False
+            if not self.hostClose:
+                self.popupHost.draw(self.display, size = 36, textAlign='centerAlign', bgColor=pygame.Color('grey2'), 
+                bdColor=pygame.Color('grey3'))
+                if self.popupHost.b1.isButtonClick():
+                    ipHost = self.popupHost.t1.getText()
+                    self.hostClose = True
+                    if self.network.tryConnectServer(ipHost, 5555):
+                        self.changePageByInput(True, self.control.host)
+                    else:
+                        print("[GAME] Unable to connect server")
             
             self.buttonJoin.draw(self.display)
             if self.buttonJoin.isButtonClick():
-                if self.network.tryConnectServer("192.168.1.5", 5555):
-                    self.changePageByInput(True, self.control.createPlayer)
-                else:
-                    print("[GAME] Unable to connect server")
+                self.joinClose = False
+            if not self.joinClose:
+                self.popupJoin.draw(self.display, size = 36, textAlign='centerAlign', bgColor=pygame.Color('grey2'), 
+                bdColor=pygame.Color('grey3'))
+                if self.popupJoin.b1.isButtonClick():
+                    ipJoin = self.popupJoin.t1.getText()
+                    self.joinClose = True
+                    if self.network.tryConnectServer(ipJoin, 5555):
+                        self.changePageByInput(True, self.control.createPlayer)
+                    else:
+                        print("[GAME] Unable to connect server")
 
             self.buttonQuit.draw(self.display)
+            if self.buttonQuit.isButtonClick():
+                pygame.quit()
 
             self.drawText('KnightVIlle', 60 , 350, 175)
             self.biltScreen()
