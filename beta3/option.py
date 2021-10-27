@@ -23,5 +23,5 @@ class OptionMenu(GameScreen):
             self.buttonMenu.draw(self.display)
             self.changePageByButton(self.buttonMenu, self.control.menu)
             
-            self.drawText('Option Menu', 20 , 100, 100)
+            self.drawText('Option Menu', 20 , 100, 100, self.font, self.control.white)
             self.biltScreen()

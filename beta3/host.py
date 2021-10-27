@@ -42,5 +42,5 @@ class HostMenu(GameScreen):
                 else:
                     print("[GAME] Cannot create lobby") # pop up error
             
-            self.drawText('Host Menu', 20 , 100, 100)
+            self.drawText('Host Menu', 20 , 100, 100, self.font, self.control.white)
             self.biltScreen() # update screen

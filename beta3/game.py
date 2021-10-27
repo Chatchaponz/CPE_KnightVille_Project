@@ -228,8 +228,8 @@ class Game(GameManager):
                 
             if self.evilScore == 3:
                 self.gameEnded = True
-                self.drawText('Evil Win!!!', 50 , 500, 300)
-                self.drawText('Enter to exit', 30 , 500, 700)
+                self.drawText('Evil Win!!!', 50 , 500, 300, self.font, self.control.white)
+                self.drawText('Enter to exit', 30 , 500, 700, self.font, self.control.white)
                 self.revealAllPlayerRole()
 
                 if (self.player.host == True and 
@@ -261,10 +261,10 @@ class Game(GameManager):
                 if killedPlayer != None:
                     self.gameEnded = True
                     if killedPlayer.getRole().getName() == "Merlin":
-                        self.drawText('Evil Win!!!', 50 , 500, 300)
+                        self.drawText('Evil Win!!!', 50 , 500, 300, self.font, self.control.white)
                     else:
-                        self.drawText('Good Win!!!', 50 , 500, 300)
-                    self.drawText('Enter to exit', 30 , 500, 700)
+                        self.drawText('Good Win!!!', 50 , 500, 300, self.font, self.control.white)
+                    self.drawText('Enter to exit', 30 , 500, 700, self.font, self.control.white)
                     self.revealAllPlayerRole()
                     
                     if (self.player.host == True and 

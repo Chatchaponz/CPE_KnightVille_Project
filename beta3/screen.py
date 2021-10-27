@@ -39,9 +39,9 @@ class GameScreen():
             self.displayRunning = False
 
     # Pls fix this vvvv
-    def drawText(self, text, size, x, y):
-        font = pygame.font.Font(self.font2, size)
-        textSurface = font.render(text, True, self.control.white)
+    def drawText(self, text, size, x, y, font, color):
+        font = pygame.font.Font(font, size)
+        textSurface = font.render(text, True, color)
         textRect = textSurface.get_rect()
         textRect.center = (x, y)
         self.display.blit(textSurface, textRect)

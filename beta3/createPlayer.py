@@ -40,6 +40,6 @@ class CreatePlayer(GameScreen):
                 else:
                     print("[GAME] Cannot join game") # pop up here
 
-            self.drawText('Create Player[Under construction]', 20 , 100, 100)
-            self.drawText('Your test character already created', 20 , 100, 150)
+            self.drawText('Create Player[Under construction]', 20 , 100, 100, self.font, self.control.white)
+            self.drawText('Your test character already created', 20 , 100, 150, self.font, self.control.white)
             self.biltScreen() # update screen

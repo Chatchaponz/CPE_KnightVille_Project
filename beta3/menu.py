@@ -1,9 +1,8 @@
 import sys
 import pygame
-from button import * 
 from screen import GameScreen
-from popup import *
-from textbox import *
+from button import Button
+from popup import Popup
 
 class MainMenu(GameScreen):
     
@@ -107,6 +106,7 @@ class MainMenu(GameScreen):
             self.buttonQuit.draw(self.display)
             if self.buttonQuit.isButtonClick():
                 pygame.quit()
+                sys.exit()
 
-            self.drawText('KnightVIlle', 60 , 350, 175)
+            self.drawText('KnightVIlle', 60 , 350, 175, self.font2, self.control.black)
             self.biltScreen()
