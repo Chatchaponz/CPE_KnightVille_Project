@@ -14,6 +14,7 @@ class MainMenu(GameScreen):
         self.BGCover = control.BGCover
         self.skyCover = control.skyCover
         self.woodBoard = control.woodBoard
+        self.choice = control.choice
         self.skyPosition = 0
         self.skyCoverWidth = self.skyCover.get_rect().width
         #self.angle = 0
@@ -74,10 +75,14 @@ class MainMenu(GameScreen):
             self.display.blit(self.woodBoard, (135,20))
 
             self.buttonOption.draw(self.display)
+            if self.buttonOption.isMouseOver():
+                self.display.blit(self.choice, (182, 440))
             self.changePageByButton(self.buttonOption, self.control.option)
 
             # NEED POPUP HERE
             self.buttonHost.draw(self.display)
+            if self.buttonHost.isMouseOver():
+                self.display.blit(self.choice, (182, 240))
             if self.buttonHost.isButtonClick():
                 self.hostClose = False
             if not self.hostClose:
@@ -92,6 +97,8 @@ class MainMenu(GameScreen):
                         print("[GAME] Unable to connect server")
             
             self.buttonJoin.draw(self.display)
+            if self.buttonJoin.isMouseOver():
+                self.display.blit(self.choice, (182, 340))
             if self.buttonJoin.isButtonClick():
                 self.joinClose = False
             if not self.joinClose:
@@ -106,6 +113,8 @@ class MainMenu(GameScreen):
                         print("[GAME] Unable to connect server")
 
             self.buttonQuit.draw(self.display)
+            if self.buttonQuit.isMouseOver():
+                self.display.blit(self.choice, (182, 540))
             if self.buttonQuit.isButtonClick():
                 pygame.quit()
                 sys.exit()

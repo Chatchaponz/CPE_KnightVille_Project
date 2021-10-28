@@ -39,6 +39,8 @@ class GameSetting:
         self.BGCover = pygame.image.load("images\BGCover.PNG")
         self.skyCover = pygame.image.load("images\skyCover.JPG")
         self.woodBoard = pygame.image.load("images\woodBoard.PNG")
+        self.choice = pygame.image.load("images\choice.PNG")
+
 
 class StateControl(GameSetting):
 
