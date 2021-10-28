@@ -37,7 +37,7 @@ class GameSetting:
         #load game image
         self.knightCover = pygame.image.load("images\knightCover.PNG")
         self.BGCover = pygame.image.load("images\BGCover.PNG")
-        self.skyCover = pygame.image.load("images\skyCover.PNG")
+        self.skyCover = pygame.image.load("images\skyCover.JPG")
         self.woodBoard = pygame.image.load("images\woodBoard.PNG")
 
 class StateControl(GameSetting):

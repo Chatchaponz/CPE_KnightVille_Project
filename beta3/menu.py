@@ -14,7 +14,9 @@ class MainMenu(GameScreen):
         self.BGCover = control.BGCover
         self.skyCover = control.skyCover
         self.woodBoard = control.woodBoard
-        self.angle = 0
+        self.skyPosition = 0
+        self.skyCoverWidth = self.skyCover.get_rect().width
+        #self.angle = 0
 
         # Image / Button goes here
         self.buttonHost = Button(300, 250, 100, 70)
@@ -59,17 +61,17 @@ class MainMenu(GameScreen):
             self.checkEvent()
             self.display.fill((0, 0, 0))
 
-            if self.angle >= 360:
-                self.angle = 0
-
-            self.skyRotated = pygame.transform.rotate(self.skyCover, self.angle)
-            self.skyRotateRect = self.skyRotated.get_rect(center = (670,670))
-            self.display.blit(self.skyRotated, self.skyRotateRect)
-            self.angle += 0.1
+            self.display.blit(self.skyCover, (self.skyPosition,0))
+            self.skyPosition -= 2.7
+            if self.skyPosition < -(self.skyCoverWidth - 1280):
+                self.display.blit(self.skyCover, (self.skyPosition + self.skyCoverWidth,0))
+            if self.skyPosition < -self.skyCoverWidth:
+                self.skyPosition = 0
 
             self.display.blit(self.BGCover, (0,0))
             self.display.blit(self.knightCover, (0,0))
-            self.display.blit(self.woodBoard, (145,30))
+            #self.display.blit(self.woodBoard, (145,30))
+            self.display.blit(self.woodBoard, (135,20))
 
             self.buttonOption.draw(self.display)
             self.changePageByButton(self.buttonOption, self.control.option)
