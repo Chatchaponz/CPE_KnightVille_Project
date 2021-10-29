@@ -13,6 +13,9 @@ class Lobby(GameManager):
 
         self.buttonStart = Button(1000, 600, 100, 50)
         self.buttonStart.addText('Start', self.font, 20, (255,255,255), 1, (50,50,50))
+
+        self.currentMusic = control.currentMusic
+        self.musicList = control.musicList
     
     # override
     def checkEvent(self):
@@ -31,6 +34,11 @@ class Lobby(GameManager):
         
         if(self.player not in self.playersData):
             self.playersData.append(self.player)
+
+        # Stop Main music and start BGM
+        self.currentMusic.stop()
+        self.currentMusic.load(self.musicList[1])
+        self.currentMusic.play(loops=-1,fade_ms = 1000)
 
         self.allowSendData = True
         self.sendDataThread = threading.Thread(target= self.doSendAndReceiveData)

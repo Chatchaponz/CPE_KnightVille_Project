@@ -19,6 +19,10 @@ class MainMenu(GameScreen):
         self.skyCoverWidth = self.skyCover.get_rect().width
         #self.angle = 0
 
+        # Music goes here
+        self.currentMusic = control.currentMusic
+        self.musicList = control.musicList
+
         # Image / Button goes here
         self.buttonHost = Button(300, 250, 100, 70)
         self.buttonHost.addText('Host', self.font1, 40, control.white, 1, (50,50,50))
@@ -57,6 +61,11 @@ class MainMenu(GameScreen):
     def displayScreen(self):
 
         self.displayRunning = True
+
+        # Main music is loaded here
+        self.currentMusic.load(self.musicList[0])
+        self.currentMusic.play(-1)
+        
         while self.displayRunning:
 
             self.checkEvent()
