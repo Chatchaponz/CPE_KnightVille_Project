@@ -1,0 +1,8 @@
+beta v3
+- playable 
+- more interface
+- readable code
+
+fix
+- data transmit between player (attempt 3)
+- can end game only host or someone. Other players have very high chance to struck at the end of the game

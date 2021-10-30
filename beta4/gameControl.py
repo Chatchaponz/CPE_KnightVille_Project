@@ -11,6 +11,7 @@ from game import Game
 class GameSetting:
     def __init__(self):
         pygame.init()
+        self.running = True
 
         # Display size
         self.displayWidth = 1280
@@ -59,7 +60,6 @@ class StateControl(GameSetting):
 
     def __init__(self):
         super(StateControl, self).__init__()
-        self.Running = True
 
         # add state here
         self.menu = MainMenu(self)
