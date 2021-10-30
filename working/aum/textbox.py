@@ -12,7 +12,7 @@ class Textbox():
     '''
     Textbox - Create a textbox object.
     '''
-    def __init__(self, x, y, width, height, inactiveColor, activeColor = pygame.Color('black'), limit = None, text = '', font = None, size = 32):
+    def __init__(self, x, y, width, height, inactiveColor, activeColor = pygame.Color('black'), limit = None, text = '', fontPath = None, size = 32):
         '''
         __init__ - Constructor of textbox class.
         + x, y - the coordinate position of an object.
@@ -29,8 +29,8 @@ class Textbox():
         self.inactiveColor = inactiveColor # color of object when inactive.
         self.activeColor = activeColor # color of object when active.
         self.color = self.inactiveColor # color of object in current state.
-        self.font = pygame.font.Font(font, size) # font configs.
-        self.textSurface = self.font.render(text, True, pygame.Color('grey')) # text with font configs.
+        self.fontSurface = pygame.font.Font(fontPath, size) # font configs.
+        self.textSurface = self.fontSurface.render(text, True, pygame.Color('grey')) # text with font configs.
         self.active = False # state of object.
         if limit != None:
             self.limit = limit # limit of character in object.
@@ -69,14 +69,14 @@ class Textbox():
                     self.text = self.text[:-1]
                 elif self.limit != None and len(self.text) < self.limit or self.limit == None:
                     self.text += event.unicode
-            self.textSurface = self.font.render(self.text + '|', True, pygame.Color('black'))
+            self.textSurface = self.fontSurface.render(self.text + '|', True, pygame.Color('black'))
         else:
             if self.prevText != self.initText and self.text == '':
-                self.textSurface = self.font.render(self.prevText, True, pygame.Color('grey'))
+                self.textSurface = self.fontSurface.render(self.text, True, pygame.Color('grey'))
             elif self.text != '':
-                self.textSurface = self.font.render(self.text, True, pygame.Color('grey'))
+                self.textSurface = self.fontSurface.render(self.text, True, pygame.Color('grey'))
             elif self.text == '' and self.prevText == self.initText:
-                self.textSurface = self.font.render(self.initText, True, pygame.Color('grey'))
+                self.textSurface = self.fontSurface.render(self.initText, True, pygame.Color('grey'))
     
     def resetText(self):
         '''

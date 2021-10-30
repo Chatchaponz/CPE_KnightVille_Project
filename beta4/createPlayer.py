@@ -23,9 +23,10 @@ class CreatePlayer(GameScreen):
         self.buttonRight.addText('→', self.font, 20, (255,255,255), 1, (50,50,50))
 
         self.playerName = Textbox(self.screenWidth//2 - 125, 150, 250, 35, 
-        pygame.Color('white'), pygame.Color('white'), 15, 'Your IGN', size = 28)
+        pygame.Color('white'), pygame.Color('white'), 15, 'Your In-game name', size = 28)
+        self.playerName.text = ''
 
-        self.popupNoIGN = Popup(self.screenWidth//2 - 300, self.screenHeight//2 - 125, 600, 250, 'Please enter your IGN/> or In-game name', pygame.Color('white'), pygame.Color('red'))
+        self.popupNoIGN = Popup(self.screenWidth//2 - 300, self.screenHeight//2 - 125, 600, 250, 'Please enter your/> In-game name', pygame.Color('white'), pygame.Color('red'))
         self.popupNoIGN.modComponents(self.popupNoIGN.b1, 'button', pygame.Color('darkseagreen4'), pygame.Color('darkslategray'), 'understand')
 
         self.triggerNoIGN = False
