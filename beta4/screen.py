@@ -16,7 +16,7 @@ class GameScreen():
         self.font = 'font/Taviraj-Black.TTF'
         self.font1 = 'font\FastSagaDemoRegular.TTF'
         self.font2 = 'font\FastSagaDemoItalic.TTF'
-    
+        
     def biltScreen(self):
         self.control.screen.blit(self.display, (0, 0))
         pygame.display.update()
@@ -40,7 +40,6 @@ class GameScreen():
                 self.control.changeState(state)
             self.displayRunning = False
 
-    # Pls fix this vvvv
     def drawText(self, text, size, x, y, font, color):
         font = pygame.font.Font(font, size)
         textSurface = font.render(text, True, color)
