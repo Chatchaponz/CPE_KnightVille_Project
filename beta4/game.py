@@ -1,4 +1,4 @@
-import pygame, sys, random, threading
+import pygame, sys, threading
 from button import Button 
 from gameManager import GameManager
 
