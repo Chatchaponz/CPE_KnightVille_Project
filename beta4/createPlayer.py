@@ -1,5 +1,8 @@
-from button import Button 
+import pygame, sys
+from button import Button
+from popup import Popup 
 from screen import GameScreen
+from textbox import Textbox
 
 
 class CreatePlayer(GameScreen):
@@ -19,10 +22,27 @@ class CreatePlayer(GameScreen):
         self.buttonRight = Button(900, 300, 100, 50)
         self.buttonRight.addText('→', self.font, 20, (255,255,255), 1, (50,50,50))
 
+        self.playerName = Textbox(self.screenWidth//2 - 125, 150, 250, 35, 
+        pygame.Color('white'), pygame.Color('white'), 15, 'Your IGN', size = 28)
+
+        self.popupNoIGN = Popup(self.screenWidth//2 - 300, self.screenHeight//2 - 125, 600, 250, 'Please enter your IGN/> or In-game name', pygame.Color('white'), pygame.Color('red'))
+        self.popupNoIGN.modComponents(self.popupNoIGN.b1, 'button', pygame.Color('darkseagreen4'), pygame.Color('darkslategray'), 'understand')
+
+        self.triggerNoIGN = False
+
         #load skins
         self.skins = self.control.skins
 
         self.amountSkins = len(self.skins)
+    
+    def checkEvent(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.Running = False
+                self.control.currentState.displayRunning = False
+                pygame.quit()
+                sys.exit()
+            self.playerName.handleEvent(event)
              
     def displayScreen(self):
 
@@ -39,6 +59,7 @@ class CreatePlayer(GameScreen):
             self.display.fill((0, 0, 0))
 
             # Things in page vvv
+            self.playerName.draw(self.display)
 
             self.display.blit(self.skins[skin], ((self.screenWidth//2) - 95, 300))
             self.buttonLeft.draw(self.display)
@@ -58,14 +79,21 @@ class CreatePlayer(GameScreen):
                     
             self.buttonJoin.draw(self.display)
             if self.buttonJoin.isButtonClick():
-                if self.network.joinGame():
-                    if self.player.host == True:
-                        self.player.id = 0
-                    self.changePageByInput(True, self.control.lobby)
-                    self.player.setAttribute(50, 700, skin, "Test player")
+                playerName = self.playerName.getText()
+                if playerName:
+                    if self.network.joinGame():
+                        if self.player.host == True:
+                            self.player.id = 0
+                        self.changePageByInput(True, self.control.lobby)    
+                        self.player.setAttribute(50, 700, skin, playerName)
+                    else:
+                        print("[GAME] Cannot join game") # pop up here
                 else:
-                    print("[GAME] Cannot join game") # pop up here
-
+                    self.triggerNoIGN = True
+            if self.triggerNoIGN:
+                self.popupNoIGN.draw(self.display, self.font, size = 28, textAlign = 'centerAlign', bgColor = pygame.Color('darkgrey'))
+                if self.popupNoIGN.b1.isButtonClick():
+                    self.triggerNoIGN = False
 
             self.drawText('Create Player[Under construction]', 20 , 100, 100, self.font, self.control.white)
             self.drawText('Your test character already created', 20 , 100, 150, self.font, self.control.white)
