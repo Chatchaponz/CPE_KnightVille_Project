@@ -1,74 +1,57 @@
-'''
-textbox.py - Create a textbox object which can get input text on an object.
-last updated: 16 oct 2021
-'''
 import pygame
 
 pygame.init()
 pygame.key.set_repeat(500, 80)
-font = pygame.font.Font(None, 32)
 
 '''
-Textbox - Create a textbox object.
+textbox.py - Create a textbox object which can get input text on an object.
+last updated: 29 oct 2021
 '''
+
 class Textbox():
     '''
-    __init__ - Constructor for create an object which will use to set-up an object.
-    + x, y - the coordinate position of an object.
-    + width, height - size of an object.
-    + rect - area of an object. #เรียกว่าอะไรนะ
-    + text - input text in object.
-    + prevText - text from previous event.
-    + initText - text when initial object.
-    + inactiveColor - border color for inactive textbox object.
-    + activeColor - border color for active textbox object.
-    + color - border color of an object to update.
-    + textSurface - render a text with set-up properties.
-    + active - status of an object.
-    + limit - limit input character of an object.
+    Textbox - Create a textbox object.
     '''
-    def __init__(self, x, y, width, height, inactiveColor, activeColor = pygame.Color('black'), limit = None, text = ''):
-        self.rect = pygame.Rect(x, y, width, height)
-        self.width = width
-        self.text = text
-        self.prevText = text
-        self.initText = text
-        self.inactiveColor = inactiveColor
-        self.activeColor = activeColor
-        self.color = self.inactiveColor
-        self.textSurface = font.render(text, True, pygame.Color('grey'))
-        self.active = False
+    def __init__(self, x, y, width, height, inactiveColor, activeColor = pygame.Color('black'), limit = None, text = '', font = None, size = 32):
+        '''
+        __init__ - Constructor of textbox class.
+        + x, y - the coordinate position of an object.
+        + width, height - size of an object.
+        + text - input text in object.
+        + inactiveColor - border color for inactive textbox object.
+        + activeColor - border color for active textbox object.
+        + limit - limit input character of an object.
+        '''
+        self.rect = pygame.Rect(x, y, width, height) # area of an object.
+        self.text = text # text on object.
+        self.prevText = text # previous text on object.
+        self.initText = text # text on object when object being initialize.
+        self.inactiveColor = inactiveColor # color of object when inactive.
+        self.activeColor = activeColor # color of object when active.
+        self.color = self.inactiveColor # color of object in current state.
+        self.font = pygame.font.Font(font, size) # font configs.
+        self.textSurface = self.font.render(text, True, pygame.Color('grey')) # text with font configs.
+        self.active = False # state of object.
         if limit != None:
-            self.limit = limit
+            self.limit = limit # limit of character in object.
         else:
             self.limit = None
 
-    '''
-    getText - get input text from an object.
-    + text - input text in object.
-    + prevText - input text in previous event.
-    '''
     def getText(self):
+        '''
+        getText - get text that being type in object.
+
+        + return text
+        '''
         self.prevText = self.text
         return self.text 
 
-    '''
-    handle_event - handle event which occur on an object such as is object being activate? and to
-    activate an object by click on an object, is object is being type in? by check object state and
-    keyboard being type etc.
-    + event - event object.
-    + rect - area of an object.
-    + inactiveColor - border color for inactive textbox object.
-    + activeColor - border color for active textbox object.
-    + color - border color of an object to update.
-    + textSurface - render a text with set-up properties.
-    + active - status of an object. 
-    + limit - limit input character of an object..
-    + text - input text in object.
-    + prevText - text from previous event.
-    + initText - text when initial object.
-    '''
     def handleEvent(self, event, initReset = True):
+        '''
+        handleEvent - collect the event and decision which action is using on object.
+        + event - event object.
+        + initReset - reset text in object when it is initial text. 
+        '''
         if event.type == pygame.MOUSEBUTTONDOWN:
             if self.rect.collidepoint(event.pos):
                 self.active = True
@@ -86,43 +69,33 @@ class Textbox():
                     self.text = self.text[:-1]
                 elif self.limit != None and len(self.text) < self.limit or self.limit == None:
                     self.text += event.unicode
-            self.textSurface = font.render(self.text + '|', True, pygame.Color('black'))
+            self.textSurface = self.font.render(self.text + '|', True, pygame.Color('black'))
         else:
             if self.prevText != self.initText and self.text == '':
-                self.textSurface = font.render(self.prevText, True, pygame.Color('grey'))
+                self.textSurface = self.font.render(self.prevText, True, pygame.Color('grey'))
             elif self.text != '':
-                self.textSurface = font.render(self.text, True, pygame.Color('grey'))
+                self.textSurface = self.font.render(self.text, True, pygame.Color('grey'))
             elif self.text == '' and self.prevText == self.initText:
-                self.textSurface = font.render(self.initText, True, pygame.Color('grey'))
-                
+                self.textSurface = self.font.render(self.initText, True, pygame.Color('grey'))
+    
+    def resetText(self):
+        '''
+        resetText - empty text in object.
+        '''
+        self.text = ''
 
-    '''
-    resetText - reset text in an object.
-    + text - input text in object.
-    + reset - do reset or not.
-    ''' 
-    def resetText(self, reset = False):
-        if reset:
-            self.text = ''
-
-    '''
-    update - update width size of width according to how many character being type in.
-    + width - width size of an object.
-    + rect - area of an object.
-    '''
     def update(self):
+        '''
+        update - update width of object due to text lenght.
+        '''
         width = max(200, self.textSurface.get_width() + 10)
         self.rect.width = width
 
-    '''
-    draw - draw an object on the screen.
-    + textSurface - render a text with set-up properties.
-    + rect - area of an object.
-    + color - border color of an object.
-    + x, y - coordinate position of an object.
-    + screen - screen object.
-    '''
     def draw(self, screen):
+        '''
+        draw - draw an object on the screen.
+        + screen - screen object.
+        '''
         pygame.draw.rect(screen, pygame.Color('white'), self.rect, 0)
         screen.blit(self.textSurface, (self.rect.x + 5, self.rect.y + 5))
         pygame.draw.rect(screen, self.color, self.rect, 3)
