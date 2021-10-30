@@ -59,7 +59,7 @@ class StateControl(GameSetting):
 
     def __init__(self):
         super(StateControl, self).__init__()
-        self.Running = True
+        self.running = True
 
         # add state here
         self.menu = MainMenu(self)

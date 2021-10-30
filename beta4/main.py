@@ -6,5 +6,5 @@ gameState = StateControl()
 gameState.currentMusic.load(gameState.musicList[0])
 gameState.currentMusic.play(-1)
 
-while gameState.Running:
+while gameState.running:
     gameState.currentState.displayScreen()
