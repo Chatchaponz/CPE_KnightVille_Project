@@ -69,6 +69,12 @@ class Lobby(GameManager):
             if self.buttonLeave.isButtonClick():
                 self.allowSendData = False
                 self.sendDataThread.join()
+
+                # Main music is loaded here
+                self.currentMusic.stop()
+                self.currentMusic.load(self.musicList[0])
+                self.currentMusic.play(-1)
+
                 if self.network.connectStatus == True:
                     self.network.disconnectFromServer()
                 self.player.setAttribute() # reset current player

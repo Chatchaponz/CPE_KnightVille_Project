@@ -10,10 +10,6 @@ class MainMenu(GameScreen):
         super(MainMenu, self).__init__(control)
         self.network = control.network
 
-        # Music goes here
-        self.currentMusic = control.currentMusic
-        self.musicList = control.musicList
-
         # Image / Button goes here
         self.knightCover = control.knightCover
         self.knightCoverRect = self.knightCover.get_rect()
@@ -65,10 +61,6 @@ class MainMenu(GameScreen):
 
         self.displayRunning = True
 
-        # Main music is loaded here
-        self.currentMusic.load(self.musicList[0])
-        self.currentMusic.play(-1)
-        
         while self.displayRunning:
 
             self.checkEvent()
