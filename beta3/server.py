@@ -6,8 +6,17 @@ import random
 import configparser
 from os import path
 from client import Signal
+'''
+server - Create server and handle request from clients
 
+[Class] + GameEvent
+
+last updated: 27 Oct 2021
+'''
+# Initiate config
 config = configparser.ConfigParser()
+
+# Build new config file if it isn't exist
 if not path.exists("server_config.ini"):
     config["SETTING"] = {
         'Server_IP': socket.gethostbyname(socket.gethostname()), # Get local ip by computer name e.g. 192.168.X.X
@@ -20,7 +29,7 @@ if not path.exists("server_config.ini"):
 # Try read Setting from config file
 try:
     config.read('server_config.ini')
-    IP = config["SETTING"]['Server_IP'] # local ip e.g. 192.168.X.X
+    IP = config["SETTING"]['Server_IP'] # Local ip e.g. 192.168.X.X
     PORT = int(config["SETTING"]['Server_Port']) # Default port
     SIZE = 4096 # Maximum data recieve size
 
@@ -62,6 +71,7 @@ except (Exception, socket.error) as e:
 print("[SERVER] Server Started, Waiting for a connection...")
 print(f"[SERVER] Server IP: [{IP}], Server Port: [{PORT}]")
 
+# Match setting
 def resetMatch():
     thisMatch['status'] = False
     thisMatch['maxPlayer'] = 10
@@ -73,22 +83,40 @@ def resetMatch():
     print('[SERVER] Match has been ended')
 
 
+# =============================================================================
 
-
-# manage game event
+# Manage game event
 class GameEvent:
+    '''
+    GameEvent - Manage in game event
+                In this case is Avalon like game
+                So, this class responsible for:
+                - Calculate score
+                - Sync game phase, party leader and score between client
+    '''
     def __init__(self):
-        self.gamePhase = 0
-        self.round = 0
-        self.playerRoles = []
-        self.currentPartyLeader = None
-        self.doMission = None
-        self.missionSuccess = None
-        self.voteRejected = 0
-        self.goodScore = 0
-        self.evilScore = 0
+        '''
+        __init__ - Constructor of GameEvent class
+        '''
+        self.gamePhase = 0 # Current game phase
+        self.round = 0     # Current round -> maximum to 5
+        self.playerRoles = [] # Random role of all players in this game
+        self.currentPartyLeader = None # Current party leader
+        self.doMission = None # Indicate whether all players accept current party to do mission or not
+        self.missionSuccess = None # Indicate success of current party
+        self.voteRejected = 0 # Count number of rejected party
+        self.goodScore = 0 # Keep track score of good side
+        self.evilScore = 0 # Keep track score of evil side
     
     def randomRoles(self, allowRoles: list):
+        '''
+        randomRoles - Random role for each players in current match
+        + allowRoles - List of boolean indicate role that allow in this match
+
+        + return - List of random roles (list of integer)
+          - [2,6,3, ...] if success
+          - [] if fail
+        '''
         randomRoles = []
         playerNumber = thisMatch['maxPlayer']
         playerRules = {
@@ -103,7 +131,7 @@ class GameEvent:
         randomRoles += [2] * playerRules[playerNumber]["good"]
         randomRoles += [6] * playerRules[playerNumber]["evil"]
         goodIndex = 0
-        evilIndex = playerRules[playerNumber]["good"] # evil start index equal to end index of good
+        evilIndex = playerRules[playerNumber]["good"] # Evil start index equal to end index of good
         for role, roleAllow in enumerate(allowRoles):
             if roleAllow and role in [0, 1]:
                 randomRoles[goodIndex] = role
@@ -114,7 +142,13 @@ class GameEvent:
         random.shuffle(randomRoles)
         return randomRoles
     
-    def countScore(self, scoreToCount):
+    def countScore(self, scoreToCount: int):
+        '''
+        countScore - Count a score according to "scoreToCount"
+        + scoreToCount - Integer indicate number to count
+
+        + return - Count of score
+        '''
         scoreCount = 0
         if thisMatch['data'] != []:
             for thisData in thisMatch['data']:
@@ -125,12 +159,29 @@ class GameEvent:
         return scoreCount
     
     def changeLeader(self):
+        '''
+        changeLeader - Change current leader to next leader
+        '''
         if self.currentPartyLeader + 1 < thisMatch['maxPlayer']:
             self.currentPartyLeader += 1
         else:
             self.currentPartyLeader = 0
 
     def checkAllData(self, dataIndex: int, checkData, condition: bool = False):
+        '''
+        checkAllData - Check that all player data are the same according to "checkData"
+                       This method have 3 type of check depend on data in "dataIndex", "checkData" and "condition"
+                       1. Check with condition ( check choice of party member only )
+                       2. Check choice with list of choice ( check choice in only list of choice )
+                       3. Check choice equal to data that want to check only
+        + dataIndex - Index of data to check from all data (must be integer)
+        + checkData - Correct data to check
+        + condition - Indicate check with condition
+
+        + return - "allSame" (Boolean) indicate that all data are the same or not
+          - True if all data are the same as "checkData"
+          - False if all data are not the same as "checkData"
+        '''
         allSame = True
         countId = 0
         if thisMatch['data'] != []:
@@ -161,24 +212,39 @@ class GameEvent:
         return allSame
     
     def getPartyLeader(self, dataIndex: int):
+        '''
+        getPartyLeader - Get data of current party leader from all data
+        + dataIndex - Index of current party leader
+
+        + return - Current party leader data
+          - <data> if current party leader data exist
+          - None if current party leader data not exist
+        '''
         if thisMatch['data'] != [] and len(thisMatch['data']) > dataIndex:
             return thisMatch['data'][dataIndex][2]
         return None
     
     def checkCondition(self):
+        '''
+        checkCondition - Check that current condition is suitable for change phase
+
+        + return - "checkPass" (Boolean) indicate suitable condition
+          - Ture if current condition is ready to change phase
+          - False if current condition is not ready to change phase
+        '''
         checkPass = False
         if self.gamePhase == 0:
             if self.checkAllData(13, True):
                 checkPass = True
         
         if self.gamePhase == 1:
-            # check round
+            # Check round
             self.missionSuccess = None
             self.doMission = None
             if self.round <= 5:
                 if self.goodScore == 3 or self.evilScore == 3:
                     self.gamePhase = 9
-            # check leader
+            # Check leader
             if (self.checkAllData(10, self.currentPartyLeader) and
                 self.checkAllData(9, []) and self.gamePhase == 1):
                 checkPass = True
@@ -186,7 +252,7 @@ class GameEvent:
         if self.gamePhase == 2:
             leaderData = self.getPartyLeader(self.currentPartyLeader)
             if leaderData != None and len(leaderData) > 9:
-                # check leader choice and check partyMember of everyone
+                # Check leader choice and check partyMember of everyone
                 if leaderData[5] == 3 and self.checkAllData(9, leaderData[9]):
                     checkPass = True
 
@@ -237,6 +303,13 @@ class GameEvent:
         return checkPass
 
     def doEvent(self):
+        '''
+        doEvent - Main loop do event in GameEvent
+                  Send inintial data
+                  - Random Roles
+                  - Random first party leader
+                  - Current score (good, evil, rejected)
+        '''
         while True:
             if thisMatch['playing']:
 
@@ -312,18 +385,17 @@ class GameEvent:
                 self.goodScore = 0
                 self.evilScore = 0
 
-            # time delay for while loop
+            # Time delay for while loop
             time.sleep(0.001)
 
+# =============================================================================
 
 
-
-
-
-
-
-# change host to the next player near the host
 def changeHost(addr):
+    '''
+    changeHost - Change current host to the next player near the host
+    + addr - Address of this client
+    '''
     for i in range(len(thisMatch['players'])):
         if thisMatch['players'][i] != addr:
             thisMatch['host'] = thisMatch['players'][i]
@@ -331,13 +403,18 @@ def changeHost(addr):
             break
 
 def closeThread(conn, addr):
+    '''
+    closeThread - Close the Thread after this Client already disconnected
+    + conn - Connection of this client
+    + addr - Address of this client
+    '''
     try:
-        # case host lost connection, need to change host
+        # Case host lost connection, need to change host
         if thisMatch['host'] == addr and len(thisMatch['players']) > 1:
             changeHost(addr)
 
         for i in range(len(thisMatch['players'])):
-            # pop players from list
+            # Pop players from list
             if thisMatch['players'][i] == addr:
                 thisMatch['players'].pop(i)
                 break
@@ -358,6 +435,11 @@ def closeThread(conn, addr):
         print('[ERROR] Cannot close thread : ' + str(e))
 
 def sendData(conn, data):
+    '''
+    sendData - Send data from server to client
+    + conn - Connection of this client
+    + data - Data to be send
+    '''
     try:
         conn.send(pickle.dumps(data))
     except (EOFError, socket.error) as e:
@@ -367,7 +449,13 @@ def sendData(conn, data):
 
 
 def handleSignal(signal, data, addr, conn):
-    
+    '''
+    handleSignal - Handle signal request from client
+    + signal - Type of signal
+    + data - Data to be check/send
+    + addr - Address of this client
+    + conn - Connection of this client
+    '''
     if signal == Signal.SET_MATCH:
         if thisMatch['status'] == False:
             thisMatch['status'] = True
@@ -429,12 +517,12 @@ def handleSignal(signal, data, addr, conn):
         if addr in thisMatch['players']:
             othersClientData = []  # Exclude current client data
             for i in range(len(thisMatch['data'])):
-                if thisMatch['data'][i][0] == thisMatch['host']: # always check for host (if there is a change)
+                if thisMatch['data'][i][0] == thisMatch['host']: # Always check for host (if there is a change)
                     thisMatch['data'][i][1] = 1
                 if thisMatch['data'][i][0] == addr:
-                    thisMatch['data'][i][2] = data # update data of this client
+                    thisMatch['data'][i][2] = data # Update data of this client
                 else:
-                    othersClientData.append(thisMatch['data'][i] + [i]) # get other [<address>, <host status>, <data>, <id>] data (element 1 and 2)
+                    othersClientData.append(thisMatch['data'][i] + [i]) # Get other [<address>, <host status>, <data>, <id>] data (element 1 and 2)
             sendData(conn, othersClientData)
         else:
             sendData(conn, None)
@@ -478,10 +566,13 @@ def handleSignal(signal, data, addr, conn):
             sendData(conn, [False, failStatus])
 
 
-# Thread for each client
 def threadedClient(conn, addr):
-
-    sendData(conn, True) # send to client
+    '''
+    threadedClient - Thread for hanlde each client request
+    + conn - Connection of this client
+    + addr - Address of this client
+    '''
+    sendData(conn, True) # Send to client
     print(f"[SERVER] NEW CONNECTION {addr} Connected.")
     while True:
         try:
@@ -492,7 +583,6 @@ def threadedClient(conn, addr):
                 print(f"[SERVER] {addr} Disconnected")
                 break
             else:
-                # print("[SERVER] Received: ", signal, data)
                 handleSignal(signal, data, addr, conn)
 
         except (EOFError, socket.error) as e:
@@ -508,26 +598,15 @@ def threadedClient(conn, addr):
 thisServer.listen()
 
 gameEvent = GameEvent()
-
+# Make thread waiting for handle game event
 eventThread = threading.Thread(target= gameEvent.doEvent)
 eventThread.daemon = True
 eventThread.start()
 
 while True:
-    
     # Start accept incomming data
     conn, addr = thisServer.accept()
     # Start separate thread using "threadedClient" function
     thread = threading.Thread(target= threadedClient, args= (conn, addr))
     thread.start()
     print(f"[SERVER] ACTIVE CONNECTIONS {threading.activeCount() - 2}")
-
-
-
-
-
-'''
-print("[SERVER] Shutting down...")
-thisServer.shutdown(socket.SHUT_RDWR)
-thisServer.close()
-'''
