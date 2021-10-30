@@ -24,7 +24,6 @@ class Button():
     + clicked - Mouse being clicked.
     '''
     def __init__(self, x, y, width, height):
-        self.width, self.height = width, height
         self.text = None
         self.bgColor = None
         self.textColor = (255, 255, 255)
@@ -75,11 +74,11 @@ class Button():
     + width, height - size of an object.
     '''
     def addImage(self, image, overImage = None):
-        self.image = pygame.transform.scale(image, (self.width, self.height))
+        self.image = pygame.transform.scale(image, (self.rect.width, self.rect.height))
         if overImage != None:
-            self.overImage = pygame.transform.scale(overImage, (self.width, self.height))
+            self.overImage = pygame.transform.scale(overImage, (self.rect.width, self.rect.height))
         else:
-            self.overImage = pygame.transform.scale(image, (self.width, self.height))
+            self.overImage = pygame.transform.scale(image, (self.rect.width, self.rect.height))
 
     '''
     draw - draw an object on screen with set-up property of an object.
@@ -104,9 +103,9 @@ class Button():
                 screen.blit(self.overImage, (self.rect.x, self.rect.y))
         else:
             if self.bgColor != None and mouseOver == False:
-                pygame.draw.rect(screen, self.bgColor, (self.rect.x, self.rect.y, self.width, self.height),self.outline)
+                pygame.draw.rect(screen, self.bgColor, (self.rect.x, self.rect.y, self.rect.width, self.rect.height),self.outline)
             elif self.bgColorOver != None and mouseOver == True:
-                pygame.draw.rect(screen, self.bgColorOver, (self.rect.x, self.rect.y, self.width, self.height),self.outline)
+                pygame.draw.rect(screen, self.bgColorOver, (self.rect.x, self.rect.y, self.rect.width, self.rect.height),self.outline)
 
         if self.text != None:
             font = pygame.font.Font(self.fontPath,self.fontSize)
@@ -114,7 +113,7 @@ class Button():
                 textSurface = font.render(self.text, True, self.textColor)
             elif self.textColorOver != None and mouseOver == True:
                 textSurface = font.render(self.text, True, self.textColorOver)
-            screen.blit(textSurface, (self.rect.x + (self.width/2 - textSurface.get_width()/2), self.rect.y + (self.height/2 - textSurface.get_height()/2)))
+            screen.blit(textSurface, (self.rect.x + (self.rect.width/2 - textSurface.get_width()/2), self.rect.y + (self.rect.height/2 - textSurface.get_height()/2)))
 
     '''
     isMouseOver - checked mouse position is over a button or not by using the collidepoint 

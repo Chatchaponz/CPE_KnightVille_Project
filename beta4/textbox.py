@@ -27,7 +27,7 @@ class Textbox():
     + active - status of an object.
     + limit - limit input character of an object.
     '''
-    def __init__(self, x, y, width, height, inactiveColor, activeColor = pygame.Color('black'), limit = None, text = 'Input text here'):
+    def __init__(self, x, y, width, height, inactiveColor, activeColor = pygame.Color('black'), limit = None, text = ''):
         self.rect = pygame.Rect(x, y, width, height)
         self.width = width
         self.text = text
@@ -68,7 +68,7 @@ class Textbox():
     + prevText - text from previous event.
     + initText - text when initial object.
     '''
-    def handleEvent(self, event):
+    def handleEvent(self, event, initReset = True):
         if event.type == pygame.MOUSEBUTTONDOWN:
             if self.rect.collidepoint(event.pos):
                 self.active = True
@@ -76,7 +76,7 @@ class Textbox():
                 self.active = False
             if self.active:
                 self.color = self.activeColor
-                if self.text == self.initText:
+                if self.text == self.initText and initReset:
                     self.text = ''
             else:
                 self.color = self.inactiveColor
