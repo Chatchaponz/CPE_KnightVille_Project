@@ -14,6 +14,9 @@ class MainMenu(GameScreen):
         self.currentMusic = control.currentMusic
         self.musicList = control.musicList
 
+        # Sounds go here
+        self.soundList = control.soundList
+
         # Image
         self.knightCover = control.knightCover
         self.knightCoverRect = self.knightCover.get_rect()
@@ -108,6 +111,12 @@ class MainMenu(GameScreen):
             self.buttonJoin.draw(self.display)
             self.buttonOption.draw(self.display)
             self.buttonQuit.draw(self.display)
+
+            # Menu button sounds
+            self.buttonHost.triggerSound(self.soundList[3])
+            self.buttonJoin.triggerSound(self.soundList[3])
+            self.buttonOption.triggerSound(self.soundList[3])
+            self.buttonQuit.triggerSound(self.soundList[3])
 
             if self.buttonOption.isMouseOver():
                 self.display.blit(self.choice, ((self.screenWidth/4) - (self.choiceWidth/2) + 50, 430))
