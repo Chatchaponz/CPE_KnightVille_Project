@@ -10,30 +10,33 @@ class MainMenu(GameScreen):
         super(MainMenu, self).__init__(control)
         self.network = control.network
 
-        self.knightCover = control.knightCover
-        self.BGCover = control.BGCover
-        self.skyCover = control.skyCover
-        self.woodBoard = control.woodBoard
-        self.choice = control.choice
-        self.skyPosition = 0
-        self.skyCoverWidth = self.skyCover.get_rect().width
-        #self.angle = 0
-
         # Music goes here
         self.currentMusic = control.currentMusic
         self.musicList = control.musicList
 
         # Image / Button goes here
-        self.buttonHost = Button(300, 250, 100, 70)
+        self.knightCover = control.knightCover
+        self.knightCoverRect = self.knightCover.get_rect()
+        self.BGCover = control.BGCover
+        self.skyCover = control.skyCover
+        self.woodBoard = control.woodBoard
+        self.woodBoardWidth = self.woodBoard.get_rect().width
+        self.woodBoardHeight = self.woodBoard.get_rect().height
+        self.choice = control.choice
+        self.choiceWidth = self.choice.get_rect().width
+        self.skyPosition = 0
+        self.skyCoverWidth = self.skyCover.get_rect().width
+
+        self.buttonHost = Button(self.screenWidth//4, 240, 100, 70)
         self.buttonHost.addText('Host', self.font1, 40, control.white, 1, (50,50,50))
 
-        self.buttonJoin = Button(300, 350, 100, 70)
+        self.buttonJoin = Button(self.screenWidth//4, 340, 100, 70)
         self.buttonJoin.addText('Join', self.font1, 40, control.white, 1, (50,50,50))
 
-        self.buttonOption = Button(300, 450, 100, 70)
+        self.buttonOption = Button(self.screenWidth//4, 440, 100, 70)
         self.buttonOption.addText('Option', self.font1, 40, control.white, 1, (50,50,50))
 
-        self.buttonQuit = Button(300, 550, 100, 70)
+        self.buttonQuit = Button(self.screenWidth//4, 540, 100, 70)
         self.buttonQuit.addText('Quit', self.font1, 40, control.white, 1, (50,50,50))
 
         self.popupJoin = Popup((self.display.get_width() - 500)//2, (self.display.get_height() - 100)//2, 500, 100, 'Enter host/> ip address', pygame.Color('white'), pygame.Color('red'), 2)
@@ -79,19 +82,22 @@ class MainMenu(GameScreen):
                 self.skyPosition = 0
 
             self.display.blit(self.BGCover, (0,0))
-            self.display.blit(self.knightCover, (0,0))
-            #self.display.blit(self.woodBoard, (145,30))
-            self.display.blit(self.woodBoard, (135,20))
+            self.display.blit(self.knightCover, self.knightCoverRect)
+            self.display.blit(self.woodBoard, ((self.screenWidth/4) - (self.woodBoardWidth/2) + 50,20))
 
+            # draw button
+            self.buttonHost.draw(self.display)
+            self.buttonJoin.draw(self.display)
             self.buttonOption.draw(self.display)
+            self.buttonQuit.draw(self.display)
+
             if self.buttonOption.isMouseOver():
-                self.display.blit(self.choice, (182, 440))
+                self.display.blit(self.choice, ((self.screenWidth/4) - (self.choiceWidth/2) + 50, 430))
             self.changePageByButton(self.buttonOption, self.control.option)
 
             # NEED POPUP HERE
-            self.buttonHost.draw(self.display)
             if self.buttonHost.isMouseOver():
-                self.display.blit(self.choice, (182, 240))
+                self.display.blit(self.choice, ((self.screenWidth/4) - (self.choiceWidth/2) + 50, 230))
             if self.buttonHost.isButtonClick():
                 self.hostClose = False
             if not self.hostClose:
@@ -105,9 +111,8 @@ class MainMenu(GameScreen):
                     else:
                         print("[GAME] Unable to connect server")
             
-            self.buttonJoin.draw(self.display)
             if self.buttonJoin.isMouseOver():
-                self.display.blit(self.choice, (182, 340))
+                self.display.blit(self.choice, ((self.screenWidth/4) - (self.choiceWidth/2) + 50, 330))
             if self.buttonJoin.isButtonClick():
                 self.joinClose = False
             if not self.joinClose:
@@ -121,12 +126,11 @@ class MainMenu(GameScreen):
                     else:
                         print("[GAME] Unable to connect server")
 
-            self.buttonQuit.draw(self.display)
             if self.buttonQuit.isMouseOver():
-                self.display.blit(self.choice, (182, 540))
+                self.display.blit(self.choice, ((self.screenWidth/4) - (self.choiceWidth/2) + 50, 530))
             if self.buttonQuit.isButtonClick():
                 pygame.quit()
                 sys.exit()
 
-            self.drawText('KnightVIlle', 60 , 350, 175, self.font2, self.control.black)
+            self.drawText('KnightVIlle', 60 , (self.screenWidth/4) + 50, 180, self.font2, self.control.black)
             self.biltScreen()

@@ -6,7 +6,9 @@ class GameScreen():
         self.control = control
 
         self.display = pygame.Surface((self.control.displayWidth, self.control.displayHeight))
-
+        self.screenWidth = control.displayWidth
+        self.screenHeight = control.displayHeight
+        
         # clock (frame rate)
         self.clock = pygame.time.Clock()
 

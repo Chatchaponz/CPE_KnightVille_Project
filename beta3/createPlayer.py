@@ -55,7 +55,7 @@ class CreatePlayer(GameScreen):
                     print("[GAME] Cannot join game") # pop up here
 
 
-            self.display.blit(self.skins[skin], (500, 300))
+            self.display.blit(self.skins[skin], ((self.screenWidth//2) - 95, 300))
             self.buttonLeft.draw(self.display)
             if self.buttonLeft.isButtonClick():
                 if skin == 0:
