@@ -117,11 +117,11 @@ class Popup:
         if cls == 'button':
             if type(active) == type('imagePath'):
                 obj.image = inactive
-                if active == None:
+                if active != None:
                     obj.overImage = active
             else:
                 obj.bgColor = inactive
-                if active == None:
+                if active != None:
                     obj.bgColorOver = active
             obj.text = text
             obj.font = font
@@ -132,10 +132,10 @@ class Popup:
             obj.font = font
             obj.limit = limit
             obj.inactiveColor = inactive
-            if active == None:
-                obj.activeColor = inactive
-            else:
+            if active != None:
                 obj.activeColor = active
+            else:
+                obj.activeColor = inactive
 
     def draw(self, screen, font, size, newlineSpacing = 5, textAlign = 'leftAlign', bgColor = pygame.Color('white'), 
     bdColor = None, bdSize = 1, image = None):
