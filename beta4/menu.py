@@ -48,14 +48,14 @@ class MainMenu(GameScreen):
         self.popupHost = Popup((self.display.get_width() - 700)//2, (self.display.get_height() - 250)//2, 700, 250, 
         'YOUR/> SERVER IP', pygame.Color('white'), pygame.Color('greenyellow'), type = 2)
         self.popupHost.adjustComponents(200, 80, fontPath = None, t1text = 'IP ADDRESS', t2text = 'PORT')
-        self.popupHost.modComponents(self.popupHost.t1, 'textbox', pygame.Color('white'), font = self.font1, limit = 15)
+        self.popupHost.modComponents(self.popupHost.t1, 'textbox', pygame.Color('white'), font = None, limit = 15)
         self.popupHost.modComponents(self.popupHost.t2, 'textbox', pygame.Color('white'), text = '5555', font = None, 
         limit = 5)
 
         self.popupJoin = Popup((self.display.get_width() - 700)//2, (self.display.get_height() - 250)//2, 700, 250, 
         'HOST/> SERVER IP', pygame.Color('white'), pygame.Color('red'), type = 2)
         self.popupJoin.adjustComponents(200, 80, fontPath = None, t1text = 'IP ADDRESS', t2text = 'PORT')
-        self.popupJoin.modComponents(self.popupJoin.t1, 'textbox', pygame.Color('white'), font = self.font1, limit = 15)
+        self.popupJoin.modComponents(self.popupJoin.t1, 'textbox', pygame.Color('white'), font = None, limit = 15)
         self.popupJoin.modComponents(self.popupJoin.t2, 'textbox', pygame.Color('white'), text = '5555', font = None,
         limit = 5)
 
