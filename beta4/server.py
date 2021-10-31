@@ -44,6 +44,7 @@ except ( Exception, configparser.Error ) as e:
 
 ADDR = (IP, PORT) # Address
 
+# Match setting
 thisMatch = {
     'status': False,
     'maxPlayer': 10,
@@ -70,17 +71,6 @@ except (Exception, socket.error) as e:
 
 print("[SERVER] Server Started, Waiting for a connection...")
 print(f"[SERVER] Server IP: [{IP}], Server Port: [{PORT}]")
-
-# Match setting
-def resetMatch():
-    thisMatch['status'] = False
-    thisMatch['maxPlayer'] = 10
-    thisMatch['playing'] = False
-    thisMatch['host'] = ()
-    thisMatch['players'] = []
-    thisMatch['data'] = []
-    thisMatch['setting'] = []
-    print('[SERVER] Match has been ended')
 
 
 # =============================================================================
@@ -389,6 +379,19 @@ class GameEvent:
             time.sleep(0.001)
 
 # =============================================================================
+
+def resetMatch():
+    '''
+    resetMatch - reset all data in "thisMatch" to inintial state
+    '''
+    thisMatch['status'] = False
+    thisMatch['maxPlayer'] = 10
+    thisMatch['playing'] = False
+    thisMatch['host'] = ()
+    thisMatch['players'] = []
+    thisMatch['data'] = []
+    thisMatch['setting'] = []
+    print('[SERVER] Match has been ended')
 
 
 def changeHost(addr):
