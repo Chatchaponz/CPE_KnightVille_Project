@@ -46,6 +46,7 @@ class Role:
     def doSpecial(self, players):
         '''
         doSpecial - Do special ability of each role
+        + players - List of other players in match
         '''
         for player in players:
             
