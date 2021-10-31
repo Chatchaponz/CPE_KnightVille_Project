@@ -5,7 +5,7 @@ from textbox import Textbox
 class Popup:
     def __init__(self, x, y, width, height, textline, textColor, textHighlight = None, type = 0):
         self.rect =  pygame.Rect(x, y, width, height)
-        self.textRect = self.rect.inflate(-30, -50)
+        self.textRect = self.rect.inflate(-150, -50)
         self.text = textline
         self.textColor = textColor
         self.t1preText = pygame.font.Font(None, 20).render('', True, self.textColor)
@@ -21,8 +21,10 @@ class Popup:
             self.b2 = Button(self.rect.centerx + 30, self.rect.height + self.rect.y - 55, 60, 30)
             self.b2.addText('No', bgColor=pygame.Color('red2'), bgColorOver=pygame.Color('red3'))
         elif self.type == 2: # type 2, ask user to fill information.
-            self.t1 = Textbox(self.rect.centerx - (200 + 60 + 30)//2, self.rect.height + self.rect.y - 55, 200, 30, pygame.Color('gainsboro'))
-            self.t2 = Textbox(self.t1.rect.x + self.t1.rect.width + 15, self.rect.height + self.rect.y - 55, 100, 30, pygame.Color('gainsboro'))
+            self.t1 = Textbox(self.rect.centerx - (200 + 60 + 30)//2, self.rect.height + self.rect.y - 55,
+            200, 30, pygame.Color('gainsboro'))
+            self.t2 = Textbox(self.t1.rect.x + self.t1.rect.width + 15, self.rect.height + self.rect.y - 55,
+            0, 30, pygame.Color('gainsboro'))
             self.b1 = Button(self.t2.rect.x + 15, self.rect.height + self.rect.y - 55, 60, 30)
             self.b1.addText('DONE', bgColor=pygame.Color('black'), bgColorOver=pygame.Color('grey'))
         else: # type 0 , it is popup let user known some information.
@@ -136,8 +138,12 @@ class Popup:
                 obj.activeColor = active
 
     def draw(self, screen, font, size, newlineSpacing = 5, textAlign = 'leftAlign', bgColor = pygame.Color('white'), 
-    bdColor = None, bdSize = 1):
-        if bgColor != None:
+    bdColor = None, bdSize = 1, image = None):
+        if image != None:
+            imageSurface = pygame.transform.scale(image, (self.rect.width, self.rect.height))
+            screen.blit(imageSurface, (self.rect.centerx - self.rect.width//2, self.rect.y))
+            screen.blit(imageSurface, (self.rect.x, self.rect.y))
+        elif bgColor != None:
             pygame.draw.rect(screen, bgColor, self.rect, 0)
         if bdColor != None:
             pygame.draw.rect(screen, bdColor, self.rect, bdSize)
