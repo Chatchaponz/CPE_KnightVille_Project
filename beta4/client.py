@@ -56,7 +56,7 @@ class DisconnectException(ClientException):
 
 class Client:
     '''
-    Client - provide ways to connect and make activity to the server
+    Client - Provide ways to connect and make activity to the server
     '''
     __IP = "" # IPv4 from client to connect to the server with the same IP
     __PORT = 5555 # Default port
