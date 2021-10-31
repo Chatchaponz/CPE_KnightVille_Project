@@ -86,10 +86,6 @@ class MainMenu(GameScreen):
     def displayScreen(self):
 
         self.displayRunning = True
-
-        # Main music is loaded here
-        self.currentMusic.load(self.musicList[0])
-        self.currentMusic.play(-1)
         
         while self.displayRunning:
 
