@@ -33,35 +33,36 @@ class MainMenu(GameScreen):
 
         # Button
         self.buttonHost = Button(self.screenWidth//4, 240, 100, 70)
-        self.buttonHost.addText('Host', self.font1, 40, control.white, 1, (50,50,50))
+        self.buttonHost.addText('Host', self.font1, 40, control.white, (50,50,50))
 
         self.buttonJoin = Button(self.screenWidth//4, 340, 100, 70)
-        self.buttonJoin.addText('Join', self.font1, 40, control.white, 1, (50,50,50))
+        self.buttonJoin.addText('Join', self.font1, 40, control.white, (50,50,50))
 
         self.buttonOption = Button(self.screenWidth//4, 440, 100, 70)
-        self.buttonOption.addText('Option', self.font1, 40, control.white, 1, (50,50,50))
+        self.buttonOption.addText('Option', self.font1, 40, control.white, (50,50,50))
 
         self.buttonQuit = Button(self.screenWidth//4, 540, 100, 70)
-        self.buttonQuit.addText('Quit', self.font1, 40, control.white, 1, (50,50,50))
+        self.buttonQuit.addText('Quit', self.font1, 40, control.white, (50,50,50))
 
         # Popup set-up
         self.popupHost = Popup((self.display.get_width() - 700)//2, (self.display.get_height() - 250)//2, 700, 250, 
         'YOUR/> SERVER IP', pygame.Color('white'), pygame.Color('greenyellow'), type = 2)
         self.popupHost.adjustComponents(200, 80, fontPath = None, t1text = 'IP ADDRESS', t2text = 'PORT')
         self.popupHost.modComponents(self.popupHost.t1, 'textbox', pygame.Color('white'), font = self.font1, limit = 15)
-        self.popupHost.modComponents(self.popupHost.t2, 'textbox', pygame.Color('white'), text = '5555', font = self.font1, 
+        self.popupHost.modComponents(self.popupHost.t2, 'textbox', pygame.Color('white'), text = '5555', font = None, 
         limit = 5)
 
         self.popupJoin = Popup((self.display.get_width() - 700)//2, (self.display.get_height() - 250)//2, 700, 250, 
         'HOST/> SERVER IP', pygame.Color('white'), pygame.Color('red'), type = 2)
         self.popupJoin.adjustComponents(200, 80, fontPath = None, t1text = 'IP ADDRESS', t2text = 'PORT')
         self.popupJoin.modComponents(self.popupJoin.t1, 'textbox', pygame.Color('white'), font = self.font1, limit = 15)
-        self.popupJoin.modComponents(self.popupJoin.t2, 'textbox', pygame.Color('white'), text = '5555', font = self.font1, 
+        self.popupJoin.modComponents(self.popupJoin.t2, 'textbox', pygame.Color('white'), text = '5555', font = None,
         limit = 5)
 
-        self.popupFailCon = Popup((self.display.get_width() - 500)//2, (self.display.get_height() - 200)//2, 500, 200, 
+        self.popupFail = Popup((self.display.get_width() - 500)//2, (self.display.get_height() - 200)//2, 500, 200, 
         'UNABLE/> TO CONNECT HOST SERVER', pygame.Color('white'), pygame.Color('aquamarine2'), type = 0)
-        self.popupFailCon.adjustComponents(bWidth=70, fontPath=None)
+        self.popupFail.adjustComponents(bWidth=70, fontPath=None)
+        self.popupFail.modComponents(self.popupFail.b1, 'button', pygame.Color('lightsalmon3'), pygame.Color('lightsalmon4'), 'Close', self.font1, 22)
 
 
         # Popup state
@@ -170,9 +171,9 @@ class MainMenu(GameScreen):
                 #     print('???')
                 #     self.joinClose = True
             if not self.connect:
-                self.popupFailCon.draw(self.display, self.font1, 30, textAlign= 'centerAlign',  bgColor = None, 
+                self.popupFail.draw(self.display, self.font1, 30, textAlign= 'centerAlign',  bgColor = None, 
                 image = self.popupBackground)
-                if self.popupFailCon.b1.isButtonClick():
+                if self.popupFail.b1.isButtonClick():
                     self.connect = True
 
             if self.buttonQuit.isMouseOver():

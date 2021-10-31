@@ -98,4 +98,5 @@ class Textbox():
         '''
         pygame.draw.rect(screen, pygame.Color('white'), self.rect, 0)
         screen.blit(self.textSurface, (self.rect.x + 5, self.rect.y + 5))
-        pygame.draw.rect(screen, self.color, self.rect, 3)
+        if self.color != None:
+            pygame.draw.rect(screen, self.color, self.rect, 3)
