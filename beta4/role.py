@@ -1,8 +1,19 @@
+'''
+role - Manage each role and do their special
 
+[Class] + Role
+
+last updated: 31 Oct 2021
+'''
 class Role:
-
-    def __init__(self, role) :
-
+    '''
+    Role - Store role and do their ability 
+    '''
+    def __init__(self, role: int) :
+        '''
+        __init__ - Constructor of Role class
+        + role - Interger indicate role
+        '''
         self.__allRoles = [
             ["Merlin", "Good"], 
             ["Percival", "Good"],
@@ -12,17 +23,30 @@ class Role:
             ["Morgana", "Evil"],
             ["Mininon Of Mordred", "Evil"],
             ["Oberon", "Evil"]
-        ]
+        ] # All role in game
 
-        self.__thisRole = self.__allRoles[role]
+        self.__thisRole = self.__allRoles[role] # Current role
 
     def getName(self):
+        '''
+        getName - Getter method for get this role's name
+
+        + return - role's name
+        '''
         return self.__thisRole[0]
     
     def getIdentity(self):
+        '''
+        getIdentity - Getter method for get this role's identity (good, evil)
+        
+        + return - role's identity
+        '''
         return self.__thisRole[1]
     
     def doSpecial(self, players):
+        '''
+        doSpecial - Do special ability of each role
+        '''
         for player in players:
             
             thisPlayerRole = player.getRole()
