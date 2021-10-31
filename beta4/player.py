@@ -126,7 +126,8 @@ class Player:
     
     def revealRole(self, otherPlayers):
         self.__roleReveal = True
-        self.__role.doSpecial(otherPlayers)
+        if self.__role != None:
+            self.__role.doSpecial(otherPlayers)
     
     def unrevealRole(self, otherPlayers):
         self.__roleReveal = False

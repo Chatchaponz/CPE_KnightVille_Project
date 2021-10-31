@@ -52,8 +52,8 @@ class Game(GameManager):
                         self.resetAll()
                     self.changePageByInput(True, self.control.lobby)
 
-            if event.type == pygame.KEYUP and self.player.getRole() != None:
-                if event.key == pygame.K_z:
+            if event.type == pygame.KEYUP:
+                if event.key == pygame.K_z and self.player.getRole() != None:
                     self.player.unrevealRole(self.playersData)
 
             if self.matchSetting[2] == True:
