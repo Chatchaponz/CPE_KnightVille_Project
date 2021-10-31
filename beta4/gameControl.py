@@ -36,11 +36,11 @@ class GameSetting:
         self.globalData = [[], [], []]
 
         #load game image
-        self.knightCover = pygame.image.load("images\knightCover.PNG")
-        self.BGCover = pygame.image.load("images\BGCover.PNG")
-        self.skyCover = pygame.image.load("images\skyCover.JPG")
-        self.woodBoard = pygame.image.load("images\woodBoard.PNG")
-        self.choice = pygame.image.load("images\choice.PNG")
+        self.knightCover = pygame.image.load("images\menuUI\knightCover.PNG")
+        self.BGCover = pygame.image.load("images\menuUI\BGCover.PNG")
+        self.skyCover = pygame.image.load("images\menuUI\skyCover.JPG")
+        self.woodBoard = pygame.image.load("images\menuUI\woodBoard.PNG")
+        self.choice = pygame.image.load("images\menuUI\choice.PNG")
         self.popupBackground = pygame.image.load("images\popup1.PNG")
 
         #load skins

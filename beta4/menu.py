@@ -21,6 +21,8 @@ class MainMenu(GameScreen):
         self.knightCover = control.knightCover
         self.knightCoverRect = self.knightCover.get_rect()
         self.BGCover = control.BGCover
+        self.BGCoverWidth = self.BGCover.get_rect().width
+        self.BGCoverPosition = -2500
         self.skyCover = control.skyCover
         self.woodBoard = control.woodBoard
         self.woodBoardWidth = self.woodBoard.get_rect().width
@@ -100,7 +102,13 @@ class MainMenu(GameScreen):
             if self.skyPosition < -self.skyCoverWidth:
                 self.skyPosition = 0
 
-            self.display.blit(self.BGCover, (0,0))
+            self.display.blit(self.BGCover, (self.BGCoverPosition,0))
+            self.BGCoverPosition -= 0.5
+            if self.BGCoverPosition < -(self.BGCoverWidth - 1280):
+                self.display.blit(self.BGCover, (self.BGCoverPosition + self.BGCoverWidth,0))
+            if self.BGCoverPosition < -self.BGCoverWidth:
+                self.BGCoverPosition = 0
+
             self.display.blit(self.knightCover, self.knightCoverRect)
             self.display.blit(self.woodBoard, ((self.screenWidth/4) - (self.woodBoardWidth/2) + 50,20))
 
