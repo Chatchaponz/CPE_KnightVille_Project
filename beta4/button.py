@@ -51,7 +51,7 @@ class Button():
             self.bgColorOver = bgColor
 
         self.textColor = textColor
-        
+
         if textColorOver != None:
             self.textColorOver = textColorOver
         else:
@@ -73,30 +73,37 @@ class Button():
         else:
             self.overImage = pygame.transform.scale(image, (self.rect.width, self.rect.height))
     
-    def draw(self, screen):
+    def draw(self, screen, available = True):
         '''
         draw - draw an object on screen.
         + screen - screen object.
         '''
         mouseOver = self.isMouseOver() # state to check mouse is in area of object.
         if self.image != None:
-            if mouseOver == False:
+            if not mouseOver:
                 screen.blit(self.image, (self.rect.x, self.rect.y))
-            elif mouseOver == True:
+            elif mouseOver and available:
                 screen.blit(self.overImage, (self.rect.x, self.rect.y))
+            else:
+                screen.blit(self.image, (self.rect.x, self.rect.y))
+                
         elif self.bgColor != None:
             if not mouseOver:
                 pygame.draw.rect(screen, self.bgColor, self.rect, 0)
-            elif mouseOver:
+            elif mouseOver and available:
                 pygame.draw.rect(screen, self.bgColorOver, self.rect, 0)
+            else:
+                pygame.draw.rect(screen, self.bgColor, self.rect, 0)
 
         if self.text != None:
             if self.textColor != None:
                 font = pygame.font.Font(self.fontPath,self.fontSize)
                 if not mouseOver:
                     textSurface = font.render(self.text, True, self.textColor)
-                elif mouseOver:
+                elif mouseOver and available:
                     textSurface = font.render(self.text, True, self.textColorOver)
+                else:
+                    textSurface = font.render(self.text, True, self.textColor)
                 screen.blit(textSurface, (self.rect.x + (self.rect.width/2 - textSurface.get_width()/2), self.rect.y + (self.rect.height/2 - textSurface.get_height()/2)))
     
 
@@ -131,6 +138,7 @@ class Button():
                 self.clicked = False
                 action = True
         return action
+        
     
 
     def triggerSound(self, soundPath):

@@ -68,6 +68,7 @@ class MainMenu(GameScreen):
 
 
         # Popup state
+        self.available = True
         self.hostClose = True
         self.joinClose = True
         self.connect = True
@@ -113,29 +114,32 @@ class MainMenu(GameScreen):
             self.display.blit(self.woodBoard, ((self.screenWidth/4) - (self.woodBoardWidth/2) + 50,20))
 
             # draw button
-            self.buttonHost.draw(self.display)
-            self.buttonJoin.draw(self.display)
-            self.buttonOption.draw(self.display)
-            self.buttonQuit.draw(self.display)
+            self.buttonHost.draw(self.display, self.available)
+            self.buttonJoin.draw(self.display, self.available)
+            self.buttonOption.draw(self.display, self.available)
+            self.buttonQuit.draw(self.display, self.available)
 
             # Menu button sounds
-            self.buttonHost.triggerSound(self.soundList[3])
-            self.buttonJoin.triggerSound(self.soundList[3])
-            self.buttonOption.triggerSound(self.soundList[3])
-            self.buttonQuit.triggerSound(self.soundList[3])
-
-            if self.buttonOption.isMouseOver():
-                self.display.blit(self.choice, ((self.screenWidth/4) - (self.choiceWidth/2) + 50, 430))
-            self.changePageByButton(self.buttonOption, self.control.option)
+            if self.available:
+                self.buttonHost.triggerSound(self.soundList[3])
+                self.buttonJoin.triggerSound(self.soundList[3])
+                self.buttonOption.triggerSound(self.soundList[3])
+                self.buttonQuit.triggerSound(self.soundList[3])
+            if self.available:
+                if self.buttonOption.isMouseOver():
+                    self.display.blit(self.choice, ((self.screenWidth/4) - (self.choiceWidth/2) + 50, 430))
+                self.changePageByButton(self.buttonOption, self.control.option)
 
             # NEED POPUP HERE
-            if self.buttonHost.isMouseOver():
-                self.display.blit(self.choice, ((self.screenWidth/4) - (self.choiceWidth/2) + 50, 230))
-            if self.buttonHost.isButtonClick():
-                self.hostClose = False # OPEN HOST POPUP
+            if self.available:
+                if self.buttonHost.isMouseOver():
+                    self.display.blit(self.choice, ((self.screenWidth/4) - (self.choiceWidth/2) + 50, 230))
+                if self.buttonHost.isButtonClick():
+                    self.hostClose = False # OPEN HOST POPUP
             if not self.hostClose:
                 self.popupHost.draw(self.display, self.font1, 52, textAlign = 'centerAlign', bgColor = None,
                 image = self.popupBackground)
+                self.available = False
                 # self.popupHost.b4.draw(self.display)
                 # self.display.blit(self.popupBackground, ((self.screenWidth//4) - self.popupBackground))
                 if self.popupHost.b1.isButtonClick():
@@ -148,17 +152,19 @@ class MainMenu(GameScreen):
                     else:
                         print("[GAME] Unable to connect server")
                         self.connect = False
+                    self.available = True
                 # elif self.popupHost.b3.isButtonClick():
                 #     self.hostClose = True
                 # elif self.popupHost.b4.isButtonClick():
                 #     print('???')
                 #     self.hostClose = True
-                
             
-            if self.buttonJoin.isMouseOver():
-                self.display.blit(self.choice, ((self.screenWidth/4) - (self.choiceWidth/2) + 50, 330))
-            if self.buttonJoin.isButtonClick():
-                self.joinClose = False # OPEN JOIN POPUP
+            if self.available:
+                if self.buttonJoin.isMouseOver():
+                    self.display.blit(self.choice, ((self.screenWidth/4) - (self.choiceWidth/2) + 50, 330))
+                if self.buttonJoin.isButtonClick():
+                    self.joinClose = False # OPEN JOIN POPUP
+                    self.available = False
             if not self.joinClose:
                 self.popupJoin.draw(self.display, self.font1, 52, textAlign = 'centerAlign', bgColor = None, 
                 image = self.popupBackground)
@@ -178,17 +184,20 @@ class MainMenu(GameScreen):
                 # elif self.popupJoin.b4.isButtonClick(): # POPUP GUIDE BUTTON
                 #     print('???')
                 #     self.joinClose = True
+                    self.available = True
             if not self.connect:
                 self.popupFail.draw(self.display, self.font1, 30, textAlign= 'centerAlign',  bgColor = None, 
                 image = self.popupBackground)
+                self.available = False
                 if self.popupFail.b1.isButtonClick():
                     self.connect = True
-
-            if self.buttonQuit.isMouseOver():
-                self.display.blit(self.choice, ((self.screenWidth/4) - (self.choiceWidth/2) + 50, 530))
-            if self.buttonQuit.isButtonClick():
-                pygame.quit()
-                sys.exit()
+                    self.available = True
+            if self.available:        
+                if self.buttonQuit.isMouseOver():
+                    self.display.blit(self.choice, ((self.screenWidth/4) - (self.choiceWidth/2) + 50, 530))
+                if self.buttonQuit.isButtonClick():
+                    pygame.quit()
+                    sys.exit()
 
             self.drawText('KnightVIlle', 60 , (self.screenWidth/4) + 50, 180, self.font2, self.control.black)
             self.biltScreen()
