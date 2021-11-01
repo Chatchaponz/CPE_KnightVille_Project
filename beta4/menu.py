@@ -104,7 +104,7 @@ class MainMenu(GameScreen):
                 self.skyPosition = 0
 
             self.display.blit(self.BGCover, (self.BGCoverPosition,0))
-            self.BGCoverPosition -= 0.5
+            self.BGCoverPosition -= 1
             if self.BGCoverPosition < -(self.BGCoverWidth - 1280):
                 self.display.blit(self.BGCover, (self.BGCoverPosition + self.BGCoverWidth,0))
             if self.BGCoverPosition < -self.BGCoverWidth:
