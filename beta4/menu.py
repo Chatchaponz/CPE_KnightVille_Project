@@ -16,6 +16,7 @@ class MainMenu(GameScreen):
 
         # Sound Effect
         self.soundList = control.soundList
+        self.clickChoiceSound = pygame.mixer.Sound(self.soundList[2])
 
         # Image
         self.knightCover = control.knightCover
@@ -122,7 +123,7 @@ class MainMenu(GameScreen):
 
             # Menu available to click
             if self.available:
-            # Button sounds
+            # Mouse over button sound
                 self.buttonHost.triggerSound(self.soundList[3])
                 self.buttonJoin.triggerSound(self.soundList[3])
                 self.buttonOption.triggerSound(self.soundList[3])
@@ -131,20 +132,24 @@ class MainMenu(GameScreen):
                 if self.buttonOption.isMouseOver(): # OPTION
                     self.display.blit(self.choice, ((self.screenWidth/4) - (self.choiceWidth/2) + 50, 430))
                 if self.buttonOption.isButtonClick():
+                    self.clickChoiceSound.play()
                     self.changePageByInput(True, self.control.option)
                 if self.buttonHost.isMouseOver(): # HOST
                     self.display.blit(self.choice, ((self.screenWidth/4) - (self.choiceWidth/2) + 50, 230))
                 if self.buttonHost.isButtonClick():
+                    self.clickChoiceSound.play()
                     self.hosting = True # OPEN HOST POPUP
                     self.available = False
                 if self.buttonJoin.isMouseOver(): # JOIN
                     self.display.blit(self.choice, ((self.screenWidth/4) - (self.choiceWidth/2) + 50, 330))
                 if self.buttonJoin.isButtonClick():
+                    self.clickChoiceSound.play()
                     self.joining = True # OPEN JOIN POPUP
                     self.available = False
                 if self.buttonQuit.isMouseOver(): # QUIT
                     self.display.blit(self.choice, ((self.screenWidth/4) - (self.choiceWidth/2) + 50, 530))
                 if self.buttonQuit.isButtonClick():
+                    self.clickChoiceSound.play()
                     pygame.quit()
                     sys.exit()
             
