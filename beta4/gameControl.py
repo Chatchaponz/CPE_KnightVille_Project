@@ -42,6 +42,7 @@ class GameSetting:
         self.woodBoard = pygame.image.load("images\menuUI\woodBoard.PNG")
         self.choice = pygame.image.load("images\menuUI\choice.PNG")
         self.popupBackground = pygame.image.load("images\popup1.PNG")
+        self.woodBoard2 = pygame.image.load("images\woodtexture.PNG")
 
         #load skins
         self.skins = []

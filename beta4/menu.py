@@ -69,9 +69,9 @@ class MainMenu(GameScreen):
 
         # Popup state
         self.available = True
-        self.hostClose = True
-        self.joinClose = True
-        self.connect = True
+        self.successConnect = True
+        self.hosting = False
+        self.joining = False
 
     def checkEvent(self):
         for event in pygame.event.get():
@@ -80,10 +80,10 @@ class MainMenu(GameScreen):
                 self.control.currentState.displayRunning = False
                 pygame.quit()
                 sys.exit()
-            if not self.joinClose:
+            if self.joining:
                 self.popupJoin.t1.handleEvent(event)
                 self.popupJoin.t2.handleEvent(event, False)
-            if not self.hostClose:
+            if self.hosting:
                 self.popupHost.t1.handleEvent(event)
                 self.popupHost.t2.handleEvent(event, False)
     
@@ -135,8 +135,8 @@ class MainMenu(GameScreen):
                 if self.buttonHost.isMouseOver():
                     self.display.blit(self.choice, ((self.screenWidth/4) - (self.choiceWidth/2) + 50, 230))
                 if self.buttonHost.isButtonClick():
-                    self.hostClose = False # OPEN HOST POPUP
-            if not self.hostClose:
+                    self.hosting = True # OPEN HOST POPUP
+            if self.hosting:
                 self.popupHost.draw(self.display, self.font1, 52, textAlign = 'centerAlign', bgColor = None,
                 image = self.popupBackground)
                 self.available = False
@@ -145,52 +145,52 @@ class MainMenu(GameScreen):
                 if self.popupHost.b1.isButtonClick():
                     ipHost = self.popupHost.t1.getText()
                     portHost = self.popupHost.t2.getText()
-                    self.hostClose = True
+                    self.hosting = False
                     if self.network.tryConnectServer(str(ipHost), int(portHost)):
                         self.changePageByInput(True, self.control.host)
-                        self.connect = True
+                        self.successConnect = True
                     else:
                         print("[GAME] Unable to connect server")
-                        self.connect = False
+                        self.successConnect = False
                     self.available = True
                 # elif self.popupHost.b3.isButtonClick():
-                #     self.hostClose = True
+                #     self.hosting = True
                 # elif self.popupHost.b4.isButtonClick():
                 #     print('???')
-                #     self.hostClose = True
+                #     self.hosting = True
             
             if self.available:
                 if self.buttonJoin.isMouseOver():
                     self.display.blit(self.choice, ((self.screenWidth/4) - (self.choiceWidth/2) + 50, 330))
                 if self.buttonJoin.isButtonClick():
-                    self.joinClose = False # OPEN JOIN POPUP
+                    self.joining = True # OPEN JOIN POPUP
                     self.available = False
-            if not self.joinClose:
+            if self.joining:
                 self.popupJoin.draw(self.display, self.font1, 52, textAlign = 'centerAlign', bgColor = None, 
                 image = self.popupBackground)
                 # self.popupJoin.b4.draw(self.display) # OPTIONAL TO DRAWN GUIDE BUTTON ON POPUP
                 if self.popupJoin.b1.isButtonClick():
                     ipJoin = self.popupJoin.t1.getText()
                     portJoin = self.popupJoin.t2.getText()
-                    self.joinClose = True
+                    self.joining = False
                     if self.network.tryConnectServer(ipJoin, portJoin):
                         self.changePageByInput(True, self.control.createPlayer)
-                        self.connect = True
+                        self.successConnect = True
                     else:
                         print("[GAME] Unable to connect server")
-                        self.connect = False
+                        self.successConnect = False
                 # elif self.popupJoin.b3.isButtonClick(): # POPUP CLOSE BUTTON
-                #     self.joinClose = True
+                #     self.joining = True
                 # elif self.popupJoin.b4.isButtonClick(): # POPUP GUIDE BUTTON
                 #     print('???')
-                #     self.joinClose = True
+                #     self.joining = True
                     self.available = True
-            if not self.connect:
+            if not self.successConnect:
                 self.popupFail.draw(self.display, self.font1, 30, textAlign= 'centerAlign',  bgColor = None, 
                 image = self.popupBackground)
                 self.available = False
                 if self.popupFail.b1.isButtonClick():
-                    self.connect = True
+                    self.successConnect = True
                     self.available = True
             if self.available:        
                 if self.buttonQuit.isMouseOver():
