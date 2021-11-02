@@ -13,17 +13,16 @@ class GameScreen():
         self.clock = pygame.time.Clock()
 
         # Font
-        self.font = 'font/Taviraj-Black.TTF'
-        self.font1 = 'font\FastSagaDemoRegular.TTF'
-        self.font2 = 'font\FastSagaDemoItalic.TTF'
+        self.font = 'font\Dead Again.OTF'
+        self.font1 = 'font\Eastwood.TTF'
         
     def biltScreen(self):
         self.control.screen.blit(self.display, (0, 0))
         pygame.display.update()
     
-    # def changePageByButton(self, button, page = None):
-    #     buttonClick = button.isButtonClick()
-    #     self.changePageByInput(buttonClick, page)
+    def changePageByButton(self, button, page = None):
+        buttonClick = button.isButtonClick()
+        self.changePageByInput(buttonClick, page)
     
     def changePageByInput(self, input, state = None):
         previousStateLength = len(self.control.previousState)

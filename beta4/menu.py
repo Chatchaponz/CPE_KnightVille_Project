@@ -10,11 +10,11 @@ class MainMenu(GameScreen):
         super(MainMenu, self).__init__(control)
         self.network = control.network
 
-        # Music goes here
+        # Music
         self.currentMusic = control.currentMusic
         self.musicList = control.musicList
 
-        # Sounds go here
+        # Sound Effect
         self.soundList = control.soundList
 
         # Image
@@ -46,25 +46,26 @@ class MainMenu(GameScreen):
         self.buttonQuit = Button(self.screenWidth//4, 540, 100, 70)
         self.buttonQuit.addText('Quit', self.font1, 40, control.white, (50,50,50))
 
-        # Popup set-up
+        # Popup
         self.popupHost = Popup((self.display.get_width() - 700)//2, (self.display.get_height() - 250)//2, 700, 250, 
-        'YOUR/> SERVER IP', pygame.Color('white'), pygame.Color('greenyellow'), type = 2)
-        self.popupHost.adjustComponents(200, 80, fontPath = None, t1text = 'IP ADDRESS', t2text = 'PORT')
-        self.popupHost.modComponents(self.popupHost.t1, 'textbox', pygame.Color('white'), font = None, limit = 15)
-        self.popupHost.modComponents(self.popupHost.t2, 'textbox', pygame.Color('white'), text = '5555', font = None, 
+        'YOUR/> SERVER IP', pygame.Color('white'), pygame.Color('cyan3'), type = 2)
+        self.popupHost.adjustComponents(200, 80, fontPath = self.font1, t1text = 'IP ADDRESS', t2text = 'PORT')
+        self.popupHost.modComponents(self.popupHost.t1, 'textbox', pygame.Color('white'), font = self.font1, limit = 15)
+        self.popupHost.modComponents(self.popupHost.t2, 'textbox', pygame.Color('white'), text = '5555', font = self.font1, 
         limit = 5)
 
         self.popupJoin = Popup((self.display.get_width() - 700)//2, (self.display.get_height() - 250)//2, 700, 250, 
-        'HOST/> SERVER IP', pygame.Color('white'), pygame.Color('red'), type = 2)
-        self.popupJoin.adjustComponents(200, 80, fontPath = None, t1text = 'IP ADDRESS', t2text = 'PORT')
-        self.popupJoin.modComponents(self.popupJoin.t1, 'textbox', pygame.Color('white'), font = None, limit = 15)
-        self.popupJoin.modComponents(self.popupJoin.t2, 'textbox', pygame.Color('white'), text = '5555', font = None,
+        'HOST/> SERVER IP', pygame.Color('white'), pygame.Color('cyan3'), type = 2)
+        self.popupJoin.adjustComponents(200, 80, fontPath = self.font1, t1text = 'IP ADDRESS', t2text = 'PORT')
+        self.popupJoin.modComponents(self.popupJoin.t1, 'textbox', pygame.Color('white'), font = self.font1, limit = 15)
+        self.popupJoin.modComponents(self.popupJoin.t2, 'textbox', pygame.Color('white'), text = '5555', font = self.font1,
         limit = 5)
 
         self.popupFail = Popup((self.display.get_width() - 500)//2, (self.display.get_height() - 200)//2, 500, 200, 
-        'UNABLE/> TO CONNECT HOST SERVER', pygame.Color('white'), pygame.Color('aquamarine2'), type = 0)
-        self.popupFail.adjustComponents(bWidth=70, fontPath=None)
-        self.popupFail.modComponents(self.popupFail.b1, 'button', pygame.Color('lightsalmon3'), pygame.Color('lightsalmon4'), 'Close', self.font1, 22)
+        'UNABLE TO CONNECT HOST SERVER', pygame.Color('white'), pygame.Color('cyan3'), type = 0)
+        self.popupFail.adjustComponents(bWidth=70, fontPath = self.font1)
+        self.popupFail.modComponents(self.popupFail.b1, 'button', pygame.Color('lightsalmon3'), pygame.Color('lightsalmon4'), 'Close', 
+        self.font1, 22)
 
 
         # Popup state
@@ -113,31 +114,42 @@ class MainMenu(GameScreen):
             self.display.blit(self.knightCover, self.knightCoverRect)
             self.display.blit(self.woodBoard, ((self.screenWidth/4) - (self.woodBoardWidth/2) + 50,20))
 
-            # draw button
+            # Draw button
             self.buttonHost.draw(self.display, self.available)
             self.buttonJoin.draw(self.display, self.available)
             self.buttonOption.draw(self.display, self.available)
             self.buttonQuit.draw(self.display, self.available)
 
-            # Menu button sounds
+            # Menu available to click
             if self.available:
+            # Button sounds
                 self.buttonHost.triggerSound(self.soundList[3])
                 self.buttonJoin.triggerSound(self.soundList[3])
                 self.buttonOption.triggerSound(self.soundList[3])
                 self.buttonQuit.triggerSound(self.soundList[3])
-            if self.available:
-                if self.buttonOption.isMouseOver():
+            # MENU LIST
+                if self.buttonOption.isMouseOver(): # OPTION
                     self.display.blit(self.choice, ((self.screenWidth/4) - (self.choiceWidth/2) + 50, 430))
                 if self.buttonOption.isButtonClick():
                     self.changePageByInput(True, self.control.option)
-
-            # NEED POPUP HERE
-            if self.available:
-                if self.buttonHost.isMouseOver():
+                if self.buttonHost.isMouseOver(): # HOST
                     self.display.blit(self.choice, ((self.screenWidth/4) - (self.choiceWidth/2) + 50, 230))
                 if self.buttonHost.isButtonClick():
                     self.hosting = True # OPEN HOST POPUP
-            if self.hosting:
+                    self.available = False
+                if self.buttonJoin.isMouseOver(): # JOIN
+                    self.display.blit(self.choice, ((self.screenWidth/4) - (self.choiceWidth/2) + 50, 330))
+                if self.buttonJoin.isButtonClick():
+                    self.joining = True # OPEN JOIN POPUP
+                    self.available = False
+                if self.buttonQuit.isMouseOver(): # QUIT
+                    self.display.blit(self.choice, ((self.screenWidth/4) - (self.choiceWidth/2) + 50, 530))
+                if self.buttonQuit.isButtonClick():
+                    pygame.quit()
+                    sys.exit()
+            
+            # POPUP
+            if self.hosting:  # HOSTING
                 self.popupHost.draw(self.display, self.font1, 52, textAlign = 'centerAlign', bgColor = None,
                 image = self.popupBackground)
                 self.available = False
@@ -159,14 +171,7 @@ class MainMenu(GameScreen):
                 # elif self.popupHost.b4.isButtonClick():
                 #     print('???')
                 #     self.hosting = True
-            
-            if self.available:
-                if self.buttonJoin.isMouseOver():
-                    self.display.blit(self.choice, ((self.screenWidth/4) - (self.choiceWidth/2) + 50, 330))
-                if self.buttonJoin.isButtonClick():
-                    self.joining = True # OPEN JOIN POPUP
-                    self.available = False
-            if self.joining:
+            if self.joining: #JOINING
                 self.popupJoin.draw(self.display, self.font1, 52, textAlign = 'centerAlign', bgColor = None, 
                 image = self.popupBackground)
                 # self.popupJoin.b4.draw(self.display) # OPTIONAL TO DRAWN GUIDE BUTTON ON POPUP
@@ -186,19 +191,14 @@ class MainMenu(GameScreen):
                 #     print('???')
                 #     self.joining = True
                     self.available = True
-            if not self.successConnect:
+            if not self.successConnect: # FAILED TO CONNECT
                 self.popupFail.draw(self.display, self.font1, 30, textAlign= 'centerAlign',  bgColor = None, 
                 image = self.popupBackground)
                 self.available = False
                 if self.popupFail.b1.isButtonClick():
                     self.successConnect = True
                     self.available = True
-            if self.available:        
-                if self.buttonQuit.isMouseOver():
-                    self.display.blit(self.choice, ((self.screenWidth/4) - (self.choiceWidth/2) + 50, 530))
-                if self.buttonQuit.isButtonClick():
-                    pygame.quit()
-                    sys.exit()
+                
 
-            self.drawText('KnightVIlle', 60 , (self.screenWidth/4) + 50, 180, self.font2, self.control.black)
+            self.drawText('KNiGHT VIlle', 60 , (self.screenWidth/4) + 50, 180, self.font1, pygame.Color('bisque3'))
             self.biltScreen()

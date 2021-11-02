@@ -30,10 +30,6 @@ class Popup:
         else: # type 0 , it is popup let user known some information.
             self.b1 = Button(self.rect.centerx - 45, self.rect.height + self.rect.y - 55, 90, 30)
             self.b1.addText('Understand', bgColor=pygame.Color('black'), bgColorOver=pygame.Color('grey'))
-        self.b3 = Button(self.rect.x + self.rect.width - 20, self.rect.y + 5, 15, 15)
-        self.b3.addText('x', fontSize=24, bgColor=pygame.Color('red1'), bgColorOver=pygame.Color('red3'))
-        self.b4 = Button(self.rect.x + self.rect.width - 45, self.rect.y + 5, 15, 15)
-        self.b4.addText('?', fontSize=24, bgColor=pygame.Color('yellow3'), bgColorOver=pygame.Color('yellow4'))
         
     def fitText(self, screen, font, newlineSpacing = 5, textAlign = 'leftAlign'):
         spaceWidth = font.size(" ")[0]
@@ -129,7 +125,7 @@ class Popup:
             obj.outline = outline
         elif cls == 'textbox':
             obj.prevText, obj.initText, obj.text = text, text, text
-            obj.font = font
+            obj.fontSurface = pygame.font.Font(font, fontSize)
             obj.limit = limit
             obj.inactiveColor = inactive
             if active != None:
