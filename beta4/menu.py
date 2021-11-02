@@ -128,7 +128,8 @@ class MainMenu(GameScreen):
             if self.available:
                 if self.buttonOption.isMouseOver():
                     self.display.blit(self.choice, ((self.screenWidth/4) - (self.choiceWidth/2) + 50, 430))
-                self.changePageByButton(self.buttonOption, self.control.option)
+                if self.buttonOption.isButtonClick():
+                    self.changePageByInput(True, self.control.option)
 
             # NEED POPUP HERE
             if self.available:

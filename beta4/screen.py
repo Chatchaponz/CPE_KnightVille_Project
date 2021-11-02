@@ -21,9 +21,9 @@ class GameScreen():
         self.control.screen.blit(self.display, (0, 0))
         pygame.display.update()
     
-    def changePageByButton(self, button, page = None):
-        buttonClick = button.isButtonClick()
-        self.changePageByInput(buttonClick, page)
+    # def changePageByButton(self, button, page = None):
+    #     buttonClick = button.isButtonClick()
+    #     self.changePageByInput(buttonClick, page)
     
     def changePageByInput(self, input, state = None):
         previousStateLength = len(self.control.previousState)
