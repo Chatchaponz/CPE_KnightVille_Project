@@ -30,7 +30,7 @@ class Player:
         self.name = name
         self.fontColor = (255, 255, 255)
         self.font = pygame.font.Font('font/Taviraj-Black.ttf', 25)
-        self.playerName = self.font.render(self.name, False, self.fontColor)
+        self.playerName = self.font.render(self.name, True, self.fontColor)
 
         # Role
         self.__role = None
@@ -165,7 +165,7 @@ class Player:
         self.playerRect = self.playerSkin.get_rect(bottomleft = (self.x, self.y))
         
         self.name = name
-        self.playerName = self.font.render(self.name, False, self.fontColor)
+        self.playerName = self.font.render(self.name, True, self.fontColor)
     
     def updateSkin(self, skin = 0):
         self.skin = skin
@@ -174,7 +174,7 @@ class Player:
 
     def updateName(self, name = "Unknown"):
         self.name = name
-        self.playerName = self.font.render(self.name, False, self.fontColor)
+        self.playerName = self.font.render(self.name, True, self.fontColor)
 
     # 'event' should be event in pygame.event.get()
     def playerMovement(self, event):
