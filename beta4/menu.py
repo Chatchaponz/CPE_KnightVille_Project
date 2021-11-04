@@ -54,6 +54,7 @@ class MainMenu(GameScreen):
         self.popupHost.modComponents(self.popupHost.t1, 'textbox', pygame.Color('white'), font = self.font1, limit = 15)
         self.popupHost.modComponents(self.popupHost.t2, 'textbox', pygame.Color('white'), text = '5555', font = self.font1, 
         limit = 5)
+        # self.popupHost.modComponents(self.popupHost.b1, 'button', pygame.Color())
 
         self.popupJoin = Popup((self.display.get_width() - 700)//2, (self.display.get_height() - 250)//2, 700, 250, 
         'HOST/> SERVER IP', pygame.Color('white'), pygame.Color('cyan3'), type = 2)
@@ -65,7 +66,7 @@ class MainMenu(GameScreen):
         self.popupFail = Popup((self.display.get_width() - 500)//2, (self.display.get_height() - 200)//2, 500, 200, 
         'UNABLE TO CONNECT HOST SERVER', pygame.Color('white'), pygame.Color('cyan3'), type = 0)
         self.popupFail.adjustComponents(bWidth=70, fontPath = self.font1)
-        self.popupFail.modComponents(self.popupFail.b1, 'button', pygame.Color('lightsalmon3'), pygame.Color('lightsalmon4'), 'Close', 
+        self.popupFail.modComponents(self.popupFail.b1, 'button', (132, 85, 47), (100, 64, 44), 'Close', 
         self.font1, 22)
 
 
@@ -161,6 +162,7 @@ class MainMenu(GameScreen):
                 # self.popupHost.b4.draw(self.display)
                 # self.display.blit(self.popupBackground, ((self.screenWidth//4) - self.popupBackground))
                 if self.popupHost.b1.isButtonClick():
+                    self.clickChoiceSound.play()
                     ipHost = self.popupHost.t1.getText()
                     portHost = self.popupHost.t2.getText()
                     self.hosting = False
@@ -171,8 +173,10 @@ class MainMenu(GameScreen):
                         print("[GAME] Unable to connect server")
                         self.successConnect = False
                     self.available = True
-                # elif self.popupHost.b3.isButtonClick():
-                #     self.hosting = True
+                if self.popupHost.b2.isButtonClick():
+                    self.clickChoiceSound.play()
+                    self.available = True
+                    self.hosting = False
                 # elif self.popupHost.b4.isButtonClick():
                 #     print('???')
                 #     self.hosting = True
@@ -181,6 +185,7 @@ class MainMenu(GameScreen):
                 image = self.popupBackground)
                 # self.popupJoin.b4.draw(self.display) # OPTIONAL TO DRAWN GUIDE BUTTON ON POPUP
                 if self.popupJoin.b1.isButtonClick():
+                    self.clickChoiceSound.play()
                     ipJoin = self.popupJoin.t1.getText()
                     portJoin = self.popupJoin.t2.getText()
                     self.joining = False
@@ -190,17 +195,20 @@ class MainMenu(GameScreen):
                     else:
                         print("[GAME] Unable to connect server")
                         self.successConnect = False
-                # elif self.popupJoin.b3.isButtonClick(): # POPUP CLOSE BUTTON
-                #     self.joining = True
+                    self.available = True
+                if self.popupJoin.b2.isButtonClick(): # POPUP CLOSE BUTTON
+                    self.clickChoiceSound.play()
+                    self.available = True
+                    self.joining = False
                 # elif self.popupJoin.b4.isButtonClick(): # POPUP GUIDE BUTTON
                 #     print('???')
                 #     self.joining = True
-                    self.available = True
             if not self.successConnect: # FAILED TO CONNECT
                 self.popupFail.draw(self.display, self.font1, 30, textAlign= 'centerAlign',  bgColor = None, 
                 image = self.popupBackground)
                 self.available = False
                 if self.popupFail.b1.isButtonClick():
+                    self.clickChoiceSound.play()
                     self.successConnect = True
                     self.available = True
                 

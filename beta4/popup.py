@@ -16,20 +16,22 @@ class Popup:
             self.textHighlight = None
         self.type = type
         if self.type == 1: # type 1, ask user to agree or not.
-            self.b1 = Button(self.rect.centerx - 55, self.rect.height + self.rect.y - 55, 60, 30)
-            self.b1.addText('Yes', bgColor=pygame.Color('green2'), bgColorOver=pygame.Color('green3'))
-            self.b2 = Button(self.rect.centerx + 30, self.rect.height + self.rect.y - 55, 60, 30)
-            self.b2.addText('No', bgColor=pygame.Color('red2'), bgColorOver=pygame.Color('red3'))
+            self.b1 = Button(self.rect.centerx - 55, self.rect.bottom - 60, 60, 30)
+            self.b1.addText('Yes', bgColor = pygame.Color('green2'), bgColorOver = pygame.Color('green3'))
+            self.b2 = Button(self.rect.centerx + 30, self.rect.bottom - 60, 60, 30)
+            self.b2.addText('No', bgColor = pygame.Color('red2'), bgColorOver = pygame.Color('red3'))
         elif self.type == 2: # type 2, ask user to fill information.
-            self.t1 = Textbox(self.rect.centerx - (200 + 60 + 30)//2, self.rect.height + self.rect.y - 55,
+            self.t1 = Textbox(self.rect.centerx - 200//2, self.rect.bottom - 100,
             200, 30, pygame.Color('gainsboro'))
-            self.t2 = Textbox(self.t1.rect.x + self.t1.rect.width + 15, self.rect.height + self.rect.y - 55,
+            self.t2 = Textbox(self.t1.rect.right + 15, self.rect.bottom - 100,
             0, 30, pygame.Color('gainsboro'))
-            self.b1 = Button(self.t2.rect.x + 15, self.rect.height + self.rect.y - 55, 60, 30)
-            self.b1.addText('DONE', bgColor=pygame.Color('black'), bgColorOver=pygame.Color('grey'))
+            self.b1 = Button(self.rect.centerx - 80, self.rect.bottom - 60, 60, 30)
+            self.b1.addText('DONE', bgColor = pygame.Color('black'), bgColorOver = pygame.Color('grey'))
+            self.b2 = Button(self.rect.centerx + 20, self.rect.bottom - 60, 60, 30)
+            self.b2.addText('CANCEL', bgColor = pygame.Color('black'), bgColorOver = pygame.Color('grey'))
         else: # type 0 , it is popup let user known some information.
-            self.b1 = Button(self.rect.centerx - 45, self.rect.height + self.rect.y - 55, 90, 30)
-            self.b1.addText('Understand', bgColor=pygame.Color('black'), bgColorOver=pygame.Color('grey'))
+            self.b1 = Button(self.rect.centerx - 45, self.rect.bottom - 60, 90, 30)
+            self.b1.addText('Understand', bgColor = pygame.Color('black'), bgColorOver = pygame.Color('grey'))
         
     def fitText(self, screen, font, newlineSpacing = 5, textAlign = 'leftAlign'):
         spaceWidth = font.size(" ")[0]
@@ -84,11 +86,11 @@ class Popup:
             return remainingText
         return ""
 
-    def adjustComponents(self,t1Width = 200, t2Width = 100, tHeight = 30, bWidth = 90, bHeight = 30, fontPath = None, t1text = '', t2text = ''):
-        y = self.rect.height + self.rect.y - tHeight//2 - 40
+    def adjustComponents(self, t1Width = 200, t2Width = 100, tHeight = 30, bWidth = 90, bHeight = 30, fontPath = None, t1text = '', t2text = ''):
+        y = self.rect.bottom - tHeight//2 - 40
         if self.type == 1:
-            bX1 = self.rect.centerx - 30 - bWidth//2
-            bX2 = self.rect.centerx + 30
+            bX1 = self.rect.centerx - 20 - bWidth
+            bX2 = self.rect.centerx + 20
             self.__adjustComponents(self.b2, bX2, y, bWidth, bHeight)
         if self.type == 2:
             font = pygame.font.Font(fontPath, tHeight)
@@ -103,22 +105,27 @@ class Popup:
                 self.t2preText = ''
                 t1X = self.rect.centerx - (t1Width + 15 + self.t1preText.get_width())//2 + self.t1preText.get_width()
                 self.__adjustComponents(self.t1, t1X, y - 45, t1Width, tHeight)
-        bX1 = self.rect.centerx - bWidth//2
-        self.__adjustComponents(self.b1, bX1, y, bWidth, bHeight)
+            bX1 = self.rect.centerx - bWidth - 20
+            self.__adjustComponents(self.b1, bX1, y, bWidth, bHeight)
+            bX2 = self.rect.centerx + 20
+            self.__adjustComponents(self.b2, bX2, y, bWidth, bHeight)
+        else:
+            bX1 = self.rect.centerx - bWidth//2
+            self.__adjustComponents(self.b1, bX1, y, bWidth, bHeight)
 
     def __adjustComponents(self, object, x, y, width, height):
         object.rect = pygame.Rect(x, y, width, height)
 
     def modComponents(self, obj, cls, inactive, active = None, text = '', font = None, fontSize = 20, outline = 0, limit = None):
         if cls == 'button':
-            if type(active) == type('imagePath'):
-                obj.image = inactive
-                if active != None:
-                    obj.overImage = active
-            else:
+            if type(inactive) == type((0,0,0)):
                 obj.bgColor = inactive
                 if active != None:
                     obj.bgColorOver = active
+            else:
+                obj.image = inactive
+                if active != None:
+                    obj.overImage = active
             obj.text = text
             obj.font = font
             obj.fontSize = fontSize
@@ -150,6 +157,7 @@ class Popup:
         elif self.type == 2:
             self.t1.draw(screen)
             self.b1.draw(screen)
+            self.b2.draw(screen)
             screen.blit(self.t1preText, (self.t1.rect.x - self.t1preText.get_width() - 5, self.t1.rect.centery - self.t1preText.get_height()//2))
             if self.t2preText != '':        
                 self.t2.draw(screen)

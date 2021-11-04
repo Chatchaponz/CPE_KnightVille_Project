@@ -73,7 +73,7 @@ class Button():
         else:
             self.overImage = pygame.transform.scale(image, (self.rect.width, self.rect.height))
     
-    def draw(self, screen, available = True):
+    def draw(self, screen):
         '''
         draw - draw an object on screen.
         + screen - screen object.
@@ -82,7 +82,7 @@ class Button():
         if self.image != None:
             if not mouseOver:
                 screen.blit(self.image, (self.rect.x, self.rect.y))
-            elif mouseOver and available:
+            elif mouseOver:
                 screen.blit(self.overImage, (self.rect.x, self.rect.y))
             else:
                 screen.blit(self.image, (self.rect.x, self.rect.y))
@@ -90,7 +90,7 @@ class Button():
         elif self.bgColor != None:
             if not mouseOver:
                 pygame.draw.rect(screen, self.bgColor, self.rect, 0)
-            elif mouseOver and available:
+            elif mouseOver:
                 pygame.draw.rect(screen, self.bgColorOver, self.rect, 0)
             else:
                 pygame.draw.rect(screen, self.bgColor, self.rect, 0)
@@ -100,7 +100,7 @@ class Button():
                 font = pygame.font.Font(self.fontPath,self.fontSize)
                 if not mouseOver:
                     textSurface = font.render(self.text, True, self.textColor)
-                elif mouseOver and available:
+                elif mouseOver:
                     textSurface = font.render(self.text, True, self.textColorOver)
                 else:
                     textSurface = font.render(self.text, True, self.textColor)
