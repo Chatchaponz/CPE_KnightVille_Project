@@ -122,7 +122,7 @@ class Button():
             return False
     
 
-    def isButtonClick(self,soundPath = None, vol = None):
+    def isButtonClick(self,soundPath = None, vol = 1):
         '''
         isButtonClick - checked mouseclick state on button object by checking.
         is mouse is over an object and mouse is being clicked or not.
@@ -147,13 +147,15 @@ class Button():
         
     
 
-    def triggerSound(self, soundPath):
+    def triggerSound(self, soundPath, vol = 1 ):
         '''
         triggerSound - trigger a sound when object is being clicked in it area.
         + soundPath - sound's file name
         '''
         if self.isMouseOver() and self.playedSound:
+        
             sound = pygame.mixer.Sound(soundPath)
+            sound.set_volume(vol)
             sound.play()
             self.playedSound = False
         if not self.isMouseOver():

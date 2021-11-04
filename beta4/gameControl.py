@@ -60,7 +60,7 @@ class GameSetting:
 
         #load sounds effect
         self.soundList = ['sounds/button-24.wav','sounds/button-27.wav','sounds/button-30.wav','sounds/button-50.wav','sounds/button-1.wav','sounds/click.wav']
-
+        self.soundEffectVol = 1
 
 class StateControl(GameSetting):
 
