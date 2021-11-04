@@ -44,6 +44,13 @@ class GameSetting:
         self.popupBackground = pygame.image.load("images\popup1.PNG")
         self.woodBoard2 = pygame.image.load("images\woodtexture.PNG")
 
+        self.lobbyRoom = pygame.image.load("images\lobby\lobbyRoom.JPG")
+        self.knightStand = pygame.image.load("images\lobby\knightStand.PNG")
+        self.knightStandAura = pygame.image.load("images\lobby\knightStandAura.PNG")
+        self.map = pygame.image.load("images\lobby\map.PNG")
+        self.mapAura = pygame.image.load("images\lobby\mapAura.PNG")
+        self.lobbyTable = pygame.image.load("images\lobby\lobbyTable.PNG")
+
         #load skins
         self.skins = []
         imagePath = "images/skins/"

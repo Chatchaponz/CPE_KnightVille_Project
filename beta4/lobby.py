@@ -12,14 +12,25 @@ class Lobby(GameManager):
         self.musicList = control.musicList
         
         # Image / Button goes here vvvv
+        self.lobbyRoom = control.lobbyRoom
+        self.knightStand = control.knightStand
+        self.knightStandAura = control.knightStandAura
+        self.map = control.map
+        self.mapWidth = self.map.get_rect().width
+        self.mapAura = control.mapAura
+        self.mapAuraWidth = self.mapAura.get_rect().width
+        self.lobbyTable = control.lobbyTable
+        self.lobbyTableWidth = self.lobbyTable.get_rect().width
+
         self.buttonLeave = Button(100, 100, 100, 50)
         self.buttonLeave.addText('Leave', self.font, 20, (255,255,255), 1, (50,50,50))
 
         self.buttonStart = Button(1000, 600, 100, 50)
         self.buttonStart.addText('Start', self.font, 20, (255,255,255), 1, (50,50,50))
 
-        self.buttonEditPlayer = Button(1000, 100, 100, 50)
+        self.buttonEditPlayer = Button(820, 220, 156, 333)
         self.buttonEditPlayer.addText('Edit Player', self.font, 20, (255,255,255), 1, (50,50,50))
+        self.buttonEditPlayer.addImage(self.knightStand)
         self.popEdit = False
 
         # Setup edit player
@@ -105,7 +116,7 @@ class Lobby(GameManager):
         # Set collision
         self.player.collided = []
         if self.player.collided == []:
-            self.player.collided = [[0, self.screenWidth], [360, self.screenHeight]]
+            self.player.collided = [[0, self.screenWidth], [580, self.screenHeight + 20]]
 
         while self.displayRunning:
 
@@ -119,6 +130,13 @@ class Lobby(GameManager):
 
             # page blackground
             self.display.fill((0, 0, 0))
+            self.display.blit(self.lobbyRoom, (0,0))
+            if self.buttonEditPlayer.isMouseOver():
+                self.display.blit(self.knightStandAura, (820, 220))
+            self.buttonEditPlayer.draw(self.display)
+            self.display.blit(self.map, ((self.screenWidth//2)-(self.mapWidth//2), 235))
+            self.display.blit(self.lobbyTable, ((self.screenWidth//2)-(self.lobbyTableWidth//2), 385))
+
 
             if self.network.connectStatus == True:
                 self.updateScreenData()
@@ -166,7 +184,6 @@ class Lobby(GameManager):
                 else:
                     print("[GAME] You are not host")
             
-            self.buttonEditPlayer.draw(self.display)
             if self.buttonEditPlayer.isButtonClick():
                 self.popEdit = True
                 if self.currentName == None and self.currentSkin == None:
