@@ -95,6 +95,7 @@ class MainMenu(GameScreen):
 
         self.displayRunning = True
         
+        buttonList = [self.buttonHost, self.buttonJoin, self.buttonOption, self.buttonQuit]
         while self.displayRunning:
 
             self.checkEvent()
@@ -118,7 +119,6 @@ class MainMenu(GameScreen):
             self.display.blit(self.woodBoard, ((self.screenWidth/4) - (self.woodBoardWidth/2) + 50,20))
 
             # Draw button
-            buttonList = [self.buttonHost, self.buttonJoin, self.buttonOption, self.buttonQuit]
             for buttonSurface in buttonList:
                 buttonSurface.draw(self.display, self.available)
 
