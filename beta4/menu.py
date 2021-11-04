@@ -189,7 +189,7 @@ class MainMenu(GameScreen):
                     ipJoin = self.popupJoin.t1.getText()
                     portJoin = self.popupJoin.t2.getText()
                     self.joining = False
-                    if self.network.tryConnectServer(ipJoin, portJoin):
+                    if self.network.tryConnectServer(str(ipJoin), int(portJoin)):
                         self.changePageByInput(True, self.control.createPlayer)
                         self.successConnect = True
                     else:
