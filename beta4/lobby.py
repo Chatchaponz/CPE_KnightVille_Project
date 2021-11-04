@@ -124,6 +124,9 @@ class Lobby(GameManager):
         # for thread in threading.enumerate(): 
         #     print(thread.name)
 
+        # all buttons
+        buttonList = [self.buttonEditPlayer, self.buttonStart, self.buttonLeave]
+
         # Set collision
         self.player.collided = []
         if self.player.collided == []:
@@ -144,18 +147,19 @@ class Lobby(GameManager):
             self.display.blit(self.lobbyRoom, (0,0))
             if self.buttonEditPlayer.isMouseOver():
                 self.display.blit(self.knightStandAura, (820, 220))
-            self.buttonEditPlayer.draw(self.display, self.available)
+
+            # draw all button
+            for roomButton in buttonList:
+                roomButton.draw(self.display, self.available)
+            
             self.display.blit(self.map, ((self.screenWidth//2)-(self.mapWidth//2), 235))
+            
             self.display.blit(self.lobbyTable, ((self.screenWidth//2)-(self.lobbyTableWidth//2), 385))
 
 
             if self.network.connectStatus == True:
                 self.updateScreenData()
             self.drawPlayers()
-
-            buttonList = [self.buttonEditPlayer, self.buttonStart, self.buttonLeave]
-            for roomButton in buttonList:
-                roomButton.draw(self.display, self.available)
             
             if self.available:
                 if self.buttonLeave.isButtonClick():
