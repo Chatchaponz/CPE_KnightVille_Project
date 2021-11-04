@@ -52,13 +52,14 @@ class GameSetting:
             self.skins.append(pygame.image.load( imagePath + nameSkin).convert_alpha())
 
         # Initialize music player
+        pygame.mixer.init(frequency = 44100, size = -16, channels = 2, buffer = 512)
         self.currentMusic = pygame.mixer.music
         self.musicList = ['musics/JOAK_Final.wav','musics/BGM.wav']
         # Set default volume to 50%
         self.currentMusic.set_volume(0.5)
 
         #load sounds effect
-        self.soundList = ['sounds/button-24.wav','sounds/button-27.wav','sounds/button-30.wav','sounds/button-50.wav']
+        self.soundList = ['sounds/button-24.wav','sounds/button-27.wav','sounds/button-30.wav','sounds/button-50.wav','sounds/button-1.wav']
 
 
 class StateControl(GameSetting):
