@@ -94,8 +94,9 @@ class MainMenu(GameScreen):
     def displayScreen(self):
 
         self.displayRunning = True
-        
+
         buttonList = [self.buttonHost, self.buttonJoin, self.buttonOption, self.buttonQuit]
+        
         while self.displayRunning:
 
             self.checkEvent()
@@ -175,12 +176,21 @@ class MainMenu(GameScreen):
                     ipJoin = self.popupJoin.t1.getText()
                     portJoin = self.popupJoin.t2.getText()
                     self.joining = False
-                    if self.network.tryConnectServer(str(ipJoin), int(portJoin)):
-                        self.changePageByInput(True, self.control.createPlayer)
-                        self.successConnect = True
-                    else:
-                        print("[GAME] Unable to connect server")
-                        self.successConnect = False
+                    # try connect
+                    if self.network.connectStatus != True:
+                        if not self.network.tryConnectServer(str(ipJoin), int(portJoin)):
+                            print("[GAME] Unable to connect server")
+                            self.successConnect = False
+                    # try join
+                    if self.network.connectStatus == True:      
+                        if self.network.joinGame():
+                            self.changePageByInput(True, self.control.createPlayer)
+                            self.successConnect = True
+                        else:
+                            print("[GAME] Cannot join game") # pop up here
+                            self.network.disconnectFromServer()
+                            self.successConnect = False
+
                     self.available = True
                 if self.popupJoin.b2.isButtonClick(self.clickChoiceSound,self.soundEffectVol): # POPUP CLOSE BUTTON
                     self.available = True
