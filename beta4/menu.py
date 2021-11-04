@@ -118,18 +118,15 @@ class MainMenu(GameScreen):
             self.display.blit(self.woodBoard, ((self.screenWidth/4) - (self.woodBoardWidth/2) + 50,20))
 
             # Draw button
-            self.buttonHost.draw(self.display, self.available)
-            self.buttonJoin.draw(self.display, self.available)
-            self.buttonOption.draw(self.display, self.available)
-            self.buttonQuit.draw(self.display, self.available)
+            buttonList = [self.buttonHost, self.buttonJoin, self.buttonOption, self.buttonQuit]
+            for buttonSurface in buttonList:
+                buttonSurface.draw(self.display, self.available)
 
             # Menu available to click
             if self.available:
             # Mouse over button sound
-                self.buttonHost.triggerSound(self.soundList[4],self.soundEffectVol)
-                self.buttonJoin.triggerSound(self.soundList[4],self.soundEffectVol)
-                self.buttonOption.triggerSound(self.soundList[4],self.soundEffectVol)
-                self.buttonQuit.triggerSound(self.soundList[4],self.soundEffectVol)
+                for buttonEffect in buttonList:
+                    buttonEffect.triggerSound(self.soundList[4],self.soundEffectVol)
             # MENU LIST
                 if self.buttonOption.isMouseOver(): # OPTION
                     self.display.blit(self.choice, ((self.screenWidth/4) - (self.choiceWidth/2) + 50, 440))
