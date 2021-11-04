@@ -86,8 +86,13 @@ class HostMenu(GameScreen):
 
             if self.buttonCreateLobby.isButtonClick():
                 if self.network.createLobby(self.numPlayer, [True, False, True, False, True, False, True, False], 0, 0):
-                    self.player.host = True
-                    self.changePageByInput(True, self.control.createPlayer)
+                    if self.network.joinGame():
+                        self.player.host = True
+                        self.player.id = 0
+                        self.changePageByInput(True, self.control.createPlayer)
+                    else:
+                        print("[GAME] Cannot join game") # pop up here
+                        self.lobbyFailed = True
                 else:
                     print("[GAME] Cannot create lobby") # pop up error
                     self.lobbyFailed = True

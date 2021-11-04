@@ -82,13 +82,8 @@ class CreatePlayer(GameScreen):
             if self.buttonJoin.isButtonClick():
                 playerName = self.playerName.getText()
                 if playerName:
-                    if self.network.joinGame():
-                        if self.player.host == True:
-                            self.player.id = 0
-                        self.changePageByInput(True, self.control.lobby)    
-                        self.player.setAttribute(50, 700, skin, playerName)
-                    else:
-                        print("[GAME] Cannot join game") # pop up here
+                    self.changePageByInput(True, self.control.lobby)    
+                    self.player.setAttribute(50, 700, skin, playerName)
                 else:
                     self.triggerNoIGN = True
             if self.triggerNoIGN:
