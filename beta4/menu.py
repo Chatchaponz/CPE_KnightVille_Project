@@ -17,7 +17,7 @@ class MainMenu(GameScreen):
         # Sound Effect
         self.soundEffectVol = control.soundEffectVol
         self.soundList = control.soundList
-        self.clickChoiceSound = self.soundList[5]
+        self.clickChoiceSound = self.soundList[2]
 
         # Image
         self.knightCover = control.knightCover
