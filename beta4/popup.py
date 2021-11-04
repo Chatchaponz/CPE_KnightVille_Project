@@ -122,7 +122,7 @@ class Popup:
                 obj.bgColor = inactive
                 if active != None:
                     obj.bgColorOver = active
-            else:
+            if type(inactive) == type(pygame.Surface):
                 obj.image = inactive
                 if active != None:
                     obj.overImage = active
