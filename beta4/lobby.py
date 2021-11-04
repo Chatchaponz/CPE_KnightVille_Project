@@ -1,6 +1,7 @@
 import pygame, sys, threading
 from button import Button 
 from gameManager import GameManager
+from textbox import Textbox
 
 class Lobby(GameManager):
     
@@ -52,6 +53,11 @@ class Lobby(GameManager):
         self.currentName = None
         self.skins = self.control.skins
         self.amountSkins = len(self.skins)
+        
+        self.newPlayername = Textbox(self.popEditBg.centerx - 110, self.popEditBg.y + 20, 220, 30, pygame.Color('white'), 
+        pygame.Color('white'), 15, fontPath = self.font1, size = 26)
+
+        self.available = True
     
     def editPlayer(self):
         # Popup background (may change later)
@@ -59,7 +65,10 @@ class Lobby(GameManager):
         
         self.display.blit(self.skins[self.currentSkin], (self.popEditX + 100, self.popEditY + 120))
 
-        self.drawText(self.currentName, 20, self.popEditX + 150, self.popEditY + 100, self.font, self.control.white)
+        self.currentName = self.newPlayername.getText()
+        self.drawText(self.currentName, 20, self.popEditBg.centerx , self.popEditY + 100, self.font1, self.control.white)
+
+        self.newPlayername.draw(self.display)
 
         self.buttonLeft.draw(self.display)
         if self.buttonLeft.isButtonClick():
@@ -81,6 +90,7 @@ class Lobby(GameManager):
             self.player.updateName(self.currentName)
             self.currentName = None
             self.currentSkin = None
+            self.available = True
             self.popEdit = False
 
 
@@ -90,7 +100,8 @@ class Lobby(GameManager):
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-
+            
+            self.newPlayername.handleEvent(event)
             self.player.playerMovement(event)
 
     def displayScreen(self):
@@ -133,7 +144,7 @@ class Lobby(GameManager):
             self.display.blit(self.lobbyRoom, (0,0))
             if self.buttonEditPlayer.isMouseOver():
                 self.display.blit(self.knightStandAura, (820, 220))
-            self.buttonEditPlayer.draw(self.display)
+            self.buttonEditPlayer.draw(self.display, self.available)
             self.display.blit(self.map, ((self.screenWidth//2)-(self.mapWidth//2), 235))
             self.display.blit(self.lobbyTable, ((self.screenWidth//2)-(self.lobbyTableWidth//2), 385))
 
@@ -142,53 +153,57 @@ class Lobby(GameManager):
                 self.updateScreenData()
             self.drawPlayers()
 
-            self.buttonLeave.draw(self.display)
-            if self.buttonLeave.isButtonClick():
-                self.allowSendData = False
-                self.sendDataThread.join()
-
-                if self.network.connectStatus == True:
-                    self.network.disconnectFromServer()
-                self.player.setAttribute() # reset current player
-                self.player.host = False
-                self.player.id = None
-                self.currentName = None
-                self.currentSkin = None
-                self.sendData = []
-                self.othersPlayerInMatch.clear()
-                self.playersData.clear()
-
-                # Main music is loaded here
-                self.currentMusic.stop()
-                self.currentMusic.load(self.musicList[0])
-                self.currentMusic.play(-1)
-
-                self.changePageByInput(True, self.control.menu)
+            buttonList = [self.buttonEditPlayer, self.buttonStart, self.buttonLeave]
+            for roomButton in buttonList:
+                roomButton.draw(self.display, self.available)
             
-            self.buttonStart.draw(self.display)
-            if self.buttonStart.isButtonClick():
-                if self.player.host == True:
-                    if (self.network.connectStatus == True and
-                        len(self.matchSetting) > 0):
-                        currentPlayer = len(self.playersData)
-                        maxPlayer = self.matchSetting[0] 
-                        if currentPlayer == maxPlayer:
-                            self.currentName = None
-                            self.currentSkin = None
-                            self.allowSendData = False
-                            self.sendDataThread.join()
-                            self.network.startGame()
-                            self.changePageByInput(True, self.control.game)
-                        else:
-                            print("[GAME] Cannot start match")
-                else:
-                    print("[GAME] You are not host")
-            
-            if self.buttonEditPlayer.isButtonClick():
-                self.popEdit = True
-                if self.currentName == None and self.currentSkin == None:
-                    self.currentSkin = self.player.skin
-                    self.currentName = self.player.name
+            if self.available:
+                if self.buttonLeave.isButtonClick():
+                    self.allowSendData = False
+                    self.sendDataThread.join()
+
+                    if self.network.connectStatus == True:
+                        self.network.disconnectFromServer()
+                    self.player.setAttribute() # reset current player
+                    self.player.host = False
+                    self.player.id = None
+                    self.currentName = None
+                    self.currentSkin = None
+                    self.sendData = []
+                    self.othersPlayerInMatch.clear()
+                    self.playersData.clear()
+
+                    # Main music is loaded here
+                    self.currentMusic.stop()
+                    self.currentMusic.load(self.musicList[0])
+                    self.currentMusic.play(-1)
+
+                    self.changePageByInput(True, self.control.menu)
+                
+                if self.buttonStart.isButtonClick():
+                    if self.player.host == True:
+                        if (self.network.connectStatus == True and
+                            len(self.matchSetting) > 0):
+                            currentPlayer = len(self.playersData)
+                            maxPlayer = self.matchSetting[0] 
+                            if currentPlayer == maxPlayer:
+                                self.currentName = None
+                                self.currentSkin = None
+                                self.allowSendData = False
+                                self.sendDataThread.join()
+                                self.network.startGame()
+                                self.changePageByInput(True, self.control.game)
+                            else:
+                                print("[GAME] Cannot start match")
+                    else:
+                        print("[GAME] You are not host")
+                
+                if self.buttonEditPlayer.isButtonClick():
+                    self.popEdit = True
+                    if self.currentName == None and self.currentSkin == None:
+                        self.currentSkin = self.player.skin
+                        self.currentName = self.player.name
+                    self.newPlayername.text = self.currentName
             
             if self.popEdit == True:
                 self.editPlayer()

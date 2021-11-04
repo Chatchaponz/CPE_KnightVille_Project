@@ -13,8 +13,8 @@ class GameScreen():
         self.clock = pygame.time.Clock()
 
         # Font
-        self.font = 'font\Dead Again.OTF'
-        self.font1 = 'font\Eastwood.TTF'
+        self.font = 'font\Black-Chancery.TTF'
+        self.font1 = 'font\Dragon Fire.TTF'
         
     def biltScreen(self):
         self.control.screen.blit(self.display, (0, 0))

@@ -125,25 +125,20 @@ class MainMenu(GameScreen):
             # Menu available to click
             if self.available:
             # Mouse over button sound
-                for buttonEffect in buttonList:
-                    buttonEffect.triggerSound(self.soundList[4],self.soundEffectVol)
+                for buttonSurface in buttonList:
+                    buttonSurface.triggerSound(self.soundList[4],self.soundEffectVol)
+                    if buttonSurface.isMouseOver():
+                        self.display.blit(self.choice, ((self.screenWidth/4) - (self.choiceWidth/2) + 50, buttonSurface.rect.y))
+                    
             # MENU LIST
-                if self.buttonOption.isMouseOver(): # OPTION
-                    self.display.blit(self.choice, ((self.screenWidth/4) - (self.choiceWidth/2) + 50, 440))
                 if self.buttonOption.isButtonClick(self.clickChoiceSound,self.soundEffectVol):
                     self.changePageByInput(True, self.control.option)
-                if self.buttonHost.isMouseOver(): # HOST
-                    self.display.blit(self.choice, ((self.screenWidth/4) - (self.choiceWidth/2) + 50, 240))
                 if self.buttonHost.isButtonClick(self.clickChoiceSound,self.soundEffectVol):
                     self.hosting = True # OPEN HOST POPUP
                     self.available = False
-                if self.buttonJoin.isMouseOver(): # JOIN
-                    self.display.blit(self.choice, ((self.screenWidth/4) - (self.choiceWidth/2) + 50, 340))
                 if self.buttonJoin.isButtonClick(self.clickChoiceSound,self.soundEffectVol):
                     self.joining = True # OPEN JOIN POPUP
                     self.available = False
-                if self.buttonQuit.isMouseOver(): # QUIT
-                    self.display.blit(self.choice, ((self.screenWidth/4) - (self.choiceWidth/2) + 50, 540))
                 if self.buttonQuit.isButtonClick(self.clickChoiceSound,self.soundEffectVol):
                     pygame.quit()
                     sys.exit()
