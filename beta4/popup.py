@@ -10,6 +10,9 @@ class Popup:
         self.textColor = textColor
         self.t1preText = pygame.font.Font(None, 20).render('', True, self.textColor)
         self.t2preText = ''
+
+        self.activeButton = True
+        
         if textHighlight:
             self.textHighlight = textHighlight
         else:
@@ -152,15 +155,15 @@ class Popup:
             pygame.draw.rect(screen, bdColor, self.rect, bdSize)
         self.fitText(screen, pygame.font.Font(font, size), newlineSpacing, textAlign)
         if self.type == 1:
-            self.b1.draw(screen)
-            self.b2.draw(screen)
+            self.b1.draw(screen, self.activeButton)
+            self.b2.draw(screen, self.activeButton)
         elif self.type == 2:
             self.t1.draw(screen)
-            self.b1.draw(screen)
-            self.b2.draw(screen)
+            self.b1.draw(screen, self.activeButton)
+            self.b2.draw(screen, self.activeButton)
             screen.blit(self.t1preText, (self.t1.rect.x - self.t1preText.get_width() - 5, self.t1.rect.centery - self.t1preText.get_height()//2))
             if self.t2preText != '':        
                 self.t2.draw(screen)
                 screen.blit(self.t2preText, (self.t2.rect.x - self.t2preText.get_width() - 5, self.t2.rect.centery - self.t2preText.get_height()//2))
         else:
-            self.b1.draw(screen)
+            self.b1.draw(screen, self.activeButton)

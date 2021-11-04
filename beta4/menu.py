@@ -1,4 +1,5 @@
 import sys
+import threading
 import pygame
 from screen import GameScreen
 from button import Button
@@ -17,7 +18,7 @@ class MainMenu(GameScreen):
         # Sound Effect
         self.soundEffectVol = control.soundEffectVol
         self.soundList = control.soundList
-        self.clickChoiceSound = self.soundList[5]
+        self.clickChoiceSound = self.soundList[2]
 
         # Image
         self.knightCover = control.knightCover
@@ -77,6 +78,13 @@ class MainMenu(GameScreen):
         self.hosting = False
         self.joining = False
 
+        # Thread
+        self.hostClicked = False
+        self.joinClicked = False
+        self.connecting = False
+        self.finishConnection = False
+        self.connectResult = False
+
     def checkEvent(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -84,20 +92,36 @@ class MainMenu(GameScreen):
                 self.control.currentState.displayRunning = False
                 pygame.quit()
                 sys.exit()
-            if self.joining:
+            if self.joining and not self.connecting:
                 self.popupJoin.t1.handleEvent(event)
                 self.popupJoin.t2.handleEvent(event, False)
-            if self.hosting:
+            if self.hosting and not self.connecting:
                 self.popupHost.t1.handleEvent(event)
                 self.popupHost.t2.handleEvent(event, False)
+    
+    def makeConnection(self, ip, port):
+        self.connecting = True
+        self.connectResult = self.network.tryConnectServer(str(ip), int(port))
+        self.connecting = False
+        self.finishConnection = True
+
+
+    def doConnection(self, ip, port):
+        if not self.connecting:
+            connectionThread = threading.Thread(target= self.makeConnection, args=(ip, port,))
+            connectionThread.daemon = True
+            connectionThread.start()
     
     def displayScreen(self):
 
         self.displayRunning = True
         
         buttonList = [self.buttonHost, self.buttonJoin, self.buttonOption, self.buttonQuit]
+        
         while self.displayRunning:
-
+            
+            # print(f"{threading.activeCount()}") # print number of current thread
+            
             self.checkEvent()
             self.display.fill((0, 0, 0))
 
@@ -150,41 +174,94 @@ class MainMenu(GameScreen):
                 self.available = False
                 # self.popupHost.b4.draw(self.display)
                 # self.display.blit(self.popupBackground, ((self.screenWidth//4) - self.popupBackground))
-                if self.popupHost.b1.isButtonClick(self.clickChoiceSound,self.soundEffectVol):
-                    ipHost = self.popupHost.t1.getText()
-                    portHost = self.popupHost.t2.getText()
-                    self.hosting = False
-                    if self.network.tryConnectServer(str(ipHost), int(portHost)):
-                        self.changePageByInput(True, self.control.host)
-                        self.successConnect = True
+                if not self.connecting :
+
+                    if( self.popupHost.b1.isButtonClick(self.clickChoiceSound,self.soundEffectVol) and 
+                        self.network.connectStatus != True):
+                        ipHost = self.popupHost.t1.getText()
+                        portHost = self.popupHost.t2.getText()
+                        self.doConnection(str(ipHost), int(portHost))
+                        self.hostClicked = True
+                        self.popupHost.activeButton = False
+                    
+                    if self.popupHost.b2.isButtonClick(self.clickChoiceSound,self.soundEffectVol):
+                        self.available = True
+                        self.hosting = False
+
+                if self.hostClicked:
+
+                    if self.finishConnection:
+                        
+                        # reset
+                        self.hosting = False
+                        self.hostClicked = False
+                        self.finishConnection = False
+                        self.popupHost.activeButton = True
+
+                        if self.connectResult:
+                            self.changePageByInput(True, self.control.host)
+                            self.successConnect = True
+                        else:
+                            print("[GAME] Unable to connect server")
+                            self.successConnect = False
+
                     else:
-                        print("[GAME] Unable to connect server")
-                        self.successConnect = False
+                        self.drawText("Connecting . . .", 30, 1100, 30, self.font1, self.control.white)
+                        print("Connecting...")
+
                     self.available = True
-                if self.popupHost.b2.isButtonClick(self.clickChoiceSound,self.soundEffectVol):
-                    self.available = True
-                    self.hosting = False
+
+
                 # elif self.popupHost.b4.isButtonClick():
                 #     print('???')
                 #     self.hosting = True
+
             if self.joining: #JOINING
                 self.popupJoin.draw(self.display, self.font1, 52, textAlign = 'centerAlign', bgColor = None, 
                 image = self.popupBackground)
                 # self.popupJoin.b4.draw(self.display) # OPTIONAL TO DRAWN GUIDE BUTTON ON POPUP
-                if self.popupJoin.b1.isButtonClick(self.clickChoiceSound,self.soundEffectVol):
-                    ipJoin = self.popupJoin.t1.getText()
-                    portJoin = self.popupJoin.t2.getText()
-                    self.joining = False
-                    if self.network.tryConnectServer(str(ipJoin), int(portJoin)):
-                        self.changePageByInput(True, self.control.createPlayer)
-                        self.successConnect = True
+                if not self.connecting :
+
+                    if (self.popupJoin.b1.isButtonClick(self.clickChoiceSound,self.soundEffectVol) and 
+                        self.network.connectStatus != True):
+                        ipJoin = self.popupJoin.t1.getText()
+                        portJoin = self.popupJoin.t2.getText()
+                        self.doConnection(str(ipJoin), int(portJoin))
+                        self.joinClicked = True
+                        self.popupJoin.activeButton = False
+                    
+                    if self.popupJoin.b2.isButtonClick(self.clickChoiceSound,self.soundEffectVol): # POPUP CLOSE BUTTON
+                        self.available = True
+                        self.joining = False
+                
+                if self.joinClicked:
+
+                    if self.finishConnection:
+
+                        self.joining = False
+                        self.joinClicked = False
+                        self.finishConnection = False # reset
+                        self.popupJoin.activeButton = True
+
+                        if not self.connectResult:
+                            print("[GAME] Unable to connect server")
+                            self.successConnect = False
+
                     else:
-                        print("[GAME] Unable to connect server")
-                        self.successConnect = False
+                        self.drawText("Connecting . . .", 30, 1100, 30, self.font1, self.control.white)
+                        print("Connecting...")
+                
+                    if self.network.connectStatus == True:
+                        if self.network.joinGame():
+                            self.changePageByInput(True, self.control.createPlayer)
+                            self.successConnect = True
+                        else:
+                            print("[GAME] Cannot join game") # pop up here
+                            self.network.disconnectFromServer()
+                            self.successConnect = False
+
                     self.available = True
-                if self.popupJoin.b2.isButtonClick(self.clickChoiceSound,self.soundEffectVol): # POPUP CLOSE BUTTON
-                    self.available = True
-                    self.joining = False
+
                 # elif self.popupJoin.b4.isButtonClick(): # POPUP GUIDE BUTTON
                 #     print('???')
                 #     self.joining = True
