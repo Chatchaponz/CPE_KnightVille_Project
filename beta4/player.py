@@ -17,7 +17,7 @@ class Player:
         self.goRight = False
         self.goUp = False
         self.goDown = False
-        self.collided = False
+        self.collided = []
 
         # Skin
         self.skin = skin
@@ -83,6 +83,14 @@ class Player:
         # Party Member
             if(self.isSelected == True):
                 pygame.draw.rect(screen, (0,0,255), pygame.Rect(nameX, nameY - 50, 30, 30) )
+        
+        # Target
+            if(self.isTarget == True):
+                pygame.draw.rect(screen, (255,0,255), pygame.Rect(nameX, nameY - 50, 30, 30) )
+        
+        # Killed
+            if(self.isKilled == True):
+                pygame.draw.rect(screen, (255,255,0), pygame.Rect(nameX, nameY - 50, 30, 30) )
 
         # Draw player's name
         playerNameRect = self.playerName.get_rect(center = (nameX, nameY))
@@ -103,7 +111,14 @@ class Player:
         if self.goDown and not self.goUp:
             self.velY = self.speed
         
-        if self.collided == False:
+        if self.collided != [] and len(self.collided) > 1:
+            if (self.x + self.velX > self.collided[0][0] and 
+                self.x + self.velX < (self.collided[0][1] - self.playerRect.width)):
+                self.x += self.velX
+            if (self.y + self.velY > self.collided[1][0] and 
+                self.y + self.velY < self.collided[1][1]):
+                self.y += self.velY
+        else:
             self.x += self.velX
             self.y += self.velY
 

@@ -308,7 +308,11 @@ class Game(GameManager):
 
         # for thread in threading.enumerate(): 
         #     print(thread.name)
-
+        
+        # Set collision
+        self.player.collided = []
+        if self.player.collided == []:
+            self.player.collided = [[0, self.screenWidth], [360, self.screenHeight]]
 
         while self.displayRunning:
 
