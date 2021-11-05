@@ -13,7 +13,14 @@ class Lobby(GameManager):
         self.musicList = control.musicList
         
         # Image / Button goes here vvvv
-        self.lobbyRoom = control.lobbyRoom
+        self.lobbyWall = control.lobbyWall
+        self.lobbyFloor = control.lobbyFloor
+        self.startShadow = control.startShadow
+        self.startLight = control.startLight
+        self.startShadowWidth = self.startShadow.get_rect().width
+        self.startShadowHeight = self.startShadow.get_rect().height
+        self.leaveShadow = control.leaveShadow
+        self.leaveLight = control.leaveLight
         self.knightStand = control.knightStand
         self.knightStandAura = control.knightStandAura
         self.map = control.map
@@ -23,11 +30,13 @@ class Lobby(GameManager):
         self.lobbyTable = control.lobbyTable
         self.lobbyTableWidth = self.lobbyTable.get_rect().width
 
-        self.buttonLeave = Button(100, 100, 100, 50)
-        self.buttonLeave.addText('Leave', self.font, 20, (255,255,255), 1, (50,50,50))
+        self.buttonLeave = Button(22, 259, self.startShadowWidth, self.startShadowHeight)
+        #self.buttonLeave.addText('Leave', self.font, 20, (255,255,255), 1, (50,50,50))
+        self.buttonLeave.addImage(self.leaveShadow)
 
-        self.buttonStart = Button(1000, 600, 100, 50)
-        self.buttonStart.addText('Start', self.font, 20, (255,255,255), 1, (50,50,50))
+        self.buttonStart = Button(self.screenWidth - self.startShadowWidth - 22, 259, self.startShadowWidth, self.startShadowHeight)
+        #self.buttonStart.addText('Start', self.font, 20, (255,255,255), 1, (50,50,50))
+        self.buttonStart.addImage(self.startShadow)
 
         self.buttonEditPlayer = Button(820, 220, 156, 333)
         self.buttonEditPlayer.addText('Edit Player', self.font, 20, (255,255,255), 1, (50,50,50))
@@ -144,13 +153,19 @@ class Lobby(GameManager):
 
             # page blackground
             self.display.fill((0, 0, 0))
-            self.display.blit(self.lobbyRoom, (0,0))
+            self.display.blit(self.lobbyFloor, (0,0))
+            self.display.blit(self.lobbyWall, (0,0))
             if self.buttonEditPlayer.isMouseOver():
                 self.display.blit(self.knightStandAura, (820, 220))
 
             # draw all button
             for roomButton in buttonList:
                 roomButton.draw(self.display, self.available)
+
+            if self.buttonLeave.isMouseOver():
+                self.display.blit(self.leaveLight, (22, 259))
+            if self.buttonStart.isMouseOver():
+                self.display.blit(self.startLight, (self.screenWidth - self.startShadowWidth - 22, 259))
             
             self.display.blit(self.map, ((self.screenWidth//2)-(self.mapWidth//2), 235))
             

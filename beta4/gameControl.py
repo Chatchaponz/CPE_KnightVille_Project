@@ -46,7 +46,12 @@ class GameSetting:
 
         self.hostBoard = pygame.image.load("images\host\hostBoard.JPG")
 
-        self.lobbyRoom = pygame.image.load("images\lobby\lobbyRoom.JPG")
+        self.lobbyFloor = pygame.image.load("images\lobby\lobbyFloor.JPG")
+        self.lobbyWall = pygame.image.load("images\lobby\lobbyWall.PNG")
+        self.startShadow = pygame.image.load("images\lobby\startShadow.PNG")
+        self.startLight = pygame.image.load("images\lobby\startLight.PNG")
+        self.leaveShadow = pygame.image.load("images\lobby\leaveShadow.PNG")
+        self.leaveLight = pygame.image.load("images\lobby\leaveLight.PNG")
         self.knightStand = pygame.image.load("images\lobby\knightStand.PNG")
         self.knightStandAura = pygame.image.load("images\lobby\knightStandAura.PNG")
         self.map = pygame.image.load("images\lobby\map.PNG")
