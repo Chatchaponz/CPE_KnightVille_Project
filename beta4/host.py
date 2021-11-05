@@ -33,7 +33,7 @@ class HostMenu(GameScreen):
         # Background
         self.hostBoard = pygame.transform.scale(control.hostBoard, (1280, 720))
 
-        # Role Selection
+        # Role Selection State
         self.roleMorgana = False
         self.rolePercival = False
         self.roleOberon = False
@@ -42,12 +42,13 @@ class HostMenu(GameScreen):
 
         # Role Selector
         buttonWidth, buttonHeight = 120, 120
-        self.offFilter = pygame.transform.scale(self.control.offFilter, (buttonWidth, buttonHeight))
-        self.lock = pygame.transform.scale(self.control.lock, (int(buttonWidth*3/4), buttonHeight))
+
         self.buttonRole1 = Button(self.screenWidth//2 + 60, 250, buttonWidth, buttonHeight)
         self.buttonRole1.addImage(self.control.oberon)
+
         self.buttonRole2 = Button(self.buttonRole1.rect.right + 60, self.buttonRole1.rect.y, buttonWidth, buttonHeight)
         self.buttonRole2.addImage(self.control.mordred)
+
         self.buttonRole3 = Button((self.buttonRole1.rect.x + self.buttonRole2.rect.x)/2, self.buttonRole1.rect.bottom + 70, 
         buttonWidth, buttonHeight)
         self.buttonRole3.addImage(self.control.morganaPercival)
@@ -65,17 +66,35 @@ class HostMenu(GameScreen):
         self.servantRect = pygame.Rect(self.screenWidth//2 - ((self.buttonRole1.rect.width) + 60), 
         self.buttonRole1.rect.y, buttonWidth, buttonHeight)
 
-
         self.merlin = pygame.transform.scale(self.control.merlin, (buttonWidth, buttonHeight))
         self.merlinRect = pygame.Rect(self.screenWidth//2 - ((self.buttonRole1.rect.width * 2) + 120), 
         self.buttonRole1.rect.y, buttonWidth, buttonHeight)
 
+        # Decoration Layer
+        self.offFilter = pygame.transform.scale(self.control.offFilter, (buttonWidth, buttonHeight))
+        
+        self.lock = pygame.transform.scale(self.control.lock, (int(buttonWidth*3/4), buttonHeight))
 
         self.roleFrame = pygame.transform.scale(self.control.roleFrame, (buttonWidth + 25, buttonHeight + 25))
         
         self.checked = pygame.transform.scale(self.control.checked, (buttonWidth - 75, buttonHeight - 75))
 
+        # Role number
         self.count = 0
+
+        # Popup
+        # dummy
+        dummy_string = 'some random textline'
+        dummy_colorhighlight = pygame.Color('red')
+        popWidth, popHeight = 300, 130
+        self.createFailed = Popup((self.screenWidth - popWidth)//2, (self.screenHeight - popHeight)//2, popWidth, popHeight, dummy_string,
+        self.control.white, dummy_colorhighlight)
+        self.joinFailed = Popup((self.screenWidth - popWidth)//2, (self.screenHeight - popHeight)//2, popWidth, popHeight, dummy_string,
+        self.control.white, dummy_colorhighlight)
+
+        # Tracking connect state
+        self.createSuccess = True
+        self.joinSuccess = True
 
     def resetRole(self):
         self.roleMordred = False
@@ -83,6 +102,7 @@ class HostMenu(GameScreen):
         self.roleOberon = False
         self.rolePercival = False
         self.roleMinion = True
+        self.count = 0
         
     def configRole(self, maxrole, buttonList):
         for button in buttonList:
@@ -123,10 +143,8 @@ class HostMenu(GameScreen):
             self.buttonRole3.rect.top - self.checked.get_height()//2))
         
         if self.numPlayer <= 6 and self.count > 1: # select role exceed the amount player format
-            self.count = 0
             self.resetRole()
         if self.numPlayer > 6 and self.numPlayer < 10 and self.count > 2: # select role exceed the amount player format
-            self.count = 0
             self.resetRole()
 
         if self.count == maxrole:
@@ -201,24 +219,22 @@ class HostMenu(GameScreen):
                     self.numPlayer = 5
                     
             # Role selector
-            # Number Player -> Evil Number -> Can choose role on certain number
+            #       Number Player -> Evil Number -> Can choose role on certain number
             if self.numPlayer <= 6: # can select 1 evil role + assasin
                 self.configRole(1, rolebuttonList)
             if self.numPlayer > 6 and self.numPlayer < 10: # can select 2 evil role + assasin
                 self.configRole(2, rolebuttonList)
             if self.numPlayer > 9: # can select 3 evil role + assasin
                 self.configRole(3, rolebuttonList)
+            
+            # 
             if self.buttonBack.isButtonClick():
-                self.roleMordred = False
-                self.roleMorgana = False
-                self.roleOberon = False
-                self.rolePercival = False
-                self.roleMinion = True
-                self.count = 0
+                self.resetRole()
                 if self.network.connectStatus == True:
                     self.network.disconnectFromServer()
                 self.changePageByInput(True)
 
+            # Draw role name
             self.drawText('Merlin', 18 , self.merlinRect.centerx, self.merlinRect.bottom + 25, self.font1, self.control.black)
             self.drawText('Loyal Servant', 18 , self.servantRect.centerx, self.servantRect.bottom + 25, self.font1, self.control.black)
             self.drawText('of King Arthur', 18 , self.servantRect.centerx, self.servantRect.bottom + 45, self.font1, self.control.black)
@@ -234,13 +250,27 @@ class HostMenu(GameScreen):
                 # if self.network.createLobby(self.numPlayer, [True, False, True, False, True, False, True, False], 0, 0):
                 if self.network.createLobby(self.numPlayer, [True, self.rolePercival, True, self.roleMordred, 
                 True, self.roleMorgana, self.roleMinion, self.roleOberon], 0, 0):
+                    self.createSuccess = True
                     if self.network.joinGame():
                         self.player.host = True
                         self.player.id = 0
                         self.changePageByInput(True, self.control.createPlayer)
+                        self.joinSuccess = True
                     else:
                         print("[GAME] Cannot join game") # pop up here
+                        self.joinSuccess = False
+
                 else:
                     print("[GAME] Cannot create lobby") # pop up error
+                    self.createSuccess = False
+            # dummy
+            if not self.joinSuccess:
+                self.joinFailed.draw(self.display, None, 28, textAlign = 'leftAlign', bgColor = pygame.Color('lightgrey'))
+                if self.joinFailed.b1.isButtonClick():
+                    self.joinSuccess = True
+            if not self.createSuccess:
+                self.createFailed.draw(self.display, None, 28, textAlign = 'leftAlign', bgColor = pygame.Color('lightgrey'))
+                if self.createFailed.b1.isButtonClick():
+                    self.createSuccess = True
 
             self.biltScreen() # update screen
