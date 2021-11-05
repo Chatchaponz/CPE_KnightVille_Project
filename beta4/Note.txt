@@ -7,6 +7,12 @@ beta v4
 - sound
 - readable code??
 
+bugs
+- two leaders or roles can happen ata the same time
+- end match and go back sometime cause game to crash
+- game crash while edit character and host start game
+- if assassin left the game during assassin phase some player's game may crash
+
 fix
 - Connecting to wrong server took too much time and game crash
 - Cannot join game but can create player
