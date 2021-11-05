@@ -1,0 +1,13 @@
+beta v4
+- playable 
+- more interface
+  + host UI, lobby UI
+- able to make initial setting (host)
+- able to customize player
+- sound
+- readable code??
+
+fix
+- Connecting to wrong server took too much time and game crash
+- Cannot join game but can create player
+- Popup type check
