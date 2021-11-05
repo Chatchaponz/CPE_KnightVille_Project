@@ -208,7 +208,7 @@ class Client:
         '''
         success = self.__sendData(Signal.STOP_MATCH, "")
         if(success[0]):
-            print("[CLIENT] Start match successfully")
+            print("[CLIENT] Stop match successfully")
         else:
             if success[1] == 0 : raise ServerMatchException("Unknown error.")
             if success[1] == -1 : raise ServerMatchException("Match is not start yet.")

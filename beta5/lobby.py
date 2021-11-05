@@ -140,6 +140,7 @@ class Lobby(GameManager):
         self.player.collided = []
         if self.player.collided == []:
             self.player.collided = [[0, self.screenWidth], [580, self.screenHeight + 20]]
+        
 
         while self.displayRunning:
 
@@ -188,6 +189,7 @@ class Lobby(GameManager):
                     self.player.id = None
                     self.currentName = None
                     self.currentSkin = None
+                    self.popEdit = False
                     self.sendData = []
                     self.othersPlayerInMatch.clear()
                     self.playersData.clear()
@@ -208,6 +210,7 @@ class Lobby(GameManager):
                             if currentPlayer == maxPlayer:
                                 self.currentName = None
                                 self.currentSkin = None
+                                self.popEdit = False
                                 self.allowSendData = False
                                 self.sendDataThread.join()
                                 self.network.startGame()
@@ -224,14 +227,20 @@ class Lobby(GameManager):
                         self.currentName = self.player.name
                     self.newPlayername.text = self.currentName
             
-            if self.popEdit == True:
-                self.editPlayer()
 
             if len(self.matchSetting) > 2:
                 gameStart = self.matchSetting[2]
-                if self.player.host != True and gameStart == True:
+                maxplayer = self.matchSetting[0]
+
+                # Pop edit player
+                if self.popEdit == True and not gameStart:
+                    self.editPlayer()
+
+                if(self.player.host != True and gameStart == True and 
+                   maxplayer == len(self.playersData)):
                     self.currentName = None
                     self.currentSkin = None
+                    self.popEdit = False
                     self.allowSendData = False
                     self.sendDataThread.join()
                     self.changePageByInput(True, self.control.game)

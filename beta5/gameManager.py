@@ -138,10 +138,9 @@ class GameManager(GameScreen):
             self.player.host = True
         
         # set my id
-        if self.player.id == None:
-            listOfAllId = list(range(len(self.playersData)))
-            myId = list(set(listOfAllId) - set(othersPlayerId))
-            self.player.id = myId[0]
+        listOfAllId = list(range(len(self.playersData)))
+        myId = list(set(listOfAllId) - set(othersPlayerId))
+        self.player.id = myId[0]
 
 
     def sendAndReceiveData(self, sendData = []):
@@ -173,6 +172,9 @@ class GameManager(GameScreen):
                         self.player.syncSignal = self.gamePhase
                         self.roundCount = matchData[2]
 
+                    # if len(matchData) > 3:
+                    #     print(matchData[1], matchData[3])
+                    
                     if self.gamePhase == 0:
                         if len(matchData) > 3:
                             self.setAllPlayersRole(matchData[3])
