@@ -70,7 +70,7 @@ class GameSetting:
         self.offFilter = pygame.image.load("images/profile/blackFilter.PNG")
         self.roleFrame = pygame.image.load("images/profile/frame.JPG")
         self.lock = pygame.image.load("images/profile/lock.PNG")
-        self.selected = pygame.image.load("images/profile/yes.PNG")
+        self.checked = pygame.image.load("images/profile/yes.PNG")
 
         #load skins
         self.skins = []
