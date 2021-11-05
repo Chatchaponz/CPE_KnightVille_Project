@@ -11,6 +11,13 @@ class CreatePlayer(GameScreen):
         super(CreatePlayer, self).__init__(control)
         self.network = control.network
         self.player = control.player
+
+        # Sound goes here
+
+        self.soundList = control.soundList
+        self.soundEffectVol = control.soundEffectVol
+        self.clickChoiceSound = self.soundList[2]
+
         # Image / Button goes here vvvv
         
         self.buttonJoin = Button(100, 200, 100, 50)
@@ -64,14 +71,14 @@ class CreatePlayer(GameScreen):
 
             self.display.blit(self.skins[skin], ((self.screenWidth//2) - 95, 300))
             self.buttonLeft.draw(self.display)
-            if self.buttonLeft.isButtonClick():
+            if self.buttonLeft.isButtonClick(self.soundList[6],self.soundEffectVol):
                 if skin == 0:
                     skin = self.amountSkins-1
                 else:
                     skin -= 1
 
             self.buttonRight.draw(self.display)
-            if self.buttonRight.isButtonClick():
+            if self.buttonRight.isButtonClick(self.soundList[6],self.soundEffectVol):
                 if skin == self.amountSkins-1:
                     skin = 0
                 else:
@@ -79,7 +86,7 @@ class CreatePlayer(GameScreen):
 
                     
             self.buttonJoin.draw(self.display)
-            if self.buttonJoin.isButtonClick():
+            if self.buttonJoin.isButtonClick(self.clickChoiceSound,self.soundEffectVol):
                 playerName = self.playerName.getText()
                 if playerName:
                     self.changePageByInput(True, self.control.lobby)    
@@ -88,7 +95,7 @@ class CreatePlayer(GameScreen):
                     self.triggerNoIGN = True
             if self.triggerNoIGN:
                 self.popupNoIGN.draw(self.display, self.font, size = 28, textAlign = 'centerAlign', bgColor = pygame.Color('darkgrey'))
-                if self.popupNoIGN.b1.isButtonClick():
+                if self.popupNoIGN.b1.isButtonClick(self.clickChoiceSound,self.soundEffectVol):
                     self.triggerNoIGN = False
 
             self.drawText('Create Player[Under construction]', 20 , 100, 100, self.font, self.control.white)
