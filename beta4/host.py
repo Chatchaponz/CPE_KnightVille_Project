@@ -84,7 +84,7 @@ class HostMenu(GameScreen):
 
         # Popup
         # dummy
-        dummy_string = 'some random textline'
+        dummy_string = 'Unknown Error'
         dummy_colorhighlight = pygame.Color('red')
         popWidth, popHeight = 300, 130
         self.createFailed = Popup((self.screenWidth - popWidth)//2, (self.screenHeight - popHeight)//2, popWidth, popHeight, dummy_string,
