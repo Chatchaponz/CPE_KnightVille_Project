@@ -29,7 +29,7 @@ class Player:
         # Name
         self.name = name
         self.fontColor = (255, 255, 255)
-        self.font = pygame.font.Font('font/Taviraj-Black.ttf', 25)
+        self.font = pygame.font.Font('font/Taviraj-Black.ttf', 22)
         self.playerName = self.font.render(self.name, True, self.fontColor)
 
         # Role
@@ -94,7 +94,14 @@ class Player:
 
         # Draw player's name
         playerNameRect = self.playerName.get_rect(center = (nameX, nameY))
+        # background
+        bgPlayerName = pygame.Surface((playerNameRect.width + 8, playerNameRect.height - 8))
+        bgPlayerNameRect = bgPlayerName.get_rect(center = playerNameRect.center)
+        bgPlayerName.set_alpha(100)
+        bgPlayerName.fill((0, 0, 0))
+        screen.blit(bgPlayerName, bgPlayerNameRect)
         screen.blit(self.playerName, playerNameRect)
+
         # Draw player
         screen.blit(self.playerSkin, self.playerRect)
     
