@@ -13,7 +13,7 @@ class OptionMenu(GameScreen):
 
         # Sound goes here
         self.soundList = control.soundList
-        self.backButtonSound = pygame.mixer.Sound(self.soundList[1])
+        self.backButtonOptionSound = self.soundList[2]
     
     def displayScreen(self):
 
@@ -25,8 +25,7 @@ class OptionMenu(GameScreen):
             self.display.fill((0, 0, 0))
 
             self.buttonMenu.draw(self.display)
-            if self.buttonMenu.isButtonClick():
-                self.backButtonSound.play()
+            if self.buttonMenu.isButtonClick(self.backButtonOptionSound):
                 self.changePageByInput(True, self.control.menu)
             
             self.drawText('Option Menu', 40 , self.screenWidth//2, 80, self.font, self.control.white)
