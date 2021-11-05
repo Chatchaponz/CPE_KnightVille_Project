@@ -23,15 +23,18 @@ class CreatePlayer(GameScreen):
         self.leftArrow = control.leftArrow
         self.arrowWidth = self.rightArrow.get_rect().width
         self.arrowHeight = self.rightArrow.get_rect().height
+        self.dressingCab = control.dressingCab
+        self.dressingCabWidth = self.dressingCab.get_rect().width
+        self.dressingRoom = control.dressingRoom
         
         self.buttonJoin = Button(100, 200, 100, 50)
         self.buttonJoin.addText('Join', self.font, 20, (255,255,255), 1, (50,50,50))
 
-        self.buttonLeft = Button(200, 300, self.arrowWidth, self.arrowHeight)
+        self.buttonLeft = Button((self.screenWidth//2) - (self.arrowWidth) - 80, 360, self.arrowWidth, self.arrowHeight)
         #self.buttonLeft.addText('←', self.font, 20, (255,255,255), 1, (50,50,50))
         self.buttonLeft.addImage(self.leftArrow)
 
-        self.buttonRight = Button(900, 300, self.arrowWidth, self.arrowHeight)
+        self.buttonRight = Button((self.screenWidth//2) + 80, 360, self.arrowWidth, self.arrowHeight)
         #self.buttonRight.addText('→', self.font, 20, (255,255,255), 1, (50,50,50))
         self.buttonRight.addImage(self.rightArrow)
 
@@ -71,6 +74,8 @@ class CreatePlayer(GameScreen):
 
             # page blackground
             self.display.fill((255, 150, 200))
+            self.display.blit(self.dressingRoom, (0,0))
+            self.display.blit(self.dressingCab, ((self.screenWidth//2) - (self.dressingCabWidth//2),80))
 
             # Things in page vvv
             self.playerName.draw(self.display)

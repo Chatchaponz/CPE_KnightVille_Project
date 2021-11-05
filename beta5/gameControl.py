@@ -46,6 +46,9 @@ class GameSetting:
 
         self.hostBoard = pygame.image.load("images\host\hostBoard.JPG")
 
+        self.dressingCab = pygame.image.load("images\createPlayer\dressingCab.PNG")
+        self.dressingRoom = pygame.image.load("images\createPlayer\dressingRoom.JPG")
+
         self.rightArrow = pygame.image.load("images\icon\pointerRight.PNG")
         self.leftArrow = pygame.image.load("images\icon\pointerLeft.PNG")
 
