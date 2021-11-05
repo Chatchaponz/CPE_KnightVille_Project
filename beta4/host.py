@@ -20,10 +20,10 @@ class HostMenu(GameScreen):
         self.prefixNumPlayer = pygame.font.Font(self.font1, 20).render('Number of players', True, self.control.black)
         
         self.buttonLeft = Button(self.screenWidth//2 - (self.prefixNumPlayer.get_width() - 180)//2, 140, 55, 30)
-        self.buttonLeft.addText('←', self.font1, 20, pygame.Color('white'), pygame.Color('orange'), pygame.Color('darkgrey'))
+        self.buttonLeft.addText('<', self.font1, 20, pygame.Color('white'), pygame.Color('orange'), pygame.Color('darkgrey'))
         
         self.buttonRight = Button(self.buttonLeft.rect.right + 70, self.buttonLeft.rect.y, 55, self.buttonLeft.rect.height)
-        self.buttonRight.addText('→', self.font1, 20, pygame.Color('white'), pygame.Color('darkgreen'), pygame.Color('darkgrey'))
+        self.buttonRight.addText('>', self.font1, 20, pygame.Color('white'), pygame.Color('darkgreen'), pygame.Color('darkgrey'))
         
         # Player numbers
         self.numPlayer = 5
