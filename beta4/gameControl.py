@@ -46,6 +46,9 @@ class GameSetting:
 
         self.hostBoard = pygame.image.load("images\host\hostBoard.JPG")
 
+        self.rightArrow = pygame.image.load("images\icon\pointerRight.PNG")
+        self.leftArrow = pygame.image.load("images\icon\pointerLeft.PNG")
+
         self.lobbyFloor = pygame.image.load("images\lobby\lobbyFloor.JPG")
         self.lobbyWall = pygame.image.load("images\lobby\lobbyWall.PNG")
         self.startShadow = pygame.image.load("images\lobby\startShadow.PNG")

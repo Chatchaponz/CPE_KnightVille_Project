@@ -19,15 +19,21 @@ class CreatePlayer(GameScreen):
         self.clickChoiceSound = self.soundList[2]
 
         # Image / Button goes here vvvv
+        self.rightArrow = control.rightArrow
+        self.leftArrow = control.leftArrow
+        self.arrowWidth = self.rightArrow.get_rect().width
+        self.arrowHeight = self.rightArrow.get_rect().height
         
         self.buttonJoin = Button(100, 200, 100, 50)
         self.buttonJoin.addText('Join', self.font, 20, (255,255,255), 1, (50,50,50))
 
-        self.buttonLeft = Button(200, 300, 100, 50)
-        self.buttonLeft.addText('←', self.font, 20, (255,255,255), 1, (50,50,50))
+        self.buttonLeft = Button(200, 300, self.arrowWidth, self.arrowHeight)
+        #self.buttonLeft.addText('←', self.font, 20, (255,255,255), 1, (50,50,50))
+        self.buttonLeft.addImage(self.leftArrow)
 
-        self.buttonRight = Button(900, 300, 100, 50)
-        self.buttonRight.addText('→', self.font, 20, (255,255,255), 1, (50,50,50))
+        self.buttonRight = Button(900, 300, self.arrowWidth, self.arrowHeight)
+        #self.buttonRight.addText('→', self.font, 20, (255,255,255), 1, (50,50,50))
+        self.buttonRight.addImage(self.rightArrow)
 
         self.playerName = Textbox(self.screenWidth//2 - 125, 150, 250, 35, 
         pygame.Color('white'), pygame.Color('white'), 15, 'Your In-game name', size = 28)
@@ -64,7 +70,7 @@ class CreatePlayer(GameScreen):
             self.checkEvent()
 
             # page blackground
-            self.display.fill((0, 0, 0))
+            self.display.fill((255, 150, 200))
 
             # Things in page vvv
             self.playerName.draw(self.display)
