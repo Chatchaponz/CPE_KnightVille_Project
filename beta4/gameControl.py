@@ -51,6 +51,17 @@ class GameSetting:
         self.mapAura = pygame.image.load("images\lobby\mapAura.PNG")
         self.lobbyTable = pygame.image.load("images\lobby\lobbyTable.PNG")
 
+        self.morgana = pygame.image.load("images\profile\Morgana.JPG")
+        self.mordred = pygame.image.load("images\profile\Mordred.JPG")
+        self.oberon = pygame.image.load("images\profile\Oberon.JPG")
+        self.percival = pygame.image.load("images\profile\Percival.JPG")
+        self.morganaPercival = pygame.image.load("images\profile\MorganaPercival.JPG")
+        self.servant = pygame.image.load("images\profile\Servant.JPG")
+        self.merlin = pygame.image.load("images\profile\Merlin.JPG")
+        self.offFilter = pygame.image.load("images/profile/blackFilter.PNG")
+        self.lock = pygame.image.load("images/profile/lock.PNG")
+        self.selected = pygame.image.load("images/profile/yes.PNG")
+
         #load skins
         self.skins = []
         imagePath = "images/skins/"
