@@ -352,7 +352,8 @@ class Game(GameManager):
             self.display.fill((0, 0, 0))
 
             # if self.waitForOthers():
-            self.phaseEvent()
+            if len(self.playersData) == self.matchSetting[0]:
+                self.phaseEvent()
 
             #[TEST PRINT]
             # print(self.currentLeader,self.gamePhase, self.player.syncSignal, self.player.choose, self.missionSuccess, self.goodScore, self.evilScore, self.partyMember)

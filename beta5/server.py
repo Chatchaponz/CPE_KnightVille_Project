@@ -374,6 +374,8 @@ class GameEvent:
                 self.voteRejected = 0
                 self.goodScore = 0
                 self.evilScore = 0
+                if len(thisMatch['setting']) > 3:
+                    thisMatch['setting'].pop(3)
 
             # Time delay for while loop
             time.sleep(0.001)
