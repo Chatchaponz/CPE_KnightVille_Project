@@ -206,12 +206,12 @@ class MainMenu(GameScreen):
                         else:
                             print("[GAME] Unable to connect server")
                             self.successConnect = False
+                        
+                        self.available = True
 
                     else:
-                        self.drawText("Connecting . . .", 30, 1100, 30, self.font1, self.control.white)
-                        print("Connecting...")
+                        self.drawText("Connecting . . .", 30, 640, 350, self.font1, self.control.white)
 
-                    self.available = True
 
 
                 # elif self.popupHost.b4.isButtonClick():
@@ -250,8 +250,7 @@ class MainMenu(GameScreen):
                             self.successConnect = False
 
                     else:
-                        self.drawText("Connecting . . .", 30, 1100, 30, self.font1, self.control.white)
-                        print("Connecting...")
+                        self.drawText("Connecting . . .", 30, 640, 350, self.font1, self.control.white)
                 
                     if self.network.connectStatus == True:
                         if self.network.joinGame():
@@ -262,7 +261,7 @@ class MainMenu(GameScreen):
                             self.network.disconnectFromServer()
                             self.successConnect = False
 
-                    self.available = True
+                        self.available = True
 
                 # elif self.popupJoin.b4.isButtonClick(): # POPUP GUIDE BUTTON
                 #     print('???')
