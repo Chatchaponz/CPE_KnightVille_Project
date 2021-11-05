@@ -71,14 +71,14 @@ class CreatePlayer(GameScreen):
 
             self.display.blit(self.skins[skin], ((self.screenWidth//2) - 95, 300))
             self.buttonLeft.draw(self.display)
-            if self.buttonLeft.isButtonClick(self.soundList[6],self.soundEffectVol):
+            if self.buttonLeft.isButtonClick(self.soundList[4],self.soundEffectVol):
                 if skin == 0:
                     skin = self.amountSkins-1
                 else:
                     skin -= 1
 
             self.buttonRight.draw(self.display)
-            if self.buttonRight.isButtonClick(self.soundList[6],self.soundEffectVol):
+            if self.buttonRight.isButtonClick(self.soundList[4],self.soundEffectVol):
                 if skin == self.amountSkins-1:
                     skin = 0
                 else:
