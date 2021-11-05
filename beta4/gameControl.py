@@ -60,6 +60,8 @@ class GameSetting:
         self.morganaPercival = pygame.image.load("images\profile\MorganaPercival.JPG")
         self.servant = pygame.image.load("images\profile\Servant.JPG")
         self.merlin = pygame.image.load("images\profile\Merlin.JPG")
+        self.minion = pygame.image.load("images\profile\Minion.JPG")
+        self.assasin = pygame.image.load("images\profile\Assassin.JPG")
         self.offFilter = pygame.image.load("images/profile/blackFilter.PNG")
         self.roleFrame = pygame.image.load("images/profile/frame.JPG")
         self.lock = pygame.image.load("images/profile/lock.PNG")
