@@ -41,8 +41,10 @@ class GameSetting:
         self.skyCover = pygame.image.load("images\menuUI\skyCover.JPG")
         self.woodBoard = pygame.image.load("images\menuUI\woodBoard.PNG")
         self.choice = pygame.image.load("images\menuUI\choice.PNG")
+
         self.popupBackground = pygame.image.load("images\popup1.PNG")
-        self.woodBoard2 = pygame.image.load("images\woodtexture.PNG")
+
+        self.hostBoard = pygame.image.load("images\host\hostBoard.JPG")
 
         self.lobbyRoom = pygame.image.load("images\lobby\lobbyRoom.JPG")
         self.knightStand = pygame.image.load("images\lobby\knightStand.PNG")
@@ -59,6 +61,7 @@ class GameSetting:
         self.servant = pygame.image.load("images\profile\Servant.JPG")
         self.merlin = pygame.image.load("images\profile\Merlin.JPG")
         self.offFilter = pygame.image.load("images/profile/blackFilter.PNG")
+        self.roleFrame = pygame.image.load("images/profile/frame.JPG")
         self.lock = pygame.image.load("images/profile/lock.PNG")
         self.selected = pygame.image.load("images/profile/yes.PNG")
 
