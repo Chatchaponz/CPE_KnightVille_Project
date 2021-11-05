@@ -10,6 +10,14 @@ class HostMenu(GameScreen):
         self.network = control.network
         self.player = control.player
         
+
+        # Sound goes here 
+        self.soundList = control.soundList
+        self.soundEffectVol = control.soundEffectVol
+        self.clickChoiceSound = self.soundList[2]
+        self.lockSoundOn = True
+        self.alreadyPlay = False
+
         # Button
         self.buttonBack = Button(80, 80, 80, 35)
         self.buttonBack.addText('Back', self.font1, 20, (255,255,255), 1, (50,50,50))
@@ -152,17 +160,27 @@ class HostMenu(GameScreen):
             if not self.roleOberon:
                 self.display.blit(self.offFilter, self.buttonRole1.rect)
                 self.display.blit(self.lock, (self.buttonRole1.rect.centerx - self.lock.get_width()//2, self.buttonRole1.rect.y))
+                self.lockSoundOn = True            
             if not self.roleMordred:
                 self.display.blit(self.offFilter, self.buttonRole2.rect)
                 self.display.blit(self.lock, (self.buttonRole2.rect.centerx - self.lock.get_width()//2, self.buttonRole2.rect.y))
+                self.lockSoundOn = True
             if not self.roleMorgana and not self.rolePercival:
                 self.display.blit(self.offFilter, self.buttonRole3.rect)
                 self.display.blit(self.lock, (self.buttonRole3.rect.centerx - self.lock.get_width()//2, self.buttonRole3.rect.y))
+                self.lockSoundOn = True
             if not self.roleMinion:
                 self.display.blit(self.offFilter, self.minionRect)
                 self.display.blit(self.lock, (self.minionRect.centerx - self.lock.get_width()//2, self.minionRect.y))
+                self.lockSoundOn = True
         elif self.count < maxrole:
             self.roleMinion = True
+            self.lockSoundOn = False
+            self.alreadyPlay = False
+
+        if self.lockSoundOn == True and self.alreadyPlay == False:
+            pygame.mixer.Sound(self.soundList[6]).play()
+            self.alreadyPlay = True
     
     def displayScreen(self):
 

@@ -93,7 +93,7 @@ class GameSetting:
         self.currentMusic.set_volume(0.5)
 
         #load sounds effect
-        self.soundList = ['sounds/button-30.wav','sounds/button-1.wav','sounds/button-28.wav','sounds/back.wav','sounds/select.wav','sounds/aclick.wav']
+        self.soundList = ['sounds/button-30.wav','sounds/button-1.wav','sounds/button-28.wav','sounds/back.wav','sounds/select.wav','sounds/aclick.wav','sounds/lock.wav']
         self.soundEffectVol = 1
 
 class StateControl(GameSetting):
