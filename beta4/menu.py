@@ -117,7 +117,7 @@ class MainMenu(GameScreen):
         self.displayRunning = True
         
         buttonList = [self.buttonHost, self.buttonJoin, self.buttonOption, self.buttonQuit]
-        
+
         while self.displayRunning:
             
             # print(f"{threading.activeCount()}") # print number of current thread
@@ -174,7 +174,7 @@ class MainMenu(GameScreen):
                 self.available = False
                 # self.popupHost.b4.draw(self.display)
                 # self.display.blit(self.popupBackground, ((self.screenWidth//4) - self.popupBackground))
-                if not self.connecting :
+                if not self.connecting:
 
                     if( self.popupHost.b1.isButtonClick(self.clickChoiceSound,self.soundEffectVol) and 
                         self.network.connectStatus != True):
@@ -220,7 +220,7 @@ class MainMenu(GameScreen):
                 self.popupJoin.draw(self.display, self.font1, 52, textAlign = 'centerAlign', bgColor = None, 
                 image = self.popupBackground)
                 # self.popupJoin.b4.draw(self.display) # OPTIONAL TO DRAWN GUIDE BUTTON ON POPUP
-                if not self.connecting :
+                if not self.connecting:
 
                     if (self.popupJoin.b1.isButtonClick(self.clickChoiceSound,self.soundEffectVol) and 
                         self.network.connectStatus != True):

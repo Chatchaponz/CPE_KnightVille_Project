@@ -94,7 +94,7 @@ class Player:
 
         # Draw player's name
         playerNameRect = self.playerName.get_rect(center = (nameX, nameY))
-        # background
+        # Name's background
         bgPlayerName = pygame.Surface((playerNameRect.width + 8, playerNameRect.height - 8))
         bgPlayerNameRect = bgPlayerName.get_rect(center = playerNameRect.center)
         bgPlayerName.set_alpha(100)
