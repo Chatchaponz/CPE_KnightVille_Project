@@ -134,9 +134,10 @@ class Game(GameManager):
     
     def revealAssassin(self):
         for player in self.playersData:
-            if player.getRole().getName() == "Assassin":
-                player.setRoleReveal(True)
-                break
+            if player.getRole() != None:
+                if player.getRole().getName() == "Assassin":
+                    player.setRoleReveal(True)
+                    break
     
     def isOthersGameEnded(self):
         status = True
@@ -259,7 +260,7 @@ class Game(GameManager):
                         self.updateTargetPlayer(self.targetPlayer)
                         killedPlayer = self.killPlayer(self.isKilled)
                     
-                if killedPlayer != None and self.player.getRole() != None:
+                if killedPlayer != None:
                     self.gameEnded = True
                     if killedPlayer.getRole().getName() == "Merlin":
                         self.drawText('Evil Win!!!', 50 , 500, 300, self.font, self.control.white)

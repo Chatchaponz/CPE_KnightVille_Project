@@ -140,7 +140,8 @@ class GameManager(GameScreen):
         # set my id
         listOfAllId = list(range(len(self.playersData)))
         myId = list(set(listOfAllId) - set(othersPlayerId))
-        self.player.id = myId[0]
+        if len(myId) > 0:
+            self.player.id = myId[0]
 
 
     def sendAndReceiveData(self, sendData = []):
