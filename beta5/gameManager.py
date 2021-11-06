@@ -83,59 +83,63 @@ class GameManager(GameScreen):
 
         foundHost = False
         othersPlayerId = []
-        # othersLeader = []
         othersStatus = []
+
         if len(self.matchSetting) > 2:
             gameStart = self.matchSetting[2]
 
-        for thisData in othersPlayerData:
-            thisAddr = thisData[0]
-            isHost = thisData[1]
-            thisPlayer = thisData[2]
-            thisPlayerId = thisData[3]
+        if type(othersPlayerData) == list:
+            for thisData in othersPlayerData:
+                thisAddr = thisData[0]
+                isHost = thisData[1]
+                thisPlayer = thisData[2]
+                thisPlayerId = thisData[3]
 
-            othersPlayerId.append(thisPlayerId)
-            if isHost == 1:
-                foundHost = True
-                
-            if thisAddr not in self.othersPlayerInMatch and thisPlayer != "":
-                tempPlayer = Player(thisPlayer[0], thisPlayer[1], thisPlayer[2], thisPlayer[3])
-                tempPlayer.address = thisAddr
-                tempPlayer.id = thisPlayerId
-                self.playersData.append(tempPlayer)
-                self.othersPlayerInMatch.append(thisAddr)
-            elif thisAddr in self.othersPlayerInMatch:
-                for player in self.playersData:
-                    if player != self.player and player.address == thisAddr:
-                        player.updateByPosition(thisPlayer[0], thisPlayer[1])
-                        if player.skin != thisPlayer[2]:
-                            player.updateSkin(thisPlayer[2])
-                        if player.name != thisPlayer[3]:
-                            player.updateName(thisPlayer[3])
-                        player.id = thisPlayerId
-                        player.isPlaying = thisPlayer[4]
-                        if gameStart and len(thisPlayer) > 12:
-                            player.choose = thisPlayer[5]
-                            player.syncSignal = thisPlayer[6]
-                            player.isSelected = thisPlayer[7]
-                            player.partyLeader = thisPlayer[8]
-                            if player.partyLeader == True and player.syncSignal == self.gamePhase:
-                                self.partyMember = thisPlayer[9]
-                            if player.getRole() != None:
-                                if player.getRole().getName() == "Assassin":
-                                    self.targetPlayer = thisPlayer[11][0]
-                                    self.isKilled = thisPlayer[11][1]
-                            othersStatus.append(thisPlayer[12])
-                        break
-            else:
-                if thisPlayer != "":
-                    print("[GAME] Something wrong with update player data")
+                othersPlayerId.append(thisPlayerId)
+                if isHost == 1:
+                    foundHost = True
+                    
+                if thisAddr not in self.othersPlayerInMatch and thisPlayer != "":
+                    tempPlayer = Player(thisPlayer[0], thisPlayer[1], thisPlayer[2], thisPlayer[3])
+                    tempPlayer.address = thisAddr
+                    tempPlayer.id = thisPlayerId
+                    self.playersData.append(tempPlayer)
+                    self.othersPlayerInMatch.append(thisAddr)
+                elif thisAddr in self.othersPlayerInMatch:
+                    for player in self.playersData:
+                        if player != self.player and player.address == thisAddr:
+                            player.updateByPosition(thisPlayer[0], thisPlayer[1])
+                            if player.skin != thisPlayer[2]:
+                                player.updateSkin(thisPlayer[2])
+                            if player.name != thisPlayer[3]:
+                                player.updateName(thisPlayer[3])
+                            player.id = thisPlayerId
+                            player.isPlaying = thisPlayer[4]
+                            if gameStart and len(thisPlayer) > 12:
+                                player.choose = thisPlayer[5]
+                                player.syncSignal = thisPlayer[6]
+                                player.isSelected = thisPlayer[7]
+                                player.partyLeader = thisPlayer[8]
+                                if player.partyLeader == True and player.syncSignal == self.gamePhase:
+                                    self.partyMember = thisPlayer[9]
+                                if player.getRole() != None:
+                                    if player.getRole().getName() == "Assassin":
+                                        self.targetPlayer = thisPlayer[11][0]
+                                        self.isKilled = thisPlayer[11][1]
+                                othersStatus.append(thisPlayer[12])
+                            break
+                else:
+                    if thisPlayer != "":
+                        print("[GAME] Something wrong with update player data")
+
         # check that others already end there game
         self.othersGameStatus = othersStatus
 
         # set my host
-        if foundHost == False:
+        if not foundHost:
             self.player.host = True
+        if foundHost:
+            self.player.host = False
         
         # set my id
         listOfAllId = list(range(len(self.playersData)))

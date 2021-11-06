@@ -69,6 +69,8 @@ class Lobby(GameManager):
         self.available = True
     
     def editPlayer(self):
+
+        self.available = False
         # Popup background (may change later)
         pygame.draw.rect(self.display, (0, 100, 200), self.popEditBg)
         
@@ -178,6 +180,7 @@ class Lobby(GameManager):
             self.drawPlayers()
             
             if self.available:
+
                 if self.buttonLeave.isButtonClick():
                     self.allowSendData = False
                     self.sendDataThread.join()
@@ -190,9 +193,11 @@ class Lobby(GameManager):
                     self.currentName = None
                     self.currentSkin = None
                     self.popEdit = False
+                    self.available = True
                     self.sendData = []
                     self.othersPlayerInMatch.clear()
                     self.playersData.clear()
+                    self.matchSetting.clear()
 
                     # Main music is loaded here
                     self.currentMusic.stop()
@@ -211,6 +216,7 @@ class Lobby(GameManager):
                                 self.currentName = None
                                 self.currentSkin = None
                                 self.popEdit = False
+                                self.available = True
                                 self.allowSendData = False
                                 self.sendDataThread.join()
                                 self.network.startGame()
@@ -226,7 +232,6 @@ class Lobby(GameManager):
                         self.currentSkin = self.player.skin
                         self.currentName = self.player.name
                     self.newPlayername.text = self.currentName
-            
 
             if len(self.matchSetting) > 2:
                 gameStart = self.matchSetting[2]
@@ -241,6 +246,7 @@ class Lobby(GameManager):
                     self.currentName = None
                     self.currentSkin = None
                     self.popEdit = False
+                    self.available = True
                     self.allowSendData = False
                     self.sendDataThread.join()
                     self.changePageByInput(True, self.control.game)
