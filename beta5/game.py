@@ -239,26 +239,27 @@ class Game(GameManager):
             
             if self.goodScore == 3:
                 killedPlayer = None
-                if self.player.getRole().getName() == "Assassin" and not self.gameEnded:
-                    self.player.setRoleReveal(True)
-                    if self.nameList == []:
-                        self.nameList = self.makeNameList()
-                    for id, name in enumerate(self.nameList):
-                        name.draw(self.display)
-                        if name.isButtonClick():
-                            self.targetPlayer = id
+                if self.player.getRole() != None:
+                    if self.player.getRole().getName() == "Assassin" and not self.gameEnded:
+                        self.player.setRoleReveal(True)
+                        if self.nameList == []:
+                            self.nameList = self.makeNameList()
+                        for id, name in enumerate(self.nameList):
+                            name.draw(self.display)
+                            if name.isButtonClick():
+                                self.targetPlayer = id
+                            self.updateTargetPlayer(self.targetPlayer)
+                        if self.targetPlayer != None:
+                            self.summit.draw(self.display)
+                            if self.summit.isButtonClick():
+                                self.isKilled = True
+                                killedPlayer = self.killPlayer(self.isKilled)
+                    else:
+                        self.revealAssassin()
                         self.updateTargetPlayer(self.targetPlayer)
-                    if self.targetPlayer != None:
-                        self.summit.draw(self.display)
-                        if self.summit.isButtonClick():
-                            self.isKilled = True
-                            killedPlayer = self.killPlayer(self.isKilled)
-                else:
-                    self.revealAssassin()
-                    self.updateTargetPlayer(self.targetPlayer)
-                    killedPlayer = self.killPlayer(self.isKilled)
+                        killedPlayer = self.killPlayer(self.isKilled)
                     
-                if killedPlayer != None:
+                if killedPlayer != None and self.player.getRole() != None:
                     self.gameEnded = True
                     if killedPlayer.getRole().getName() == "Merlin":
                         self.drawText('Evil Win!!!', 50 , 500, 300, self.font, self.control.white)
