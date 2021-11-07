@@ -12,9 +12,9 @@ class OptionMenu(GameScreen):
         self.buttonMenu = Button(100, 100, 100, 50)
         self.buttonMenu.addText('back', self.font, 25, control.white, 1, (50,50,50))
 
-        self.sfx = volumeBar(150, 250, 300, 30, 10)
-        self.music = volumeBar(self.sfx.rangeRect.x, self.sfx.rangeRect.y + self.sfx.rangeRect.height + 30, 
-        300, self.sfx.rangeRect.height, self.sfx.controlRect.width)
+        self.sfx = volumeBar(150, 250, 400, 40, 15)
+        self.music = volumeBar(self.sfx.rangeRect.x, self.sfx.rangeRect.y + self.sfx.rangeRect.height + 50, 
+        400, self.sfx.rangeRect.height, self.sfx.controlRect.width)
         
         self.volumeList = [[self.sfx, 'SFX'], [self.music, 'MUSIC']]
         # Sound goes here
@@ -28,7 +28,7 @@ class OptionMenu(GameScreen):
                 self.control.currentState.displayRunning = False
                 pygame.quit()
                 sys.exit()
-            for volumeBar , text in self.volumeList:
+            for volumeBar, text in self.volumeList:
                 volumeBar.handleEvent(event)
 
     def displayScreen(self):
@@ -45,5 +45,5 @@ class OptionMenu(GameScreen):
             if self.buttonMenu.isButtonClick(self.backButtonOptionSound):
                 self.changePageByInput(True, self.control.menu)
             
-            self.drawText('Option Menu', 40 , self.screenWidth//2, 80, self.font, self.control.black)
+            self.drawText('Option Menu', 40, self.screenWidth//2, 80, self.font, self.control.black)
             self.biltScreen()

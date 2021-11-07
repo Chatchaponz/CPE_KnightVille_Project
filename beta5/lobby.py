@@ -2,6 +2,7 @@ import pygame, sys, threading
 from button import Button 
 from gameManager import GameManager
 from textbox import Textbox
+from popup import Popup
 
 class Lobby(GameManager):
     
@@ -31,53 +32,58 @@ class Lobby(GameManager):
         self.lobbyTableWidth = self.lobbyTable.get_rect().width
 
         self.buttonLeave = Button(22, 259, self.startShadowWidth, self.startShadowHeight)
-        #self.buttonLeave.addText('Leave', self.font, 20, (255,255,255), 1, (50,50,50))
-        self.buttonLeave.addImage(self.leaveShadow)
+        self.buttonLeave.addImage(self.leaveShadow, self.leaveLight)
 
         self.buttonStart = Button(self.screenWidth - self.startShadowWidth - 22, 259, self.startShadowWidth, self.startShadowHeight)
-        #self.buttonStart.addText('Start', self.font, 20, (255,255,255), 1, (50,50,50))
-        self.buttonStart.addImage(self.startShadow)
+        self.buttonStart.addImage(self.startShadow, self.startLight)
 
         self.buttonEditPlayer = Button(820, 220, 156, 333)
         self.buttonEditPlayer.addText('Edit Player', self.font, 20, (255,255,255), 1, (50,50,50))
-        self.buttonEditPlayer.addImage(self.knightStand)
+        self.buttonEditPlayer.addImage(self.knightStand, self.knightStandAura)
         self.popEdit = False
 
         # Setup edit player
-        self.popEditWidth, self.popEditHeight = 400, 600 
-        self.popEditX = (self.display.get_width() - self.popEditWidth)//2
-        self.popEditY = (self.display.get_height() - self.popEditHeight)//2
         
-        self.popEditBg = pygame.Rect((self.popEditX, self.popEditY), (self.popEditWidth, self.popEditHeight))
-        self.popEditSummit = Button(self.popEditX + 300, self.popEditY + 520, 100, 50)
-        self.popEditSummit.addText('Summit', self.font, 20, (255, 255, 255), 1, (50,50,50))
+        self.popEditBg = control.dressingCab.get_rect()
+        self.popEditBg.x, self.popEditBg.y = self.screenWidth/2 - self.popEditBg.centerx, self.screenHeight/2 - self.popEditBg.centery
+        self.popEditSummit = Button(self.popEditBg.centerx - 50, self.popEditBg.y + 515, 100, 50)
+        self.popEditSummit.addText('Submit', self.font, 20, (255, 255, 255), bgColor = (144, 109, 99), bgColorOver = (120, 90, 82))
         
-        self.buttonLeft = Button(self.popEditX + 50, self.popEditY + 100, 100, 50)
-        self.buttonLeft.addText('←', self.font, 20, (255,255,255), 1, (50,50,50))
+        self.buttonLeft = Button(self.screenWidth//2 - self.control.leftArrow.get_width() - 80, 360, 
+        self.control.leftArrow.get_width(), self.control.leftArrow.get_height())
+        self.buttonLeft.addImage(self.control.leftArrow)
 
-        self.buttonRight = Button(self.popEditX + 250, self.popEditY + 100, 100, 50)
-        self.buttonRight.addText('→', self.font, 20, (255,255,255), 1, (50,50,50))
+        self.buttonRight = Button(self.screenWidth//2 + 80, 360, self.control.rightArrow.get_width(), 
+        self.control.rightArrow.get_height())
+        self.buttonRight.addImage(self.control.rightArrow)
 
         self.currentSkin = None
         self.currentName = None
         self.skins = self.control.skins
         self.amountSkins = len(self.skins)
         
-        self.newPlayername = Textbox(self.popEditBg.centerx - 110, self.popEditBg.y + 20, 220, 30, pygame.Color('white'), 
+        self.newPlayername = Textbox(self.popEditBg.centerx - 110, self.popEditBg.y + 70, 220, 30, pygame.Color('white'), 
         pygame.Color('white'), 15, fontPath = self.font1, size = 26)
 
+        self.popupNoIGN = Popup(self.screenWidth//2 - 250, self.screenHeight//2 - 90, 500, 180, 'Please enter your/> In-game name with no spacebar', 
+        pygame.Color('white'), pygame.Color('red'))
+        self.popupNoIGN.modComponents(self.popupNoIGN.b1, 'button', pygame.Color('darkseagreen4'), pygame.Color('darkslategray'), 'understand')
+
         self.available = True
+        self.triggerNoIGN = False
     
     def editPlayer(self):
 
         self.available = False
         # Popup background (may change later)
-        pygame.draw.rect(self.display, (0, 100, 200), self.popEditBg)
+        # pygame.draw.rect(self.display, (0, 100, 200), self.popEditBg)
+        self.display.blit(self.control.dressingCab, (self.popEditBg.x, self.popEditBg.y))
         
-        self.display.blit(self.skins[self.currentSkin], (self.popEditX + 100, self.popEditY + 120))
+        self.display.blit(self.skins[self.currentSkin], (self.popEditBg.centerx - self.skins[self.currentSkin].get_width()/2, 
+        self.popEditBg.y + 230))
 
         self.currentName = self.newPlayername.getText()
-        self.drawText(self.currentName, 20, self.popEditBg.centerx , self.popEditY + 100, self.font1, self.control.white)
+        self.drawText(self.currentName, 20, self.popEditBg.centerx , self.popEditBg.y + 210, self.font1, self.control.white)
 
         self.newPlayername.draw(self.display)
 
@@ -97,13 +103,22 @@ class Lobby(GameManager):
 
         self.popEditSummit.draw(self.display)
         if self.popEditSummit.isButtonClick():
-            self.player.updateSkin(self.currentSkin)
-            self.player.updateName(self.currentName)
-            self.currentName = None
-            self.currentSkin = None
-            self.available = True
-            self.popEdit = False
-
+            if len(self.currentName) > 1:
+                if self.currentName[-1] == ' ':
+                    self.currentName = self.currentName[:-1]
+            if self.currentName and not ' ' in self.currentName:
+                self.player.updateSkin(self.currentSkin)
+                self.player.updateName(self.currentName)
+                self.currentName = None
+                self.currentSkin = None
+                self.available = True
+                self.popEdit = False
+            else:
+                self.triggerNoIGN = True
+        if self.triggerNoIGN:
+            self.popupNoIGN.draw(self.display, self.font1, size = 28, textAlign = 'centerAlign', image = self.control.popupBackground)
+            if self.popupNoIGN.b1.isButtonClick():
+                self.triggerNoIGN = False
 
     # override
     def checkEvent(self):
@@ -153,22 +168,15 @@ class Lobby(GameManager):
                             self.player.skin,
                             self.player.name,
                             self.player.isPlaying]
-
+            
             # page blackground
             self.display.fill((0, 0, 0))
             self.display.blit(self.lobbyFloor, (0,0))
             self.display.blit(self.lobbyWall, (0,0))
-            if self.buttonEditPlayer.isMouseOver():
-                self.display.blit(self.knightStandAura, (820, 220))
 
             # draw all button
             for roomButton in buttonList:
                 roomButton.draw(self.display, self.available)
-
-            if self.buttonLeave.isMouseOver():
-                self.display.blit(self.leaveLight, (22, 259))
-            if self.buttonStart.isMouseOver():
-                self.display.blit(self.startLight, (self.screenWidth - self.startShadowWidth - 22, 259))
             
             self.display.blit(self.map, ((self.screenWidth//2)-(self.mapWidth//2), 235))
             
