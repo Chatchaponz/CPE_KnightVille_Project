@@ -88,8 +88,8 @@ class GameManager(GameScreen):
         if len(self.matchSetting) > 2:
             gameStart = self.matchSetting[2]
 
-        if type(othersPlayerData) == list:
-            for thisData in othersPlayerData:
+        for thisData in othersPlayerData:
+            if type(thisData) == list and len(thisData) > 3:
                 thisAddr = thisData[0]
                 isHost = thisData[1]
                 thisPlayer = thisData[2]
