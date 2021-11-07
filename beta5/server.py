@@ -53,7 +53,8 @@ thisMatch = {
     'players': [],
     'data': [],     # list of client in server plus its data 
                     # ex: [ [(192.168.X.X, 5555), 1, <data>], ... ]
-    'setting': []
+    'setting': [],
+    'chat': []
 }
 
 # Initiate server
@@ -393,6 +394,7 @@ def resetMatch():
     thisMatch['players'] = []
     thisMatch['data'] = []
     thisMatch['setting'] = []
+    thisMatch['chat'] = []
     print('[SERVER] Match has been ended')
 
 
@@ -569,6 +571,24 @@ def handleSignal(signal, data, addr, conn):
             if addr not in thisMatch['players']: failStatus = -2
             if addr != thisMatch['host']: failStatus = -3
             sendData(conn, [False, failStatus])
+    
+    if signal == Signal.SEND_MESSAGE:
+        if addr in thisMatch['players']:
+            if len(thisMatch['chat']) >= 40:
+                while len(thisMatch['chat']) >= 40:
+                    thisMatch['chat'].pop(0)
+                thisMatch['chat'].append([addr, data])
+            else:
+                thisMatch['chat'].append([addr, data])
+            sendData(conn, True)
+        else:
+            sendData(conn, False)
+    
+    if signal == Signal.RECEIVE_MESSAGE:
+        if addr in thisMatch['players']:
+            sendData(conn, thisMatch['chat'])
+        else:
+            sendData(conn, None)
 
 
 def threadedClient(conn, addr):

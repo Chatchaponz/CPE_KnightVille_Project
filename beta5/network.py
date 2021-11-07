@@ -1,3 +1,4 @@
+from pickle import TRUE
 from client import Client
 '''
 network - Manage connection between game(client) and server
@@ -105,12 +106,20 @@ class Network :
             othersPlayerData = self.__connect.send(sendData)
             currentPlayersInMatch = self.__connect.getAllPlayerAddress()
             matchSetting = self.__connect.getMatchSetting()
-            # eg: [[<addr_player1, addr_player2, ...>], [<data1>, <data2>, ...], [<Setting>]]
-            return [currentPlayersInMatch, othersPlayerData, matchSetting]
+            chatMessages = self.__connect.receiveMessages()
+            # eg: [[<addr_player1, addr_player2, ...>], [<data1>, <data2>, ...], [<Setting>], [ [<addr>, <message>], ... ]]
+            return [currentPlayersInMatch, othersPlayerData, matchSetting, chatMessages]
         except Exception as e:
             print("[ERROR] ", e)
         return None
     
+    def trySendMessage(self, sendMessage: str):
+        try:
+            return self.__connect.sendMessage(sendMessage)
+        except Exception as e:
+            print("[ERROR] ", e)
+        return False
+        
     def startGame(self):
         '''
         startGame - Start this match

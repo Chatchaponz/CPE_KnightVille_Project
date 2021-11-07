@@ -31,7 +31,9 @@ class Signal (IntEnum):
     END_MATCH = 7
     GET_MATCH_PLAYERS = 8
     GET_MATCH_SETTING = 9
-    EXIT = 10
+    SEND_MESSAGE = 10
+    RECEIVE_MESSAGE = 11
+    EXIT = 12
 
 class ClientException(Exception): 
     ''' ClientException - Parent class of all exception in Client '''
@@ -297,6 +299,31 @@ class Client:
             if success[1] == -3 : raise JoinMatchException("Match is full.")
             if success[1] == -4 : raise JoinMatchException("Already join this match.")
         return success[0]
+    
+    def sendMessage(self, data : str = ""):
+        '''
+        sendMessage - send message to server
+        + data - string data to be send
+
+        + return
+          - success if already send the message
+            - True if message store in server successfully
+            - False if cannot store the message (This client not in the match)
+        '''
+        success = self.__sendData(Signal.SEND_MESSAGE, data)
+        return  success
+    
+    def receiveMessages(self):
+        '''
+        receiveMessage - receive all messages from server
+
+        + return
+          - success if get all messages from the server (40 message maximum)
+                format: [ [<addr>, <message>], ... ]
+                but will return "None" if something went wrong
+        '''
+        success = self.__sendData(Signal.RECEIVE_MESSAGE, "")
+        return success
 
     def disconnect(self):
         '''

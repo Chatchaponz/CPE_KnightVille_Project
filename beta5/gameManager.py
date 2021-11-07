@@ -1,7 +1,8 @@
-import time
+import pygame, time
 from screen import GameScreen
 from player import Player
 from role import Role
+from textbox import Textbox
 
 class GameManager(GameScreen):
     
@@ -13,6 +14,7 @@ class GameManager(GameScreen):
         self.othersPlayerInMatch = control.globalData[0]
         self.playersData = control.globalData[1]
         self.matchSetting = control.globalData[2]
+        self.allMessages = control.globalData[3]
         self.currentPlayerInMatch = None
         self.othersPlayerData = None
 
@@ -32,6 +34,136 @@ class GameManager(GameScreen):
         self.gameEnded = False
         self.othersGameStatus = []
         self.roleAvailable = False
+
+        # Chat box 
+        self.chatPosX, self.chatPosY = 10, 380
+        chatWidth, self.chatHeight = 415, 300
+        self.chatBox = pygame.Surface((chatWidth, self.chatHeight))
+        self.chatBoxBg = pygame.Surface((chatWidth, self.chatHeight))
+        self.chatBox.set_colorkey(self.control.black)
+        self.chatBox.fill(self.control.black)
+        self.chatBoxBg.set_alpha(100)
+        self.fontsize = 20
+        self.textFont = pygame.font.Font(self.font, self.fontsize)
+        self.chatText = Textbox(self.chatPosX, self.chatPosY + self.chatHeight, 
+                                chatWidth, 30, self.control.white, limit = 89, text= "Chat with others", 
+                                fontPath= self.font, size = self.fontsize)
+        
+        self.offset = 0 # to make chat box scroll
+        self.prevOffset = -1
+        self.lastTextPos = self.chatHeight - self.fontsize
+        self.startTextPos = self.chatHeight - self.fontsize
+        self.myText = ""
+        self.pressEnter = False
+    
+    def handleChatBoxEvent(self, event):
+        if self.chatText.active:
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RETURN:
+                    self.myText = self.chatText.getText()
+                    if self.myText != "":
+                        if not self.network.trySendMessage(self.myText):
+                            print("Cannot send message")
+                        self.chatText.resetText()
+                        self.pressEnter = True
+                        self.startTextPos = self.chatHeight - self.fontsize
+                    else:
+                        self.pressEnter = False
+                        self.myText = ""
+            
+            if event.type == pygame.KEYUP:
+                if event.key == pygame.K_RETURN:
+                    self.pressEnter = False
+            
+            # scroll surface
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 4 and (self.lastTextPos + self.fontsize - 10 + self.offset) < 0: #up
+                    self.offset += 20
+                if event.button == 5 and (self.startTextPos + self.offset) > self.chatHeight - self.fontsize: #down
+                    self.offset -= 20
+
+        else:
+            self.pressEnter = False
+            self.startTextPos = self.chatHeight - self.fontsize
+
+        if not self.pressEnter:
+            self.chatText.handleEvent(event)
+    
+    def getNameByAddr(self, addr):
+        name = ""
+        ishost = False
+        if(self.currentPlayerInMatch != None and self.playersData != []):
+            if addr in self.currentPlayerInMatch and addr not in self.othersPlayerInMatch:
+                name =  self.player.name
+                ishost = True
+            else:
+                for player in self.playersData:
+                    if player.address == addr:
+                        name = player.name
+                        break
+        return name, ishost
+
+    def drawMessage(self, message: str, nameWidth, namelen, thisPos):
+        n = 30
+        if(len(message) + namelen < n):
+            thisPos -= 20
+            drawMessage = self.textFont.render(message, False, self.control.white)
+            self.chatBox.blit(drawMessage, (self.chatPosX + nameWidth, thisPos + self.offset))
+        else:
+            splitMessages = []
+            # message after name
+            splitMessages.append(message[0: (n - namelen)])
+            # other messages
+            for index in range( (n - namelen), len(message), n):
+                splitMessages.append(message[index: index + n ])
+
+            # draw message
+            for subMessage in range(len(splitMessages), 0, -1):
+                drawMessage = self.textFont.render(splitMessages[subMessage - 1], False, self.control.white)
+                thisPos -= 20
+                if subMessage - 1 == 0: self.chatBox.blit(drawMessage, (self.chatPosX + nameWidth, thisPos + self.offset))
+                else: self.chatBox.blit(drawMessage, (self.chatPosX, thisPos + self.offset))
+
+        return thisPos
+    
+    def drawChatBox(self, screen):
+        
+        # draw Text box
+        self.chatText.draw(screen)
+
+        self.chatText.update()
+
+        if self.chatText.active:
+            # draw chat box
+            self.chatBox.fill(self.control.black)
+            # screen.blit(self.chatBoxBg, (self.chatPosX, self.chatPosY) )
+            # draw name + message
+            textPos = self.startTextPos # get start text position
+
+            for messageIndex in range(len(self.allMessages), 0, -1):
+                thisMessage = self.allMessages[messageIndex - 1]
+                if (type(thisMessage) is list and len(thisMessage) > 1):
+                    name, ishost = self.getNameByAddr(thisMessage[0])
+                    if name != "":
+                        # draw name
+                        if ishost: fontColor = (0, 255, 255)
+                        elif not ishost: fontColor = (255, 255, 0)
+                        else: fontColor = (255, 0, 0)
+                        drawName = self.textFont.render("<" + name + ">: ", False, fontColor)
+                        # drawName.set_colorkey(self.control.black)
+
+                        # draw message
+                        textPos = self.drawMessage(thisMessage[1], drawName.get_width(), len(name) + 4, textPos)
+
+                        self.chatBox.blit(drawName, (self.chatPosX, textPos + self.offset))
+                        
+                        # if textPos < -20 : break # if draw util it exceeding upper bound no need to draw anymore
+                        # textPos -= 20
+            
+            screen.blit(self.chatBoxBg, (self.chatPosX, self.chatPosY) )
+            screen.blit(self.chatBox, (self.chatPosX, self.chatPosY) )
+            self.lastTextPos = textPos # get end text position
 
     def doSendAndReceiveData(self):
         while self.allowSendData:
@@ -151,21 +283,25 @@ class GameManager(GameScreen):
     def sendAndReceiveData(self, sendData = []):
         data = self.network.tryGetData(sendData)
         if data != None:
-            self.currentPlayerInMatch = data[0]
-            self.othersPlayerData = data[1]
-            if len(data) > 2 and data[2] != None:
-                if self.matchSetting == []:
-                    self.matchSetting += data[2]
-                else:
-                    self.matchSetting.clear()
-                    self.matchSetting += data[2]
+            if len(data) > 3:
+                if type(data[0]) is list: self.currentPlayerInMatch = data[0]
+                if type(data[1]) is list: self.othersPlayerData = data[1]
+                if type(data[2]) is list: self.matchSetting = data[2]
+                if type(data[3]) is list: self.allMessages = data[3]
+            # if len(data) > 2 and data[2] != None:
+            #     if self.matchSetting == []:
+            #         self.matchSetting += data[2]
+            #     else:
+            #         self.matchSetting.clear()
+            #         self.matchSetting += data[2]
     
     def updateScreenData(self):
 
         if self.othersPlayerData != None and self.currentPlayerInMatch != None:
 
-            if self.matchSetting != []:
+            if self.matchSetting != [] and type(self.matchSetting) is list:
             # print(self.matchSetting)
+
                 gameStart = self.matchSetting[2]
                 matchData = self.matchSetting[1]
                 

@@ -130,6 +130,8 @@ class Lobby(GameManager):
             self.newPlayername.handleEvent(event)
             self.player.playerMovement(event)
 
+            self.handleChatBoxEvent(event)
+
     def displayScreen(self):
 
         self.displayRunning = True
@@ -187,6 +189,8 @@ class Lobby(GameManager):
                 self.updateScreenData()
             self.drawPlayers()
             
+            self.drawChatBox(self.display)
+
             if self.available:
 
                 if self.buttonLeave.isButtonClick():
@@ -206,6 +210,7 @@ class Lobby(GameManager):
                     self.othersPlayerInMatch.clear()
                     self.playersData.clear()
                     self.matchSetting.clear()
+                    self.allMessages.clear()
 
                     # Main music is loaded here
                     self.currentMusic.stop()
