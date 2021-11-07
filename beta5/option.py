@@ -45,7 +45,7 @@ class OptionMenu(GameScreen):
             self.control.currentMusic.set_volume(self.music.value/100)
             self.control.soundEffectVol = self.sfx.value/100
             self.buttonMenu.draw(self.display)
-            if self.buttonMenu.isButtonClick(self.backButtonOptionSound):
+            if self.buttonMenu.isButtonClick(self.backButtonOptionSound, self.control.getSoundEffectVol()):
                 self.changePageByInput(True, self.control.menu)
             
             self.drawText('Option Menu', 40, self.screenWidth//2, 100, self.font, self.control.black)

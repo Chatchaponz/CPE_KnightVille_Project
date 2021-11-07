@@ -95,6 +95,9 @@ class GameSetting:
         #load sounds effect
         self.soundList = ['sounds/button-30.wav','sounds/button-1.wav','sounds/button-28.wav','sounds/back.wav','sounds/select.wav','sounds/aclick.wav','sounds/lock.wav']
         self.soundEffectVol = 1
+    
+    def getSoundEffectVol(self):
+        return self.soundEffectVol
 
 class StateControl(GameSetting):
 

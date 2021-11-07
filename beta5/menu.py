@@ -16,7 +16,6 @@ class MainMenu(GameScreen):
         self.musicList = control.musicList
 
         # Sound Effect
-        self.soundEffectVol = control.soundEffectVol
         self.soundList = control.soundList
         self.clickChoiceSound = self.soundList[2]
         self.isMouseOverSound = self.soundList[0]
@@ -151,20 +150,20 @@ class MainMenu(GameScreen):
             if self.available:
             # Mouse over button sound
                 for buttonSurface in buttonList:
-                    buttonSurface.triggerSound(self.soundList[1],self.soundEffectVol)
+                    buttonSurface.triggerSound(self.soundList[1],self.control.getSoundEffectVol())
                     if buttonSurface.isMouseOver():
                         self.display.blit(self.choice, ((self.screenWidth/4) - (self.choiceWidth/2) + 50, buttonSurface.rect.y))
                     
             # MENU LIST
-                if self.buttonOption.isButtonClick(self.clickChoiceSound,self.soundEffectVol-0.1):
+                if self.buttonOption.isButtonClick(self.clickChoiceSound,self.control.getSoundEffectVol()-0.1):
                     self.changePageByInput(True, self.control.option)
-                if self.buttonHost.isButtonClick(self.clickChoiceSound,self.soundEffectVol-0.1):
+                if self.buttonHost.isButtonClick(self.clickChoiceSound,self.control.getSoundEffectVol()-0.1):
                     self.hosting = True # OPEN HOST POPUP
                     self.available = False
-                if self.buttonJoin.isButtonClick(self.clickChoiceSound,self.soundEffectVol-0.1):
+                if self.buttonJoin.isButtonClick(self.clickChoiceSound,self.control.getSoundEffectVol()-0.1):
                     self.joining = True # OPEN JOIN POPUP
                     self.available = False
-                if self.buttonQuit.isButtonClick(self.clickChoiceSound,self.soundEffectVol-0.1):
+                if self.buttonQuit.isButtonClick(self.clickChoiceSound,self.control.getSoundEffectVol()-0.1):
                     pygame.quit()
                     sys.exit()
             
@@ -177,7 +176,7 @@ class MainMenu(GameScreen):
                 # self.display.blit(self.popupBackground, ((self.screenWidth//4) - self.popupBackground))
                 if not self.connecting:
 
-                    if( self.popupHost.b1.isButtonClick(self.clickChoiceSound,self.soundEffectVol) and 
+                    if( self.popupHost.b1.isButtonClick(self.clickChoiceSound,self.control.getSoundEffectVol()) and 
                         self.network.connectStatus != True):
                         ipHost = self.popupHost.t1.getText()
                         portHost = self.popupHost.t2.getText()
@@ -185,7 +184,7 @@ class MainMenu(GameScreen):
                         self.hostClicked = True
                         self.popupHost.activeButton = False
                     
-                    if self.popupHost.b2.isButtonClick(self.backButtonSound,self.soundEffectVol):
+                    if self.popupHost.b2.isButtonClick(self.backButtonSound,self.control.getSoundEffectVol()):
                         self.available = True
                         self.hosting = False
 
@@ -223,7 +222,7 @@ class MainMenu(GameScreen):
                 # self.popupJoin.b4.draw(self.display) # OPTIONAL TO DRAWN GUIDE BUTTON ON POPUP
                 if not self.connecting:
 
-                    if (self.popupJoin.b1.isButtonClick(self.clickChoiceSound,self.soundEffectVol) and 
+                    if (self.popupJoin.b1.isButtonClick(self.clickChoiceSound,self.control.getSoundEffectVol()) and 
                         self.network.connectStatus != True):
                         ipJoin = self.popupJoin.t1.getText()
                         portJoin = self.popupJoin.t2.getText()
@@ -231,7 +230,7 @@ class MainMenu(GameScreen):
                         self.joinClicked = True
                         self.popupJoin.activeButton = False
                     
-                    if self.popupJoin.b2.isButtonClick(self.backButtonSound,self.soundEffectVol): # POPUP CLOSE BUTTON
+                    if self.popupJoin.b2.isButtonClick(self.backButtonSound,self.control.getSoundEffectVol()): # POPUP CLOSE BUTTON
                         self.available = True
                         self.joining = False
                 
@@ -269,7 +268,7 @@ class MainMenu(GameScreen):
                 self.popupFail.draw(self.display, self.font1, 30, textAlign= 'centerAlign',  bgColor = None, 
                 image = self.popupBackground)
                 self.available = False
-                if self.popupFail.b1.isButtonClick(self.backButtonSound,self.soundEffectVol):
+                if self.popupFail.b1.isButtonClick(self.backButtonSound,self.control.getSoundEffectVol()):
                     self.successConnect = True
                     self.available = True
                 

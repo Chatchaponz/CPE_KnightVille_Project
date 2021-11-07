@@ -13,7 +13,7 @@ class HostMenu(GameScreen):
 
         # Sound goes here 
         self.soundList = control.soundList
-        self.soundEffectVol = control.soundEffectVol
+        # self.soundEffectVol = control.soundEffectVol
         self.clickChoiceSound = self.soundList[2]
         self.lockSoundOn = True
         self.alreadyPlay = False
