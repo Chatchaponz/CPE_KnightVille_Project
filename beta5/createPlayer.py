@@ -31,19 +31,19 @@ class CreatePlayer(GameScreen):
         self.buttonJoin.addText('Join', self.font, 20, (255,255,255), 1, (50,50,50))
 
         self.buttonLeft = Button((self.screenWidth//2) - (self.arrowWidth) - 80, 360, self.arrowWidth, self.arrowHeight)
-        #self.buttonLeft.addText('←', self.font, 20, (255,255,255), 1, (50,50,50))
         self.buttonLeft.addImage(self.leftArrow)
 
         self.buttonRight = Button((self.screenWidth//2) + 80, 360, self.arrowWidth, self.arrowHeight)
-        #self.buttonRight.addText('→', self.font, 20, (255,255,255), 1, (50,50,50))
         self.buttonRight.addImage(self.rightArrow)
 
         self.playerName = Textbox(self.screenWidth//2 - 125, 150, 250, 35, 
         pygame.Color('white'), pygame.Color('white'), 15, 'Your In-game name', size = 28)
         self.playerName.text = ''
 
-        self.popupNoIGN = Popup(self.screenWidth//2 - 300, self.screenHeight//2 - 125, 600, 250, 'Please enter your/> In-game name', pygame.Color('white'), pygame.Color('red'))
-        self.popupNoIGN.modComponents(self.popupNoIGN.b1, 'button', pygame.Color('darkseagreen4'), pygame.Color('darkslategray'), 'understand')
+        self.popupNoIGN = Popup(self.screenWidth//2 - 250, self.screenHeight//2 - 90, 500, 180, 
+        'Please enter your/> In-game name with no spacebar', pygame.Color('white'), pygame.Color('darkblue'))
+        self.popupNoIGN.modComponents(self.popupNoIGN.b1, 'button', pygame.Color('darkseagreen4'), 
+        pygame.Color('darkslategray'), 'understand')
 
         self.triggerNoIGN = False
 
@@ -99,14 +99,17 @@ class CreatePlayer(GameScreen):
             self.buttonJoin.draw(self.display)
             if self.buttonJoin.isButtonClick(self.clickChoiceSound,self.soundEffectVol):
                 playerName = self.playerName.getText()
-                if playerName:
+                if len(playerName) > 1:
+                    if playerName[-1] == ' ':
+                        playerName = playerName[:-1]
+                if playerName and not ' ' in playerName:
                     self.changePageByInput(True, self.control.lobby)    
                     self.player.setAttribute(50, 700, skin, playerName)
                 else:
                     self.triggerNoIGN = True
             if self.triggerNoIGN:
-                self.popupNoIGN.draw(self.display, self.font, size = 28, textAlign = 'centerAlign', bgColor = pygame.Color('darkgrey'))
-                if self.popupNoIGN.b1.isButtonClick(self.clickChoiceSound,self.soundEffectVol):
+                self.popupNoIGN.draw(self.display, self.font1, size = 28, textAlign = 'centerAlign', image = self.control.popupBackground)
+                if self.popupNoIGN.b1.isButtonClick(self.clickChoiceSound, self.soundEffectVol):
                     self.triggerNoIGN = False
 
             self.drawText('Create Player[Under construction]', 20 , 100, 100, self.font, self.control.white)

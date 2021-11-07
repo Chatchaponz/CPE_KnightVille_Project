@@ -66,7 +66,7 @@ class Lobby(GameManager):
         pygame.Color('white'), 15, fontPath = self.font1, size = 26)
 
         self.popupNoIGN = Popup(self.screenWidth//2 - 250, self.screenHeight//2 - 90, 500, 180, 'Please enter your/> In-game name with no spacebar', 
-        pygame.Color('white'), pygame.Color('red'))
+        pygame.Color('white'), pygame.Color('darkblue'))
         self.popupNoIGN.modComponents(self.popupNoIGN.b1, 'button', pygame.Color('darkseagreen4'), pygame.Color('darkslategray'), 'understand')
 
         self.available = True

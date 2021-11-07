@@ -12,10 +12,11 @@ class OptionMenu(GameScreen):
         self.buttonMenu = Button(100, 100, 100, 50)
         self.buttonMenu.addText('back', self.font, 25, control.white, 1, (50,50,50))
 
-        self.sfx = volumeBar(150, 250, 400, 40, 15)
+        self.sfx = volumeBar(self.screenWidth//2 - 225, 250, 450, 40, 15)
         self.music = volumeBar(self.sfx.rangeRect.x, self.sfx.rangeRect.y + self.sfx.rangeRect.height + 50, 
-        400, self.sfx.rangeRect.height, self.sfx.controlRect.width)
+        450, self.sfx.rangeRect.height, self.sfx.controlRect.width)
         
+        self.music.controlRect.x = self.music.rangeRect.x + self.music.rangeRect.width/2
         self.volumeList = [[self.sfx, 'SFX'], [self.music, 'MUSIC']]
         # Sound goes here
         self.soundList = control.soundList
@@ -28,7 +29,7 @@ class OptionMenu(GameScreen):
                 self.control.currentState.displayRunning = False
                 pygame.quit()
                 sys.exit()
-            for volumeBar, text in self.volumeList:
+            for volumeBar, dummyText in self.volumeList:
                 volumeBar.handleEvent(event)
 
     def displayScreen(self):
@@ -37,13 +38,15 @@ class OptionMenu(GameScreen):
 
         while self.displayRunning:
             self.checkEvent()
-            self.display.fill((255, 255, 255))
+            self.display.blit(self.control.hostBoard, (0, 0))
 
             for volumeBar, text in self.volumeList:
                 volumeBar.draw(self.display, self.control.offFilter, text, None, 26)
+            self.control.currentMusic.set_volume(self.music.value/100)
+            self.control.soundEffectVol = self.sfx.value/100
             self.buttonMenu.draw(self.display)
             if self.buttonMenu.isButtonClick(self.backButtonOptionSound):
                 self.changePageByInput(True, self.control.menu)
             
-            self.drawText('Option Menu', 40, self.screenWidth//2, 80, self.font, self.control.black)
+            self.drawText('Option Menu', 40, self.screenWidth//2, 100, self.font, self.control.black)
             self.biltScreen()
