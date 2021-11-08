@@ -70,7 +70,8 @@ class Textbox():
                 if event.key == pygame.K_BACKSPACE:
                     self.text = self.text[:-1]
                 elif self.limit != None and len(self.text) < self.limit or self.limit == None:
-                    self.text += event.unicode
+                    if event.unicode != pygame.K_RETURN or event.unicode != pygame.K_KP_ENTER:
+                        self.text += event.unicode
             self.textSurface = self.fontSurface.render(self.text + '|', True, pygame.Color('black'))
         else:
             if self.prevText != self.initText and self.text == '':
