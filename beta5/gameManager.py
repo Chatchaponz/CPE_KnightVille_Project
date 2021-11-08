@@ -59,11 +59,11 @@ class GameManager(GameScreen):
         if self.chatText.active:
 
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_RETURN:
+                if event.key in [pygame.K_RETURN, pygame.K_KP_ENTER]:
 
                     self.myText = self.chatText.getText()
 
-                    if self.myText != "" and self.myText != event.unicode:
+                    if self.myText != "":
                         if not self.network.trySendMessage(self.myText):
                             print("Cannot send message")
                         self.pressEnter = True
@@ -74,7 +74,7 @@ class GameManager(GameScreen):
                     self.myText = ""
             
             if event.type == pygame.KEYUP:
-                if event.key == pygame.K_RETURN:
+                if event.key in [pygame.K_RETURN, pygame.K_KP_ENTER]:
                     self.pressEnter = False
             
             # scroll surface
