@@ -60,16 +60,18 @@ class GameManager(GameScreen):
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN:
+
                     self.myText = self.chatText.getText()
-                    if self.myText != "":
+
+                    if self.myText != "" and self.myText != event.unicode:
                         if not self.network.trySendMessage(self.myText):
                             print("Cannot send message")
-                        self.chatText.resetText()
                         self.pressEnter = True
-                        self.startTextPos = self.chatHeight - self.fontsize
                     else:
                         self.pressEnter = False
-                        self.myText = ""
+
+                    self.chatText.resetText()
+                    self.myText = ""
             
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_RETURN:
