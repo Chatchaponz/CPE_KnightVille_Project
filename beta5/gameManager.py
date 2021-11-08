@@ -39,9 +39,9 @@ class GameManager(GameScreen):
         self.chatPosX, self.chatPosY = 10, 380
         chatWidth, self.chatHeight = 415, 300
         self.chatBox = pygame.Surface((chatWidth, self.chatHeight))
-        self.chatBoxBg = pygame.Surface((chatWidth, self.chatHeight))
-        self.chatBox.set_colorkey(self.control.black)
+        self.chatBox.set_colorkey(self.control.black) # this color will be transparent
         self.chatBox.fill(self.control.black)
+        self.chatBoxBg = pygame.Surface((chatWidth, self.chatHeight))
         self.chatBoxBg.set_alpha(100)
         self.fontsize = 20
         self.textFont = pygame.font.Font(self.font, self.fontsize)
@@ -50,7 +50,6 @@ class GameManager(GameScreen):
                                 fontPath= self.font, size = self.fontsize)
         
         self.offset = 0 # to make chat box scroll
-        self.prevOffset = -1
         self.lastTextPos = self.chatHeight - self.fontsize
         self.startTextPos = self.chatHeight - self.fontsize
         self.myText = ""
@@ -120,7 +119,7 @@ class GameManager(GameScreen):
             for index in range( (n - namelen), len(message), n):
                 splitMessages.append(message[index: index + n ])
 
-            # draw message
+            # draw messages
             for subMessage in range(len(splitMessages), 0, -1):
                 drawMessage = self.textFont.render(splitMessages[subMessage - 1], False, self.control.white)
                 thisPos -= 20
@@ -139,7 +138,7 @@ class GameManager(GameScreen):
         if self.chatText.active:
             # draw chat box
             self.chatBox.fill(self.control.black)
-            # screen.blit(self.chatBoxBg, (self.chatPosX, self.chatPosY) )
+
             # draw name + message
             textPos = self.startTextPos # get start text position
 
@@ -153,15 +152,11 @@ class GameManager(GameScreen):
                         elif not ishost: fontColor = (255, 255, 0)
                         else: fontColor = (255, 0, 0)
                         drawName = self.textFont.render("<" + name + ">: ", False, fontColor)
-                        # drawName.set_colorkey(self.control.black)
 
-                        # draw message
+                        # draw messages
                         textPos = self.drawMessage(thisMessage[1], drawName.get_width(), len(name) + 4, textPos)
 
                         self.chatBox.blit(drawName, (self.chatPosX, textPos + self.offset))
-                        
-                        # if textPos < -20 : break # if draw util it exceeding upper bound no need to draw anymore
-                        # textPos -= 20
             
             screen.blit(self.chatBoxBg, (self.chatPosX, self.chatPosY) )
             screen.blit(self.chatBox, (self.chatPosX, self.chatPosY) )
