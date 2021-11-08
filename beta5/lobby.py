@@ -38,9 +38,13 @@ class Lobby(GameManager):
         self.buttonStart.addImage(self.startShadow, self.startLight)
 
         self.buttonEditPlayer = Button(820, 220, 156, 333)
-        self.buttonEditPlayer.addText('Edit Player', self.font, 20, (255,255,255), 1, (50,50,50))
+        # self.buttonEditPlayer.addText('Edit Player', self.font, 20, (255,255,255), 1, (50,50,50))
         self.buttonEditPlayer.addImage(self.knightStand, self.knightStandAura)
         self.popEdit = False
+
+        # Setup edit room
+        self.buttonRoomSetting = Button((self.screenWidth//2)-(self.mapWidth//2), 215, self.mapWidth, self.map.get_rect().height)
+        self.buttonRoomSetting.addImage(self.map, self.mapAura)
 
         # Setup edit player
         
@@ -76,7 +80,6 @@ class Lobby(GameManager):
 
         self.available = False
         # Popup background (may change later)
-        # pygame.draw.rect(self.display, (0, 100, 200), self.popEditBg)
         self.display.blit(self.control.dressingCab, (self.popEditBg.x, self.popEditBg.y))
         
         self.display.blit(self.skins[self.currentSkin], (self.popEditBg.centerx - self.skins[self.currentSkin].get_width()/2, 
@@ -153,7 +156,7 @@ class Lobby(GameManager):
         #     print(thread.name)
 
         # all buttons
-        buttonList = [self.buttonEditPlayer, self.buttonStart, self.buttonLeave]
+        buttonList = [self.buttonEditPlayer, self.buttonRoomSetting, self.buttonStart, self.buttonLeave]
 
         # Set collision
         self.player.collided = []
@@ -180,9 +183,7 @@ class Lobby(GameManager):
             for roomButton in buttonList:
                 roomButton.draw(self.display, self.available)
             
-            self.display.blit(self.map, ((self.screenWidth//2)-(self.mapWidth//2), 235))
-            
-            self.display.blit(self.lobbyTable, ((self.screenWidth//2)-(self.lobbyTableWidth//2), 385))
+            self.display.blit(self.lobbyTable, ((self.screenWidth//2) - (self.lobbyTableWidth//2), 385))
 
 
             if self.network.connectStatus == True:
@@ -218,6 +219,17 @@ class Lobby(GameManager):
                     self.currentMusic.play(-1)
 
                     self.changePageByInput(True, self.control.menu)
+
+                for i in range(5):
+                    self.drawText('Edit Player', 30, self.buttonEditPlayer.rect.centerx + i, self.buttonEditPlayer.rect.y - 15 + i, 
+                    self.font1, self.control.black)
+                    self.drawText('Room Setting', 30, self.buttonRoomSetting.rect.centerx + i, self.buttonRoomSetting.rect.y - 45 + i, 
+                    self.font1, self.control.black)
+                self.drawText('Edit Player', 30, self.buttonEditPlayer.rect.centerx, self.buttonEditPlayer.rect.y - 15, 
+                self.font1, self.control.white)
+                self.drawText('Room Setting', 30, self.buttonRoomSetting.rect.centerx, self.buttonRoomSetting.rect.y - 45, 
+                self.font1, self.control.white)
+            
                 
                 if self.buttonStart.isButtonClick():
                     if self.player.host == True:
@@ -263,6 +275,5 @@ class Lobby(GameManager):
                     self.allowSendData = False
                     self.sendDataThread.join()
                     self.changePageByInput(True, self.control.game)
-
             self.biltScreen() # update screen
             self.clock.tick(60) # run at 60 fps
