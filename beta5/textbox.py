@@ -23,6 +23,7 @@ class Textbox():
         + limit - limit input character of an object.
         '''
         self.rect = pygame.Rect(x, y, width, height) # area of an object.
+        self.initRect = pygame.Rect(x, y, width, height)
         self.text = text # text on object.
         self.prevText = text # previous text on object.
         self.initText = text # text on object when object being initialize.
@@ -53,10 +54,11 @@ class Textbox():
         + initReset - reset text in object when it is initial text. 
         '''
         if event.type == pygame.MOUSEBUTTONDOWN:
-            if self.rect.collidepoint(event.pos):
-                self.active = True
-            else:
-                self.active = False
+            if event.button == 1:
+                if self.rect.collidepoint(event.pos):
+                    self.active = True
+                else:
+                    self.active = False
             if self.active:
                 self.color = self.activeColor
                 if self.text == self.initText and initReset:
@@ -88,8 +90,11 @@ class Textbox():
         '''
         update - update width of object due to text lenght.
         '''
-        width = max(200, self.textSurface.get_width() + 10)
-        self.rect.width = width
+        if self.textSurface.get_width() > self.rect.width - 10:
+            width = max(200, self.textSurface.get_width() + 10)
+            self.rect.width = width
+        elif self.textSurface.get_width() < self.rect.width - 10: 
+            self.rect.width = self.initRect.width
 
     def draw(self, screen):
         '''
