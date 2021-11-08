@@ -97,6 +97,8 @@ class GameManager(GameScreen):
             if addr in self.currentPlayerInMatch and addr not in self.othersPlayerInMatch:
                 name =  self.player.name
                 ishost = True
+            elif addr not in self.currentPlayerInMatch and addr not in self.othersPlayerInMatch:
+                name = "Unknown"
             else:
                 for player in self.playersData:
                     if player.address == addr:
