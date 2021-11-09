@@ -1,3 +1,4 @@
+from typing import overload
 import pygame
 from button import Button
 from textbox import Textbox
@@ -5,14 +6,14 @@ from textbox import Textbox
 class Popup:
     def __init__(self, x, y, width, height, textline, textColor, textHighlight = None, type = 0):
         self.rect =  pygame.Rect(x, y, width, height)
-        self.textRect = self.rect.inflate(-150, -50)
         self.text = textline
         self.textColor = textColor
         self.t1preText = pygame.font.Font(None, 20).render('', True, self.textColor)
         self.t2preText = ''
+        self.textRect = self.rect.inflate(-150, -80)
 
         self.activeButton = True
-        
+
         if textHighlight:
             self.textHighlight = textHighlight
         else:
@@ -61,8 +62,9 @@ class Popup:
             else:
                 lineLenList.append(width)
                 lineList.append([lineFit])
-    
+        
         lineBottom = self.textRect[1]
+        lastLineList = []
         lastLine = 0
         for lineLen, lineSurface in zip(lineLenList, lineList):
             lineLeft = self.textRect[0]
@@ -72,17 +74,28 @@ class Popup:
                 lineLeft += (self.textRect[2] - lineLen - spaceWidth * (len(lineSurface) - 1))//2
             elif textAlign == 'blockAlign' and len(lineSurface) > 1:
                 lineLeft += (self.textRect[2] - lineLen) // (len(lineSurface) - 1)
-            if lineBottom + fontHeight > self.textRect[1] + self.textRect[3]:
-                break
             lastLine += 1
+
+            lastLineList.append(lastLine)
+
+            if fontHeight * max(lastLineList) > self.rect.height - 120:
+                self.rect.height = self.rect.height + (max(lastLineList) * (fontHeight + newlineSpacing))
+                self.rect.y = screen.get_height()//2 - self.rect.height//2
+                self.textRect = self.rect.inflate(-150, -150)
+                self.b1.rect.y = self.rect.bottom - 100
+                if self.type != 1:
+                    self.b2.rect.y = self.rect.bottom - 100
+                    if self.type == 2:
+                        self.t1.rect.y = self.rect.bottom - 150
+                        self.t2.rect.y = self.rect.bottom - 150
+              
             for i, lineFit in enumerate(lineSurface):
                 x, y = lineLeft + i * spaceWidth, lineBottom
                 screen.blit(lineFit, (round(x), y))
                 lineLeft += lineFit.get_width()
             lineBottom += fontHeight + newlineSpacing
         if lastLine < len(lineList):
-            for i in range(lastLine):
-                drawLine = sum(len(lineList[i]))
+            drawLine = sum([len(lineList[i]) for i in range(lastLine)])
             remainingText = ""
             for text in wordsList[drawLine:]:
                 remainingText += text + " "
@@ -100,7 +113,8 @@ class Popup:
             self.t1preText = font.render(t1text, True, self.textColor)
             self.t2preText = font.render(t2text, True, self.textColor)
             if t2text != '':
-                t1X = self.rect.centerx - (t1Width + t2Width + 15 + self.t1preText.get_width() + self.t2preText.get_width())//2 + self.t1preText.get_width()
+                t1X = self.rect.centerx - (t1Width + t2Width + 15 + self.t1preText.get_width() + 
+                self.t2preText.get_width())//2 + self.t1preText.get_width()
                 t2X = t1X + t1Width + 15 + self.t2preText.get_width()
                 self.__adjustComponents(self.t1, t1X, y - 45, t1Width, tHeight)
                 self.__adjustComponents(self.t2, t2X, y - 45, t2Width, tHeight)
@@ -148,7 +162,6 @@ class Popup:
         if image != None:
             imageSurface = pygame.transform.scale(image, (self.rect.width, self.rect.height))
             screen.blit(imageSurface, (self.rect.centerx - self.rect.width//2, self.rect.y))
-            screen.blit(imageSurface, (self.rect.x, self.rect.y))
         elif bgColor != None:
             pygame.draw.rect(screen, bgColor, self.rect, 0)
         if bdColor != None:
