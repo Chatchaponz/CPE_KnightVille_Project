@@ -155,15 +155,15 @@ class MainMenu(GameScreen):
                         self.display.blit(self.choice, ((self.screenWidth/4) - (self.choiceWidth/2) + 50, buttonSurface.rect.y))
                     
             # MENU LIST
-                if self.buttonOption.isButtonClick(self.clickChoiceSound,self.control.getSoundEffectVol()-0.1):
+                if self.buttonOption.isButtonClick(self.clickChoiceSound,self.control.getSoundEffectVol()):
                     self.changePageByInput(True, self.control.option)
-                if self.buttonHost.isButtonClick(self.clickChoiceSound,self.control.getSoundEffectVol()-0.1):
+                if self.buttonHost.isButtonClick(self.clickChoiceSound,self.control.getSoundEffectVol()):
                     self.hosting = True # OPEN HOST POPUP
                     self.available = False
-                if self.buttonJoin.isButtonClick(self.clickChoiceSound,self.control.getSoundEffectVol()-0.1):
+                if self.buttonJoin.isButtonClick(self.clickChoiceSound,self.control.getSoundEffectVol()):
                     self.joining = True # OPEN JOIN POPUP
                     self.available = False
-                if self.buttonQuit.isButtonClick(self.clickChoiceSound,self.control.getSoundEffectVol()-0.1):
+                if self.buttonQuit.isButtonClick(self.clickChoiceSound,self.control.getSoundEffectVol()):
                     pygame.quit()
                     sys.exit()
             
