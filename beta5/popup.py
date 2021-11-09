@@ -69,7 +69,7 @@ class Popup:
         for lineLen, lineSurface in zip(lineLenList, lineList):
             lineLeft = self.textRect[0]
             if textAlign == 'rightAlign':
-                lineLeft += + self.textRect[2] - lineLen - spaceWidth * (len(lineSurface) - 1)
+                lineLeft += self.textRect[2] - lineLen - spaceWidth * (len(lineSurface) - 1)
             elif textAlign == 'centerAlign':
                 lineLeft += (self.textRect[2] - lineLen - spaceWidth * (len(lineSurface) - 1))//2
             elif textAlign == 'blockAlign' and len(lineSurface) > 1:
