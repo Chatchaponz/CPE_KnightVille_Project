@@ -100,6 +100,12 @@ class GameSetting:
     def getSoundEffectVol(self):
         return self.soundEffectVol
 
+    def playSoundWithVol(self,soundPath,vol):
+        sound = pygame.mixer.Sound(soundPath)
+        sound.set_volume(vol)
+        sound.play()
+        
+
 class StateControl(GameSetting):
 
     def __init__(self):

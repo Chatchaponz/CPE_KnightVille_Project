@@ -179,7 +179,7 @@ class HostMenu(GameScreen):
             self.alreadyPlay = False
 
         if self.lockSoundOn == True and self.alreadyPlay == False:
-            pygame.mixer.Sound(self.soundList[6]).play()
+            self.control.playSoundWithVol(self.soundList[6],self.control.getSoundEffectVol())
             self.alreadyPlay = True
     
     def displayScreen(self):
@@ -227,11 +227,11 @@ class HostMenu(GameScreen):
                         self.display.blit(self.checked, (rect.right - self.checked.get_width()//2, 
                         rect.top - self.checked.get_height()//2))    
 
-            if self.buttonLeft.isButtonClick():
+            if self.buttonLeft.isButtonClick(self.soundList[4],self.control.getSoundEffectVol()):
                 self.numPlayer -= 1
                 if self.numPlayer < 5:
                     self.numPlayer = 10
-            if self.buttonRight.isButtonClick():
+            if self.buttonRight.isButtonClick(self.soundList[4],self.control.getSoundEffectVol()):
                 self.numPlayer += 1
                 if self.numPlayer > 10:
                     self.numPlayer = 5
@@ -246,7 +246,7 @@ class HostMenu(GameScreen):
                 self.configRole(3, rolebuttonList)
             
             # 
-            if self.buttonBack.isButtonClick():
+            if self.buttonBack.isButtonClick(self.clickChoiceSound,self.control.getSoundEffectVol()):
                 self.resetRole()
                 if self.network.connectStatus == True:
                     self.network.disconnectFromServer()
@@ -264,7 +264,7 @@ class HostMenu(GameScreen):
             self.drawText('Minion of', 18 , self.minionRect.centerx, self.minionRect.bottom + 25, self.font1, self.control.black)
             self.drawText('Mordred', 18 , self.minionRect.centerx, self.minionRect.bottom + 45, self.font1, self.control.black)
 
-            if self.buttonCreateLobby.isButtonClick():
+            if self.buttonCreateLobby.isButtonClick(self.clickChoiceSound,self.control.getSoundEffectVol()):
                 # if self.network.createLobby(self.numPlayer, [True, False, True, False, True, False, True, False], 0, 0):
                 if self.network.createLobby(self.numPlayer, [True, self.rolePercival, True, self.roleMordred, 
                 True, self.roleMorgana, self.roleMinion, self.roleOberon], 0, 0):
