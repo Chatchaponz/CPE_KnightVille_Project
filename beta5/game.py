@@ -51,6 +51,8 @@ class Game(GameManager):
                         self.sendDataThread.join()
                         self.resetAll()
                     self.changePageByInput(True, self.control.lobby)
+            
+            self.handleChatBoxEvent(event)
 
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_z and self.player.getRole() != None:
@@ -370,6 +372,7 @@ class Game(GameManager):
                 self.updateScreenData()
             #     self.sendAndReceiveData(sendData)
             self.drawPlayers()
+            self.drawChatBox(self.display)
             
             # TEMP
             x = 0
