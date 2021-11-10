@@ -81,13 +81,13 @@ class Popup:
             if fontHeight * max(lastLineList) > self.rect.height - 120:
                 self.rect.height = self.rect.height + (max(lastLineList) * (fontHeight + newlineSpacing))
                 self.rect.y = screen.get_height()//2 - self.rect.height//2
-                self.textRect = self.rect.inflate(-150, -150)
-                self.b1.rect.y = self.rect.bottom - 100
+                self.textRect = self.rect.inflate(-round(self.rect.height*1/6), -round(self.rect.height*3/5))
+                self.b1.rect.y = self.rect.bottom - round(self.rect.height*2/7)
                 if self.type in [1, 2]:
-                    self.b2.rect.y = self.rect.bottom - 100
+                    self.b2.rect.y = self.rect.bottom - round(self.rect.height*2/7)
                     if self.type == 2:
-                        self.t1.rect.y = self.rect.bottom - 150
-                        self.t2.rect.y = self.rect.bottom - 150
+                        self.t1.rect.y = self.rect.bottom - round(self.rect.height*2/5)
+                        self.t2.rect.y = self.rect.bottom - round(self.rect.height*2/5)
               
             for i, lineFit in enumerate(lineSurface):
                 x, y = lineLeft + i * spaceWidth, lineBottom

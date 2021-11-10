@@ -94,11 +94,15 @@ class HostMenu(GameScreen):
         # dummy
         dummy_string = 'Unknown Error'
         dummy_colorhighlight = pygame.Color('red')
-        popWidth, popHeight = 300, 130
+        popWidth, popHeight = 400, 130
         self.createFailed = Popup((self.screenWidth - popWidth)//2, (self.screenHeight - popHeight)//2, popWidth, popHeight, dummy_string,
         self.control.white, dummy_colorhighlight)
+        self.createFailed.adjustComponents(bWidth = 60)
+        self.createFailed.modComponents(self.createFailed.b1, 'button', self.control.black, text = 'OK')
         self.joinFailed = Popup((self.screenWidth - popWidth)//2, (self.screenHeight - popHeight)//2, popWidth, popHeight, dummy_string,
         self.control.white, dummy_colorhighlight)
+        self.joinFailed.adjustComponents(bWidth = 60)
+        self.joinFailed.modComponents(self.joinFailed.b1, 'button', self.control.black, text = 'OK')
 
         # Tracking connect state
         self.createSuccess = True
@@ -285,11 +289,11 @@ class HostMenu(GameScreen):
                     self.createSuccess = False
             # dummy
             if not self.joinSuccess:
-                self.joinFailed.draw(self.display, None, 28, textAlign = 'leftAlign', bgColor = pygame.Color('lightgrey'))
+                self.joinFailed.draw(self.display, None, 28, textAlign = 'centerAlign', image = self.control.popupBackground)
                 if self.joinFailed.b1.isButtonClick():
                     self.joinSuccess = True
             if not self.createSuccess:
-                self.createFailed.draw(self.display, None, 28, textAlign = 'leftAlign', bgColor = pygame.Color('lightgrey'))
+                self.createFailed.draw(self.display, None, 28, textAlign = 'centerAlign', image = self.control.popupBackground)
                 if self.createFailed.b1.isButtonClick():
                     self.createSuccess = True
 
