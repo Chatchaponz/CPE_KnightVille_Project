@@ -11,6 +11,9 @@ from game import Game
 class GameSetting:
     def __init__(self):
         pygame.init()
+        
+        pygame.display.set_caption('KnightVILLe')
+
         self.running = True
 
         # Display size
