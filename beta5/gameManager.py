@@ -217,7 +217,8 @@ class GameManager(GameScreen):
         foundHost = False
         othersPlayerId = []
         othersStatus = []
-
+        gameStart = False
+        
         if len(self.matchSetting) > 2:
             gameStart = self.matchSetting[2]
 
