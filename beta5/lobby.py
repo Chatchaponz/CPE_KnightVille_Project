@@ -174,7 +174,11 @@ class Lobby(GameManager):
                 sys.exit()
             
             self.newPlayername.handleEvent(event)
-            self.player.playerMovement(event)
+
+            if not self.chatText.active:
+                self.player.playerMovement(event)
+            else:
+                self.player.resetMovement()
 
             self.handleChatBoxEvent(event)
 

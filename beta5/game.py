@@ -58,8 +58,10 @@ class Game(GameManager):
                 if event.key == pygame.K_z and self.player.getRole() != None:
                     self.player.unrevealRole(self.playersData)
 
-            if self.matchSetting[2] == True:
+            if self.matchSetting[2] == True and not self.chatText.active:
                 self.player.playerMovement(event)
+            else:
+                self.player.resetMovement()
     
     def resetAll(self):
         self.currentPlayerInMatch = None
