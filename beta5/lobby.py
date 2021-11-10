@@ -165,6 +165,14 @@ class Lobby(GameManager):
 
             self.changePageByInput(True, self.control.menu)
 
+    def isAllPlayerReady(self):
+        ready = True
+        for player in self.playersData:
+            if player.isPlaying == True:
+                ready = False
+                break
+        return ready
+
 
     # override
     def checkEvent(self):
@@ -185,6 +193,8 @@ class Lobby(GameManager):
     def displayScreen(self):
 
         self.displayRunning = True
+
+        self.player.isPlaying = False
         
         if(self.player not in self.playersData):
             self.playersData.append(self.player)
@@ -267,19 +277,25 @@ class Lobby(GameManager):
                             currentPlayer = len(self.playersData)
                             maxPlayer = self.matchSetting[0] 
                             if currentPlayer == maxPlayer:
-                                self.resetLobby(leaveToMain = False)
-                                self.network.startGame()
-                                self.changePageByInput(True, self.control.game)
+                                if self.isAllPlayerReady():
+                                    self.resetLobby(leaveToMain = False)
+                                    self.network.startGame()
+                                    self.changePageByInput(True, self.control.game)
+                                else:
+                                    self.isError = True
+                                    failText = f"Some player currently in match"
+                                    self.popupFail.text = failText
+                                    print("[Error] Cannot start match : ", failText)
                             else:
                                 self.isError = True
                                 failText = f"Not enough players {currentPlayer}/{maxPlayer}"
                                 self.popupFail.text = failText
-                                print("[Error] Cannot start match : ", failText) #pop up
+                                print("[Error] Cannot start match : ", failText)
                     else:
                         self.isError = True
                         failText = "You are not the host"
                         self.popupFail.text = failText
-                        print("[Error] ", failText) #pop up
+                        print("[Error] ", failText)
                 
                 if self.buttonEditPlayer.isButtonClick():
                     self.popEdit = True

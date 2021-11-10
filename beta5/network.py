@@ -112,7 +112,7 @@ class Network :
         except Exception as e:
             print("[ERROR] ", e)
             self.disconnectFromServer()
-        return None
+            return None
     
     def trySendMessage(self, sendMessage: str):
         '''

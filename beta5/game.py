@@ -37,7 +37,7 @@ class Game(GameManager):
     def checkEvent(self):
         for event in pygame.event.get():
 
-            gameStart = False
+            gameStart = True
             if len(self.matchSetting) > 2:
                 gameStart = self.matchSetting[2]
             else:
@@ -332,7 +332,7 @@ class Game(GameManager):
             self.player.collided = [[0, self.screenWidth], [360, self.screenHeight]]
 
         while self.displayRunning:
-
+            
             # if number of player in match not equal to the maximum player number allow
             if len(self.matchSetting) > 0 and len(self.playersData) != self.matchSetting[0]:
                 print("Some player are missing")

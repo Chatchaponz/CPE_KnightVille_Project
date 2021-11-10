@@ -218,7 +218,7 @@ class GameManager(GameScreen):
         othersPlayerId = []
         othersStatus = []
         gameStart = False
-        
+
         if len(self.matchSetting) > 2:
             gameStart = self.matchSetting[2]
 
@@ -288,8 +288,12 @@ class GameManager(GameScreen):
             if len(data) > 3:
                 if type(data[0]) is list: self.currentPlayerInMatch = data[0]
                 if type(data[1]) is list: self.othersPlayerData = data[1]
-                if type(data[2]) is list: self.matchSetting = data[2]
-                if type(data[3]) is list: self.allMessages = data[3]
+                if type(data[2]) is list: 
+                    self.matchSetting.clear()    
+                    self.matchSetting += data[2]
+                if type(data[3]) is list:
+                    self.allMessages.clear()
+                    self.allMessages += data[3]
             # if len(data) > 2 and data[2] != None:
             #     if self.matchSetting == []:
             #         self.matchSetting += data[2]
