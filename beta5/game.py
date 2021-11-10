@@ -36,6 +36,13 @@ class Game(GameManager):
     # override
     def checkEvent(self):
         for event in pygame.event.get():
+
+            gameStart = False
+            if len(self.matchSetting) > 2:
+                gameStart = self.matchSetting[2]
+            else:
+                print("No matchsetting") # temp
+
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
@@ -45,7 +52,7 @@ class Game(GameManager):
                 if event.key == pygame.K_z and self.player.getRole() != None:
                     self.player.revealRole(self.playersData)
 
-                if event.key == pygame.K_RETURN and self.gameEnded and self.matchSetting[2] == False:
+                if event.key == pygame.K_RETURN and self.gameEnded and gameStart == False:
                     if self.network.connectStatus == True:
                         self.allowSendData = False
                         self.sendDataThread.join()
@@ -58,7 +65,8 @@ class Game(GameManager):
                 if event.key == pygame.K_z and self.player.getRole() != None:
                     self.player.unrevealRole(self.playersData)
 
-            if self.matchSetting[2] == True and not self.chatText.active:
+            if (gameStart == True and 
+                not self.chatText.active):
                 self.player.playerMovement(event)
             else:
                 self.player.resetMovement()
@@ -159,7 +167,10 @@ class Game(GameManager):
     # choose = 5 : fail
     
     def phaseEvent(self):
-        playerNumber = self.matchSetting[0]
+
+        if len(self.matchSetting) > 2:
+            playerNumber = self.matchSetting[0]
+            gameStart = self.matchSetting[2]
 
         if self.gamePhase == 0:
             if self.player.getRole() != None:
@@ -238,7 +249,7 @@ class Game(GameManager):
                 self.revealAllPlayerRole()
 
                 if (self.player.host == True and 
-                    self.matchSetting[2] == True and
+                    gameStart == True and
                     self.isOthersGameEnded()):
                     self.network.stopThisGame()
             
@@ -274,7 +285,7 @@ class Game(GameManager):
                     self.revealAllPlayerRole()
                     
                     if (self.player.host == True and 
-                        self.matchSetting[2] == True and
+                        gameStart == True and
                         self.isOthersGameEnded()):
                         self.network.stopThisGame()
 
