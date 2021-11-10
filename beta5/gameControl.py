@@ -45,6 +45,7 @@ class GameSetting:
         self.skyCover = pygame.image.load("images\menuUI\skyCover.JPG")
         self.woodBoard = pygame.image.load("images\menuUI\woodBoard.PNG")
         self.choice = pygame.image.load("images\menuUI\choice.PNG")
+        self.logo = pygame.image.load("images\menuUI\gameLogo.PNG")
 
         self.popupBackground = pygame.image.load("images\popup1.PNG")
 
@@ -53,6 +54,7 @@ class GameSetting:
         self.dressingCab = pygame.image.load("images\createPlayer\dressingCab.PNG")
         self.dressingRoom = pygame.image.load("images\createPlayer\dressingRoom.JPG")
 
+        self.oberonIcon = pygame.image.load("images\icon\oberonIcon.PNG")
         self.rightArrow = pygame.image.load("images\icon\pointerRight.PNG")
         self.leftArrow = pygame.image.load("images\icon\pointerLeft.PNG")
 
@@ -81,6 +83,8 @@ class GameSetting:
         self.roleFrame = pygame.image.load("images/profile/frame.JPG")
         self.lock = pygame.image.load("images/profile/lock.PNG")
         self.checked = pygame.image.load("images/profile/yes.PNG")
+
+        pygame.display.set_icon(self.oberonIcon)
 
         #load skins
         self.skins = []
