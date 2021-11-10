@@ -26,18 +26,18 @@ class Network :
         + ip - IPv4 of server to connect
         + port - Port number of server to connect
 
-        + return - Boolean
-          - True if success
-          - False if fail
+        + return - Tuple
+          - (True, "") if success
+          - (False, <error>) if fail
         '''
         try:
             self.__connect = Client(str(ip), int(port))
             self.__connect.connect()
             self.connectStatus = True
-            return True
+            return (True, "")
         except Exception as e:
             print("[ERROR] ",e)
-        return False
+            return (False, str(e))
     
     def disconnectFromServer(self):
         '''
@@ -53,7 +53,7 @@ class Network :
             return True
         except Exception as e:
             print("[ERROR] ", e)
-        return False
+            return False
     
     def createLobby(self, maxPlayer : int, availableRole, syncPhase : int, syncRound : int):
         '''
@@ -63,17 +63,17 @@ class Network :
         + syncPhase - Integer indicate initial phase
         + syncRound - Integer indicate initial round
 
-        + return - Boolean
-          - True if success
-          - False if fail
+        + return - Tuple
+          - (True, "") if success
+          - (False, <error>) if fail
         '''
         try:
             self.__connect.createMatch()
             self.changeMatchSetting(maxPlayer, [availableRole, syncPhase, syncRound])
-            return True
+            return (True, "")
         except Exception as e:
             print("[ERROR] ", e)
-        return False
+            return (False, str(e))
     
     def changeMatchSetting(self, maxPlayer : int, availableRole):
         '''
@@ -90,7 +90,7 @@ class Network :
             return True
         except Exception as e:
             print("[ERROR] ", e)
-        return False
+            return False
 
     def tryGetData(self, sendData):
         '''
@@ -111,29 +111,39 @@ class Network :
             return [currentPlayersInMatch, othersPlayerData, matchSetting, chatMessages]
         except Exception as e:
             print("[ERROR] ", e)
+            self.disconnectFromServer()
         return None
     
     def trySendMessage(self, sendMessage: str):
+        '''
+        trySendMessage - Try sending this client's chat message and receive other client's messages
+        + sendMessage - message to be send (String only)
+
+        + return - list of receiving data
+          - [<message>, <message>, ...] if success
+          - None if fail
+        '''
         try:
             return self.__connect.sendMessage(sendMessage)
         except Exception as e:
             print("[ERROR] ", e)
-        return False
+            self.disconnectFromServer()
+            return None
         
     def startGame(self):
         '''
         startGame - Start this match
 
-        + return - Boolean
-          - True if success
-          - False if fail
+        + return - Tuple
+          - (True, "") if success
+          - (False, <error>) if fail
         '''
         try:
             self.__connect.startMatch()
-            return True
+            return (True, "")
         except Exception as e:
             print("[ERROR] ", e)
-        return False
+            return (False, str(e))
     
     def stopThisGame(self):
         '''
@@ -148,7 +158,7 @@ class Network :
             return True
         except Exception as e:
             print("[ERROR] ", e)
-        return False
+            return False
     
     def endThisGame(self):
         '''
@@ -163,19 +173,19 @@ class Network :
             return True
         except Exception as e:
             print("[ERROR] ", e)
-        return False
+            return False
 
     def joinGame(self):
         '''
         joinGame - Join current match
 
-        + return - Boolean
-          - True if success
-          - False if fail
+        + return - Tuple
+          - (True, "") if success
+          - (False, <error>) if fail
         '''
         try:
             self.__connect.join()
-            return True
+            return (True, "")
         except Exception as e:
             print("[ERROR] ", e)
-        return False
+            return (False, str(e))

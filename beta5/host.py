@@ -266,20 +266,22 @@ class HostMenu(GameScreen):
 
             if self.buttonCreateLobby.isButtonClick(self.clickChoiceSound,self.control.getSoundEffectVol()):
                 # if self.network.createLobby(self.numPlayer, [True, False, True, False, True, False, True, False], 0, 0):
-                if self.network.createLobby(self.numPlayer, [True, self.rolePercival, True, self.roleMordred, 
-                True, self.roleMorgana, self.roleMinion, self.roleOberon], 0, 0):
+                createResult, createError = self.network.createLobby(self.numPlayer, [True, self.rolePercival, True, self.roleMordred, 
+                                         True, self.roleMorgana, self.roleMinion, self.roleOberon], 0, 0)
+                if createResult:
                     self.createSuccess = True
-                    if self.network.joinGame():
+                    joinResult, joinError = self.network.joinGame()
+                    if joinResult:
                         self.player.host = True
                         self.player.id = 0
                         self.changePageByInput(True, self.control.createPlayer)
                         self.joinSuccess = True
                     else:
-                        print("[GAME] Cannot join game") # pop up here
+                        self.joinFailed.text = joinError
                         self.joinSuccess = False
 
                 else:
-                    print("[GAME] Cannot create lobby") # pop up error
+                    self.createFailed.text = createError
                     self.createSuccess = False
             # dummy
             if not self.joinSuccess:

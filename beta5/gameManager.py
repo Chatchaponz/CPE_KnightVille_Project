@@ -168,6 +168,8 @@ class GameManager(GameScreen):
         while self.allowSendData:
             if self.network.connectStatus == True and self.sendData != []:
                 self.sendAndReceiveData(self.sendData)
+            if self.network.connectStatus == False:
+                break
             time.sleep(0.001)
     
     def setAllPlayersRole(self, randomRoles):

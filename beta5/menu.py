@@ -84,6 +84,7 @@ class MainMenu(GameScreen):
         self.connecting = False
         self.finishConnection = False
         self.connectResult = False
+        self.errorMessage = ""
 
     def checkEvent(self):
         for event in pygame.event.get():
@@ -101,7 +102,7 @@ class MainMenu(GameScreen):
     
     def makeConnection(self, ip, port):
         self.connecting = True
-        self.connectResult = self.network.tryConnectServer(str(ip), int(port))
+        self.connectResult, self.errorMessage = self.network.tryConnectServer(str(ip), int(port))
         self.connecting = False
         self.finishConnection = True
 
@@ -202,7 +203,7 @@ class MainMenu(GameScreen):
                             self.changePageByInput(True, self.control.host)
                             self.successConnect = True
                         else:
-                            print("[GAME] Unable to connect server")
+                            self.popupFail.text = self.errorMessage
                             self.successConnect = False
                         
                         self.available = True
@@ -238,24 +239,26 @@ class MainMenu(GameScreen):
 
                     if self.finishConnection:
 
+                        # reset
                         self.joining = False
                         self.joinClicked = False
-                        self.finishConnection = False # reset
+                        self.finishConnection = False
                         self.popupJoin.activeButton = True
 
                         if not self.connectResult:
-                            print("[GAME] Unable to connect server")
+                            self.popupFail.text = self.errorMessage
                             self.successConnect = False
 
                     else:
                         self.drawText("Connecting . . .", 30, 640, 350, self.font1, self.control.white)
                 
                     if self.network.connectStatus == True:
-                        if self.network.joinGame():
+                        joinResult, joinError = self.network.joinGame()
+                        if joinResult:
                             self.changePageByInput(True, self.control.createPlayer)
                             self.successConnect = True
                         else:
-                            print("[GAME] Cannot join game") # pop up here
+                            self.popupFail.text = joinError
                             self.network.disconnectFromServer()
                             self.successConnect = False
 

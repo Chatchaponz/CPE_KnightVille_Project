@@ -321,7 +321,7 @@ class Game(GameManager):
         while self.displayRunning:
 
             # if number of player in match not equal to the maximum player number allow
-            if len(self.playersData) != self.matchSetting[0]:
+            if len(self.matchSetting) > 0 and len(self.playersData) != self.matchSetting[0]:
                 print("Some player are missing")
                 if self.network.connectStatus == True:
                     self.allowSendData = False
@@ -356,8 +356,8 @@ class Game(GameManager):
             self.display.fill((0, 0, 0))
 
             # if self.waitForOthers():
-            if len(self.playersData) == self.matchSetting[0]:
-                self.phaseEvent()
+            if len(self.matchSetting) > 0 and len(self.playersData) == self.matchSetting[0]:
+                    self.phaseEvent()
 
             #[TEST PRINT]
             # print(self.currentLeader,self.gamePhase, self.player.syncSignal, self.player.choose, self.missionSuccess, self.goodScore, self.evilScore, self.partyMember)

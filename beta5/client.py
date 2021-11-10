@@ -55,6 +55,10 @@ class DisconnectException(ClientException):
     ''' DisconnectException - Exception occur when unable to disconnect from the server '''
     pass
 
+class SendDataException(ClientException):
+    ''' SendDataException - Exception occur when unable to send the data '''
+    pass
+
 
 class Client:
     '''
@@ -85,14 +89,16 @@ class Client:
         + return - Response data from server
           - data if successfully get response from the server
           - None if no response from the server
+        
+        + raise SendDataException in case data cannot be sent
         '''
         try:
             self.client.send(pickle.dumps((signal, data)))
             return pickle.loads(self.client.recv(self.__SIZE))
         except (Exception, socket.error) as e:
-            print("[ERROR] " + str(e))
+            print("[CLIENT_ERROR] " + str(e))
             self.client.close()
-        return None
+            raise SendDataException("Unable to send the data") from e
     
     def connect(self):
         '''
@@ -110,7 +116,7 @@ class Client:
                 print("[CLIENT] Server connected.")
         except (Exception, socket.error) as e:
             self.client.close()
-            raise CannotConnectToServerException("Cannot connect to server") from e
+            raise CannotConnectToServerException("Unable to connect server") from e
         return True
     
     def createMatch(self):
@@ -122,7 +128,9 @@ class Client:
         
         + raise ServerMatchException
         '''
-        success = self.__sendData(Signal.SET_MATCH, "")
+        try: success = self.__sendData(Signal.SET_MATCH, "")
+        except ClientException as e: raise e
+
         if(success):
             print("[CLIENT] Create match successfully. Ready to join...")
         else:
@@ -150,7 +158,8 @@ class Client:
         
         + raise ServerMatchException with different massage depend on "failStatus"
         '''
-        success = self.__sendData(Signal.SETTING_MATCH, [maxPlayer, otherSetting])
+        try: success = self.__sendData(Signal.SETTING_MATCH, [maxPlayer, otherSetting])
+        except ClientException as e: raise e
         
         if(success[0]):
             print("[CLIENT] Match setting has been change.")
@@ -180,7 +189,9 @@ class Client:
         
         + raise ServerMatchException with different massage depend on "failStatus"
         '''
-        success = self.__sendData(Signal.START_MATCH, "")
+        try: success = self.__sendData(Signal.START_MATCH, "")
+        except ClientException as e: raise e
+
         if(success[0]):
             print("[CLIENT] Start match successfully")
         else:
@@ -208,7 +219,9 @@ class Client:
         
         + raise ServerMatchException with different massage depend on "failStatus"
         '''
-        success = self.__sendData(Signal.STOP_MATCH, "")
+        try: success = self.__sendData(Signal.STOP_MATCH, "")
+        except ClientException as e: raise e
+
         if(success[0]):
             print("[CLIENT] Stop match successfully")
         else:
@@ -227,7 +240,9 @@ class Client:
         
         + raise ServerMatchException in case match isn't created yet
         '''
-        success = self.__sendData(Signal.END_MATCH, "")
+        try: success = self.__sendData(Signal.END_MATCH, "")
+        except ClientException as e: raise e
+
         if(success):
             print("[CLIENT] Match is ended.")
         else:
@@ -255,7 +270,9 @@ class Client:
                 format: depend on user to implemented
                 but will return "None" if something went wrong
         '''
-        success = self.__sendData(Signal.GET_MATCH_PLAYERS, "")
+        try: success = self.__sendData(Signal.GET_MATCH_PLAYERS, "")
+        except ClientException as e: raise e
+
         return success
     
     def getMatchSetting(self):
@@ -267,7 +284,9 @@ class Client:
                 format: depend on user to implemented
                 but will return "None" if something went wrong
         '''
-        success = self.__sendData(Signal.GET_MATCH_SETTING, "")
+        try: success = self.__sendData(Signal.GET_MATCH_SETTING, "")
+        except ClientException as e: raise e
+
         return success
 
     def join(self, data = ""):
@@ -289,7 +308,9 @@ class Client:
         
         + raise JoinMatchException with different massage depend on "failStatus"
         '''
-        success = self.__sendData(Signal.JOIN, data)
+        try: success = self.__sendData(Signal.JOIN, data)
+        except ClientException as e: raise e
+
         if(success[0]):
             print("[CLIENT] Join match successfully.")
         else:
@@ -310,7 +331,9 @@ class Client:
             - True if message store in server successfully
             - False if cannot store the message (This client not in the match)
         '''
-        success = self.__sendData(Signal.SEND_MESSAGE, data)
+        try: success = self.__sendData(Signal.SEND_MESSAGE, data)
+        except ClientException as e: raise e
+
         return  success
     
     def receiveMessages(self):
@@ -322,7 +345,9 @@ class Client:
                 format: [ [<addr>, <message>], ... ]
                 but will return "None" if something went wrong
         '''
-        success = self.__sendData(Signal.RECEIVE_MESSAGE, "")
+        try: success = self.__sendData(Signal.RECEIVE_MESSAGE, "")
+        except ClientException as e: raise e
+
         return success
 
     def disconnect(self):
@@ -335,5 +360,5 @@ class Client:
             self.client.send(pickle.dumps((Signal.EXIT, "")))
         except (Exception, socket.error) as e:
             self.client.close()
-            raise DisconnectException('Unable to disconnect') from e
+            raise DisconnectException("Problem with disconnection") from e # maybe socket already close (host close server)
         self.client.close()

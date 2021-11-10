@@ -59,7 +59,7 @@ thisMatch = {
 
 # Initiate server
 # AF_INET = IPv4
-# SOCK_STREAM = TPC
+# SOCK_STREAM = TCP
 thisServer = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 # Try connect to socket

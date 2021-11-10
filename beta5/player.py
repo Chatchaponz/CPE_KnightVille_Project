@@ -163,6 +163,12 @@ class Player:
         self.y = y
         self.playerRect = self.playerSkin.get_rect(bottomleft = (int(self.x), int(self.y)))
     
+    def resetMovement(self):
+        self.goLeft = False
+        self.goRight = False
+        self.goUp = False
+        self.goDown = False
+    
     def setAttribute(self, x = 0, y = 0, skin = 0, name = "Unknown"):
         self.x = x
         self.y = y
@@ -173,6 +179,8 @@ class Player:
         
         self.name = name
         self.playerName = self.font.render(self.name, True, self.fontColor)
+
+        self.resetMovement()
     
     def updateSkin(self, skin = 0):
         self.skin = skin
@@ -186,20 +194,20 @@ class Player:
     # 'event' should be event in pygame.event.get()
     def playerMovement(self, event):
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_LEFT:
+            if event.key in [pygame.K_LEFT, pygame.K_a]:
                 self.goLeft = True
-            if event.key == pygame.K_RIGHT:
+            if event.key in [pygame.K_RIGHT, pygame.K_d]:
                 self.goRight = True
-            if event.key == pygame.K_UP:
+            if event.key in [pygame.K_UP, pygame.K_w]:
                 self.goUp = True
-            if event.key == pygame.K_DOWN:
+            if event.key in [pygame.K_DOWN, pygame.K_s]:
                 self.goDown = True
         if event.type == pygame.KEYUP:
-            if event.key == pygame.K_LEFT:
+            if event.key in [pygame.K_LEFT, pygame.K_a]:
                 self.goLeft = False
-            if event.key == pygame.K_RIGHT:
+            if event.key in [pygame.K_RIGHT, pygame.K_d]:
                 self.goRight = False
-            if event.key == pygame.K_UP:
+            if event.key in [pygame.K_UP, pygame.K_w]:
                 self.goUp = False
-            if event.key == pygame.K_DOWN:
+            if event.key in [pygame.K_DOWN, pygame.K_s]:
                 self.goDown = False

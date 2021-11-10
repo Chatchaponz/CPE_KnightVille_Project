@@ -12,6 +12,10 @@ class Lobby(GameManager):
         # Music
         self.currentMusic = control.currentMusic
         self.musicList = control.musicList
+
+        # Sound Effect
+        self.soundList = control.soundList
+        self.backButtonSound = self.soundList[3]
         
         # Image / Button goes here vvvv
         self.lobbyWall = control.lobbyWall
@@ -30,6 +34,7 @@ class Lobby(GameManager):
         self.mapAuraWidth = self.mapAura.get_rect().width
         self.lobbyTable = control.lobbyTable
         self.lobbyTableWidth = self.lobbyTable.get_rect().width
+        self.popupBackground = control.popupBackground
 
         self.buttonLeave = Button(22, 259, self.startShadowWidth, self.startShadowHeight)
         self.buttonLeave.addImage(self.leaveShadow, self.leaveLight)
@@ -72,6 +77,12 @@ class Lobby(GameManager):
         self.popupNoIGN = Popup(self.screenWidth//2 - 250, self.screenHeight//2 - 90, 500, 180, 'Please enter your/> In-game name with no spacebar', 
         pygame.Color('white'), pygame.Color('darkblue'))
         self.popupNoIGN.modComponents(self.popupNoIGN.b1, 'button', pygame.Color('darkseagreen4'), pygame.Color('darkslategray'), 'understand')
+
+        self.popupFail = Popup((self.display.get_width() - 500)//2, (self.display.get_height() - 200)//2, 500, 200, 
+        'UNABLE TO CONNECT HOST SERVER', pygame.Color('white'), pygame.Color('cyan3'), type = 0)
+        self.popupFail.adjustComponents(bWidth=70, fontPath = self.font1)
+        self.popupFail.modComponents(self.popupFail.b1, 'button', (132, 85, 47), (100, 64, 44), 'Close', self.font1, 22)
+        self.isError = False
 
         self.available = True
         self.triggerNoIGN = False
@@ -122,6 +133,38 @@ class Lobby(GameManager):
             self.popupNoIGN.draw(self.display, self.font1, size = 28, textAlign = 'centerAlign', image = self.control.popupBackground)
             if self.popupNoIGN.b1.isButtonClick():
                 self.triggerNoIGN = False
+    
+    def resetLobby(self, leaveToMain = False):
+        
+        # join thread
+        self.allowSendData = False
+        self.sendDataThread.join()
+
+        self.currentName = None
+        self.currentSkin = None
+        self.isError = False
+        self.popEdit = False
+        self.available = True
+
+        if leaveToMain:
+            if self.network.connectStatus == True:
+                self.network.disconnectFromServer()
+            self.player.setAttribute() # reset current player
+            self.player.host = False
+            self.player.id = None
+            self.sendData = []
+            self.othersPlayerInMatch.clear()
+            self.playersData.clear()
+            self.matchSetting.clear()
+            self.allMessages.clear()
+
+            # Main music is loaded here
+            self.currentMusic.stop()
+            self.currentMusic.load(self.musicList[0])
+            self.currentMusic.play(-1)
+
+            self.changePageByInput(True, self.control.menu)
+
 
     # override
     def checkEvent(self):
@@ -194,37 +237,18 @@ class Lobby(GameManager):
 
             if self.available:
 
+                if self.network.connectStatus == False:
+                    self.isError = True
+
                 if self.buttonLeave.isButtonClick():
-                    self.allowSendData = False
-                    self.sendDataThread.join()
+                    self.resetLobby(leaveToMain = True)
 
-                    if self.network.connectStatus == True:
-                        self.network.disconnectFromServer()
-                    self.player.setAttribute() # reset current player
-                    self.player.host = False
-                    self.player.id = None
-                    self.currentName = None
-                    self.currentSkin = None
-                    self.popEdit = False
-                    self.available = True
-                    self.sendData = []
-                    self.othersPlayerInMatch.clear()
-                    self.playersData.clear()
-                    self.matchSetting.clear()
-                    self.allMessages.clear()
+                
+                # self.drawText('Edit Player', 30, self.buttonEditPlayer.rect.centerx + 3, self.buttonEditPlayer.rect.y - 15, 
+                # self.font1, self.control.black)
+                # self.drawText('Room Setting', 30, self.buttonRoomSetting.rect.centerx + 3, self.buttonRoomSetting.rect.y - 45, 
+                # self.font1, self.control.black)
 
-                    # Main music is loaded here
-                    self.currentMusic.stop()
-                    self.currentMusic.load(self.musicList[0])
-                    self.currentMusic.play(-1)
-
-                    self.changePageByInput(True, self.control.menu)
-
-                for i in range(5):
-                    self.drawText('Edit Player', 30, self.buttonEditPlayer.rect.centerx + i, self.buttonEditPlayer.rect.y - 15 + i, 
-                    self.font1, self.control.black)
-                    self.drawText('Room Setting', 30, self.buttonRoomSetting.rect.centerx + i, self.buttonRoomSetting.rect.y - 45 + i, 
-                    self.font1, self.control.black)
                 self.drawText('Edit Player', 30, self.buttonEditPlayer.rect.centerx, self.buttonEditPlayer.rect.y - 15, 
                 self.font1, self.control.white)
                 self.drawText('Room Setting', 30, self.buttonRoomSetting.rect.centerx, self.buttonRoomSetting.rect.y - 45, 
@@ -233,23 +257,25 @@ class Lobby(GameManager):
                 
                 if self.buttonStart.isButtonClick():
                     if self.player.host == True:
+                        self.isError = False
                         if (self.network.connectStatus == True and
                             len(self.matchSetting) > 0):
                             currentPlayer = len(self.playersData)
                             maxPlayer = self.matchSetting[0] 
                             if currentPlayer == maxPlayer:
-                                self.currentName = None
-                                self.currentSkin = None
-                                self.popEdit = False
-                                self.available = True
-                                self.allowSendData = False
-                                self.sendDataThread.join()
+                                self.resetLobby(leaveToMain = False)
                                 self.network.startGame()
                                 self.changePageByInput(True, self.control.game)
                             else:
-                                print("[GAME] Cannot start match")
+                                self.isError = True
+                                failText = f"Not enough players {currentPlayer}/{maxPlayer}"
+                                self.popupFail.text = failText
+                                print("[Error] Cannot start match : ", failText) #pop up
                     else:
-                        print("[GAME] You are not host")
+                        self.isError = True
+                        failText = "You are not the host"
+                        self.popupFail.text = failText
+                        print("[Error] ", failText) #pop up
                 
                 if self.buttonEditPlayer.isButtonClick():
                     self.popEdit = True
@@ -268,12 +294,23 @@ class Lobby(GameManager):
 
                 if(self.player.host != True and gameStart == True and 
                    maxplayer == len(self.playersData)):
-                    self.currentName = None
-                    self.currentSkin = None
-                    self.popEdit = False
-                    self.available = True
-                    self.allowSendData = False
-                    self.sendDataThread.join()
+                    self.resetLobby(leaveToMain = False)
                     self.changePageByInput(True, self.control.game)
+
+            if self.isError:
+                
+                if self.network.connectStatus == False:
+                    self.popupFail.text = "Connection lost"
+
+                self.popupFail.draw(self.display, self.font1, 30, textAlign= 'centerAlign',  bgColor = None, 
+                image = self.popupBackground)
+                self.available = False
+                if self.popupFail.b1.isButtonClick(self.backButtonSound,self.control.getSoundEffectVol()):
+                    if self.network.connectStatus == False:
+                        self.resetLobby(leaveToMain=True)
+                    else:
+                        self.isError = False
+                        self.available = True
+
             self.biltScreen() # update screen
             self.clock.tick(60) # run at 60 fps
