@@ -93,7 +93,7 @@ class HostMenu(GameScreen):
         # Popup
         # dummy
         dummy_string = 'Unknown Error'
-        dummy_colorhighlight = pygame.Color('red')
+        dummy_colorhighlight = pygame.Color('darkblue')
         popWidth, popHeight = 400, 130
         self.createFailed = Popup((self.screenWidth - popWidth)//2, (self.screenHeight - popHeight)//2, popWidth, popHeight, dummy_string,
         self.control.white, dummy_colorhighlight)
@@ -109,6 +109,7 @@ class HostMenu(GameScreen):
         self.joinSuccess = True
 
     def resetRole(self):
+        # Reset Role
         self.roleMordred = False
         self.roleMorgana = False
         self.roleOberon = False
@@ -117,31 +118,43 @@ class HostMenu(GameScreen):
         self.count = 0
         
     def configRole(self, maxrole, buttonList):
+        # Draw role selector button
         for button in buttonList:
             self.display.blit(self.roleFrame, (button.rect.centerx - self.roleFrame.get_width()//2, 
             button.rect.centery - self.roleFrame.get_height()//2))
             button.draw(self.display) 
+
+        # Role Oberon
         if self.buttonRole1.isButtonClick():
+            # Check Role Number can be available
             if not self.roleOberon and self.count < maxrole:
                 self.count += 1
                 self.roleOberon = True
             elif self.roleOberon:
                 self.count -= 1
                 self.roleOberon = False
+        # Display role available
         if self.roleOberon:
             self.display.blit(self.checked, (self.buttonRole1.rect.right - self.checked.get_width()//2, 
             self.buttonRole1.rect.top - self.checked.get_height()//2))
+        
+        # Role Mordred
         if self.buttonRole2.isButtonClick():
+            # Check Role Number can be available
             if not self.roleMordred and self.count < maxrole:
                 self.count += 1
                 self.roleMordred = True
             elif self.roleMordred:
                 self.count -= 1
                 self.roleMordred = False
+        # Display role available
         if self.roleMordred:
             self.display.blit(self.checked, (self.buttonRole2.rect.right - self.checked.get_width()//2, 
             self.buttonRole2.rect.top - self.checked.get_height()//2))
+
+        # Role Morgana and Percival
         if self.buttonRole3.isButtonClick():
+            # Check Role Number can be available
             if not self.roleMorgana and self.count < maxrole:
                 self.count += 1
                 self.roleMorgana = True
@@ -150,15 +163,18 @@ class HostMenu(GameScreen):
                 self.count -= 1
                 self.roleMorgana = False
                 self.rolePercival = False
+        # Display role available
         if self.roleMorgana and self.rolePercival:
             self.display.blit(self.checked, (self.buttonRole3.rect.right - self.checked.get_width()//2, 
             self.buttonRole3.rect.top - self.checked.get_height()//2))
         
+        # Verify Role Number due to the Player Number and Rules
         if self.numPlayer <= 6 and self.count > 1: # select role exceed the amount player format
             self.resetRole()
         if self.numPlayer > 6 and self.numPlayer < 10 and self.count > 2: # select role exceed the amount player format
             self.resetRole()
 
+        # Display not available role
         if self.count == maxrole:
             self.roleMinion = False
             if not self.roleOberon:
@@ -198,17 +214,16 @@ class HostMenu(GameScreen):
         while self.displayRunning:
 
             self.checkEvent()
-            fontColor = pygame.Color('black')
             # page blackground
             self.display.blit(self.hostBoard, (0, 0))
-            self.drawText('HOST SETTING', 45 , self.screenWidth/2, 100, self.font1, self.control.black)
+            self.drawText('Host Setting', 45 , self.screenWidth/2, 100, self.font1, self.control.black)
 
             pygame.draw.rect(self.display, pygame.Color('black'), (self.screenWidth//2 - 2, self.buttonLeft.rect.y + 65, 4, 410))
 
             # Host Config UI
             self.display.blit(self.prefixNumPlayer, (self.buttonLeft.rect.left - self.prefixNumPlayer.get_width() - 15, 
             self.buttonLeft.rect.y + (35 -20)//2))
-            numPlayerSurface = pygame.font.Font(self.font1, 28).render(str(self.numPlayer), True, fontColor)
+            numPlayerSurface = pygame.font.Font(self.font2, 28).render(str(self.numPlayer), True, self.control.black)
             pygame.draw.rect(self.display, pygame.Color('white'), self.rectNumPlayer)
             self.display.blit(numPlayerSurface, (self.rectNumPlayer.centerx - numPlayerSurface.get_width()//2, 
             self.rectNumPlayer.centery + 5 - numPlayerSurface.get_height()//2))
@@ -216,9 +231,11 @@ class HostMenu(GameScreen):
             self.drawText('Special Role (Optional)', 28, self.buttonRole3.rect.centerx, 200, self.font1, self.control.black)
             self.drawText('Standard Role', 28, (self.merlinRect.centerx + self.servantRect.centerx)/2, 200, self.font1, self.control.black)
 
+            # UI Button
             for button in buttonList:
                 button.draw(self.display)
 
+            # Standard Roles
             for role, rect in nonselectableRoles:
                 self.display.blit(self.roleFrame, (rect.centerx - self.roleFrame.get_width()//2, 
                 rect.centery - self.roleFrame.get_height()//2))
@@ -231,6 +248,7 @@ class HostMenu(GameScreen):
                         self.display.blit(self.checked, (rect.right - self.checked.get_width()//2, 
                         rect.top - self.checked.get_height()//2))    
 
+            # Player number config
             if self.buttonLeft.isButtonClick(self.soundList[4],self.control.getSoundEffectVol()):
                 self.numPlayer -= 1
                 if self.numPlayer < 5:
@@ -249,7 +267,7 @@ class HostMenu(GameScreen):
             if self.numPlayer > 9: # can select 3 evil role + assasin
                 self.configRole(3, rolebuttonList)
             
-            # 
+            # Back to menu
             if self.buttonBack.isButtonClick(self.clickChoiceSound,self.control.getSoundEffectVol()):
                 self.resetRole()
                 if self.network.connectStatus == True:

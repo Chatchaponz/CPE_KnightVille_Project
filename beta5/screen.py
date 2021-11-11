@@ -14,7 +14,8 @@ class GameScreen():
 
         # Font
         self.font = 'font\Taviraj-Black.TTF'
-        self.font1 = 'font\Dragon Fire.TTF'
+        self.font1 = 'font/Black-Chancery.TTF'
+        self.font2 = 'font/Dragon Fire.TTF'
         
     def biltScreen(self):
         self.control.screen.blit(self.display, (0, 0))
