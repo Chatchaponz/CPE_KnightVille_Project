@@ -79,7 +79,7 @@ class Lobby(GameManager):
         self.popupNoIGN.modComponents(self.popupNoIGN.b1, 'button', pygame.Color('darkseagreen4'), pygame.Color('darkslategray'), 'understand')
 
         self.popupFail = Popup((self.display.get_width() - 500)//2, (self.display.get_height() - 200)//2, 500, 200, 
-        'UNABLE TO CONNECT HOST SERVER', pygame.Color('white'), pygame.Color('cyan3'), type = 0)
+        'Unknown Error', pygame.Color('white'), pygame.Color('cyan3'), type = 0)
         self.popupFail.adjustComponents(bWidth=70, fontPath = self.font1)
         self.popupFail.modComponents(self.popupFail.b1, 'button', (132, 85, 47), (100, 64, 44), 'Close', self.font1, 22)
         self.isError = False
@@ -183,12 +183,18 @@ class Lobby(GameManager):
             
             self.newPlayername.handleEvent(event)
 
-            if not self.chatText.active:
+            doMovement = True
+            if self.chatText.active or self.popEdit: 
+                doMovement = False
+            else: 
+                doMovement = True
+
+            if doMovement:
                 self.player.playerMovement(event)
             else:
                 self.player.resetMovement()
 
-            self.handleChatBoxEvent(event)
+            self.handleChatBoxEvent(event, self.available)
 
     def displayScreen(self):
 
@@ -249,15 +255,17 @@ class Lobby(GameManager):
             
             self.drawChatBox(self.display)
 
-            if self.available:
+            # if network connection issue occur
+            if self.network.connectStatus == False:
+                self.isError = True
+                self.available = False
+                self.popupFail.text = "Connection lost!"
 
-                if self.network.connectStatus == False:
-                    self.isError = True
+            if self.available:
 
                 if self.buttonLeave.isButtonClick():
                     self.resetLobby(leaveToMain = True)
 
-                
                 # self.drawText('Edit Player', 30, self.buttonEditPlayer.rect.centerx + 3, self.buttonEditPlayer.rect.y - 15, 
                 # self.font1, self.control.black)
                 # self.drawText('Room Setting', 30, self.buttonRoomSetting.rect.centerx + 3, self.buttonRoomSetting.rect.y - 45, 
@@ -318,9 +326,6 @@ class Lobby(GameManager):
                     self.changePageByInput(True, self.control.game)
 
             if self.isError:
-                
-                if self.network.connectStatus == False:
-                    self.popupFail.text = "Connection lost"
 
                 self.popupFail.draw(self.display, self.font1, 30, textAlign= 'centerAlign',  bgColor = None, 
                 image = self.popupBackground)

@@ -99,7 +99,7 @@ class Network :
         + sendData - data to be send
 
         + return - list of receiving data
-          - [[<addr_player1, addr_player2, ...>], [<data1>, <data2>, ...], [<Setting>]] if success
+          - [[<addr_player1>, <addr_player2>, ...], [<data1>, <data2>, ...], [<Setting>]] if success
           - None if fail
         '''
         try:

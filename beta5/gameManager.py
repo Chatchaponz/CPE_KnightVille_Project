@@ -55,7 +55,7 @@ class GameManager(GameScreen):
         self.myText = ""
         self.pressEnter = False
     
-    def handleChatBoxEvent(self, event):
+    def handleChatBoxEvent(self, event, available = True):
         if self.chatText.active:
 
             if event.type == pygame.KEYDOWN:
@@ -88,7 +88,7 @@ class GameManager(GameScreen):
             self.pressEnter = False
             self.startTextPos = self.chatHeight - self.fontsize
 
-        if not self.pressEnter:
+        if not self.pressEnter and available:
             self.chatText.handleEvent(event)
     
     def getNameByAddr(self, addr):

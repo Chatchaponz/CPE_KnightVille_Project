@@ -1,12 +1,25 @@
 import pygame, sys, threading
 from button import Button 
 from gameManager import GameManager
+from popup import Popup
 
 class Game(GameManager):
     
     def __init__(self, control):
         super(Game, self).__init__(control)
 
+        # Music
+        self.currentMusic = control.currentMusic
+        self.musicList = control.musicList
+
+        # Sound Effect
+        self.soundList = control.soundList
+        self.backButtonSound = self.soundList[3]
+
+        # Image
+        self.popupBackground = control.popupBackground
+
+        # List for all button of name
         self.nameList = []
 
         self.summit = Button( 50 , 100, 100, 30)
@@ -24,6 +37,14 @@ class Game(GameManager):
         self.fail = Button( 150 , 100, 100, 30)
         self.fail.addText("fail", self.font, 20, self.control.white, 1, (50,50,50))
 
+        # Error popup
+        self.popupFail = Popup((self.display.get_width() - 500)//2, (self.display.get_height() - 200)//2, 500, 200, 
+        'Unknown Error', pygame.Color('white'), pygame.Color('cyan3'), type = 0)
+        self.popupFail.adjustComponents(bWidth=70, fontPath = self.font1)
+        self.popupFail.modComponents(self.popupFail.b1, 'button', (132, 85, 47), (100, 64, 44), 'Close', self.font1, 22)
+        self.isError = False
+
+        # number of assignment in each round per maxplayer
         self.assignment = {
             5: [2, 3, 2, 3, 3],
             6: [2, 3, 4, 3, 4],
@@ -317,6 +338,7 @@ class Game(GameManager):
         # inintial
         self.player.updateByPosition(50, 700)
         self.player.isPlaying = True
+        self.isError = False
 
         self.allowSendData = True
         self.sendDataThread = threading.Thread(target= self.doSendAndReceiveData)
@@ -332,17 +354,24 @@ class Game(GameManager):
             self.player.collided = [[0, self.screenWidth], [360, self.screenHeight]]
 
         while self.displayRunning:
-            
+
             # if number of player in match not equal to the maximum player number allow
             if len(self.matchSetting) > 0 and len(self.playersData) != self.matchSetting[0]:
-                print("Some player are missing")
-                if self.network.connectStatus == True:
-                    self.allowSendData = False
-                    self.sendDataThread.join()
-                    self.resetAll()
-                    if self.player.host == True:
-                        self.network.stopThisGame()
-                self.changePageByInput(True, self.control.lobby)
+                self.isError = True
+                self.popupFail.text = "Some player are missing"
+                # print("Some player are missing")
+                # if self.network.connectStatus == True:
+                #     self.allowSendData = False
+                #     self.sendDataThread.join()
+                #     self.resetAll()
+                #     if self.player.host == True:
+                #         self.network.stopThisGame()
+                # self.changePageByInput(True, self.control.lobby)
+            
+            # if network connection issue occur
+            if self.network.connectStatus == False:
+                self.isError = True
+                self.popupFail.text = "Connection lost!"
 
             self.checkEvent()
 
@@ -369,7 +398,9 @@ class Game(GameManager):
             self.display.fill((0, 0, 0))
 
             # if self.waitForOthers():
-            if len(self.matchSetting) > 0 and len(self.playersData) == self.matchSetting[0]:
+            if (len(self.matchSetting) > 0 and 
+                len(self.playersData) == self.matchSetting[0] and
+                self.network.connectStatus == True):
                     self.phaseEvent()
 
             #[TEST PRINT]
@@ -399,6 +430,42 @@ class Game(GameManager):
             for i in range(self.voteRejected):
                 pygame.draw.rect(self.display, (255,0,255), pygame.Rect(x, 35, 30, 30) )
                 x += 35
+            
+            if self.isError:
+
+                self.popupFail.draw(self.display, self.font1, 30, textAlign= 'centerAlign',  bgColor = None, 
+                image = self.popupBackground)
+
+                if self.popupFail.b1.isButtonClick(self.backButtonSound,self.control.getSoundEffectVol()):
+                    
+                    self.isError = False
+
+                    # join thread
+                    self.allowSendData = False
+                    self.sendDataThread.join()
+                    
+                    if self.network.connectStatus == False:
+                        self.resetAll()
+                        self.player.setAttribute()
+                        self.player.host = False
+                        self.player.id = None
+                        self.othersPlayerInMatch.clear()
+                        self.playersData.clear()
+                        self.matchSetting.clear()
+                        self.allMessages.clear()
+
+                        # Main music is loaded here
+                        self.currentMusic.stop()
+                        self.currentMusic.load(self.musicList[0])
+                        self.currentMusic.play(-1)
+
+                        self.changePageByInput(True, self.control.menu)
+
+                    elif self.network.connectStatus == True:
+                        self.resetAll()
+                        if self.player.host == True:
+                            self.network.stopThisGame()
+                        self.changePageByInput(True, self.control.lobby)
 
             self.biltScreen() # update screen
             self.clock.tick(60) # run at 60 fps
