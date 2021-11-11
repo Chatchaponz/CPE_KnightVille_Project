@@ -225,17 +225,18 @@ class GameEvent:
         '''
         checkPass = False
         if self.gamePhase == 0:
+            # Check all player's role are currently available
             if self.checkAllData(13, True):
                 checkPass = True
         
         if self.gamePhase == 1:
-            # Check round
+            # Check round and score
             self.missionSuccess = None
             self.doMission = None
             if self.round <= 5:
                 if self.goodScore == 3 or self.evilScore == 3:
                     self.gamePhase = 9
-            # Check leader
+            # Check that all player have the same leader and all party member are reset
             if (self.checkAllData(10, self.currentPartyLeader) and
                 self.checkAllData(9, []) and self.gamePhase == 1):
                 checkPass = True
@@ -248,16 +249,19 @@ class GameEvent:
                     checkPass = True
 
         if self.gamePhase == 3:
+            # Check all player choice ( 1 : accept , 2 : reject )
             if self.checkAllData(5, [1,2]):
                 checkPass = True
         
         if self.gamePhase == 4:
+            # Check all player overall score (good/evil/rejected Score)
             if (self.checkAllData(15, self.goodScore) and
                 self.checkAllData(16, self.evilScore) and
                 self.checkAllData(17, self.voteRejected)):
                 checkPass = True
         
         if self.gamePhase == 5:
+            # Check all player choice ( 0 : no vote ) and determine next phase (do mission or not)
             if self.checkAllData(5, 0):
                 if self.doMission:
                     self.doMission = None
@@ -270,16 +274,19 @@ class GameEvent:
                     checkPass = False
         
         if self.gamePhase == 6:
+            # Check all player choice ( 4 : success , 5 : fail )
             if self.checkAllData(5, [4, 5], True):
                 checkPass = True
         
         if self.gamePhase == 7:
+            # Check all player overall score (good/evil/rejected Score)
             if (self.checkAllData(15, self.goodScore) and
                 self.checkAllData(16, self.evilScore) and
                 self.checkAllData(17, self.voteRejected)):
                 checkPass = True
         
         if self.gamePhase == 8:
+            # Check all player choice ( 0 : no vote ) and determine result of the mission (Success/Fail)
             if self.checkAllData(5, 0):
                 if self.missionSuccess != None:
                     self.missionSuccess = None
