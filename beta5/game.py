@@ -102,10 +102,14 @@ class Game(GameManager):
         self.currentLeader = None
         self.partyMember = []
         self.round = []
+        self.voteText = None
+        self.missionText = []
         self.roundCount = 0
         self.voteRejected = 0
         self.evilScore = 0
         self.goodScore = 0
+        self.totalReject = 0
+        self.totalEvil = 0
         self.gameEnded = False
         self.nameList = []
         self.othersGameStatus = []
@@ -180,7 +184,7 @@ class Game(GameManager):
                 break
         return status
 
-    # choose = 0 : no Vote
+    # choose = 0 : no vote
     # choose = 1 : accept
     # choose = 2 : reject
     # choose = 3 : summit
@@ -392,7 +396,9 @@ class Game(GameManager):
                             self.roundCount,
                             self.goodScore,
                             self.evilScore,
-                            self.voteRejected]
+                            self.voteRejected,
+                            self.totalReject,
+                            self.totalEvil]
             
             # page blackground
             self.display.fill((0, 0, 0))
@@ -419,6 +425,7 @@ class Game(GameManager):
             self.drawChatBox(self.display)
             
             # TEMP
+            # draw icon success / fail
             x = 0
             for i in self.round:
                 if i == 1:
@@ -426,10 +433,23 @@ class Game(GameManager):
                 if i == 2:
                     pygame.draw.rect(self.display, (255,0,0), pygame.Rect(x, 0, 30, 30) )
                 x += 35
+            # draw amount of success / fail
+            x = 0
+            for textSurface in self.missionText:
+                rect = textSurface.get_rect()
+                rect.center = pygame.Rect(x, 0, 30, 30).center
+                self.display.blit( textSurface, rect)
+                x += 35
+
+            # draw reject round 
             x = 0
             for i in range(self.voteRejected):
                 pygame.draw.rect(self.display, (255,0,255), pygame.Rect(x, 35, 30, 30) )
                 x += 35
+
+            # draw vote text
+            if self.voteText != None:
+                self.display.blit( self.voteText, pygame.Rect( 5, 70, 30, 30))
             
             if self.isError:
 

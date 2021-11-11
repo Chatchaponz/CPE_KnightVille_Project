@@ -98,6 +98,8 @@ class GameEvent:
         self.voteRejected = 0 # Count number of rejected party
         self.goodScore = 0 # Keep track score of good side
         self.evilScore = 0 # Keep track score of evil side
+        self.totalReject = 0 # Total reject score in each round
+        self.totalEvil = 0 # Total evil score in each round
     
     def randomRoles(self, allowRoles: list):
         '''
@@ -254,10 +256,12 @@ class GameEvent:
                 checkPass = True
         
         if self.gamePhase == 4:
-            # Check all player overall score (good/evil/rejected Score)
+            # Check all player overall score (good/evil/rejected score/reject count/ evil count)
             if (self.checkAllData(15, self.goodScore) and
                 self.checkAllData(16, self.evilScore) and
-                self.checkAllData(17, self.voteRejected)):
+                self.checkAllData(17, self.voteRejected) and
+                self.checkAllData(18, self.totalReject) and
+                self.checkAllData(19, self.totalEvil)):
                 checkPass = True
         
         if self.gamePhase == 5:
@@ -282,7 +286,9 @@ class GameEvent:
             # Check all player overall score (good/evil/rejected Score)
             if (self.checkAllData(15, self.goodScore) and
                 self.checkAllData(16, self.evilScore) and
-                self.checkAllData(17, self.voteRejected)):
+                self.checkAllData(17, self.voteRejected) and
+                self.checkAllData(18, self.totalReject) and
+                self.checkAllData(19, self.totalEvil)):
                 checkPass = True
         
         if self.gamePhase == 8:
@@ -331,8 +337,8 @@ class GameEvent:
                     if self.gamePhase == 4:
                         if self.doMission == None:
                             passScore = thisMatch['maxPlayer'] * 0.5
-                            rejectVote = self.countScore(2)
-                            if rejectVote >= passScore:
+                            self.totalReject = self.countScore(2)
+                            if self.totalReject >= passScore:
                                 self.doMission = False
                                 self.voteRejected += 1
                                 if self.voteRejected == 5:
@@ -344,20 +350,20 @@ class GameEvent:
                                 if self.voteRejected != 0:
                                     self.voteRejected = 0
                         if len(thisMatch['setting']) > 3:
-                            thisMatch['setting'][3] = [self.goodScore, self.evilScore, self.voteRejected]
+                            thisMatch['setting'][3] = [self.goodScore, self.evilScore, self.voteRejected, self.totalReject, self.totalEvil]
                     
                     if self.gamePhase == 7:
                         if self.missionSuccess == None:
-                            failCount = self.countScore(5)
-                            if failCount > 0:
+                            self.totalEvil = self.countScore(5)
+                            if self.totalEvil > 0:
                                 if thisMatch['maxPlayer'] > 6 and self.round == 4:
-                                    if failCount > 1:
+                                    if self.totalEvil > 1:
                                         self.missionSuccess = False
                                     else:
                                         self.missionSuccess = True
                                 else:
                                     self.missionSuccess = False
-                            elif failCount == 0:
+                            elif self.totalEvil == 0:
                                 self.missionSuccess = True
                             
                             if self.missionSuccess:
@@ -367,12 +373,13 @@ class GameEvent:
                             self.round += 1
 
                         if len(thisMatch['setting']) > 3:
-                            thisMatch['setting'][3] = [self.goodScore, self.evilScore, self.voteRejected]
+                            thisMatch['setting'][3] = [self.goodScore, self.evilScore, self.voteRejected, self.totalReject, self.totalEvil]
 
                 if self.checkCondition():
                     self.gamePhase += 1
             
             if not thisMatch['playing']:
+                # Reset
                 self.gamePhase = 0
                 self.round = 0
                 self.playerRoles = []
@@ -382,6 +389,8 @@ class GameEvent:
                 self.voteRejected = 0
                 self.goodScore = 0
                 self.evilScore = 0
+                self.totalReject = 0
+                self.totalEvil = 0
                 if len(thisMatch['setting']) > 3:
                     thisMatch['setting'].pop(3)
 

@@ -27,13 +27,21 @@ class GameManager(GameScreen):
         self.currentLeader = None
         self.partyMember = []
         self.round = []
+        self.voteText = None
+        self.missionText = []
         self.roundCount = 0
         self.voteRejected = 0
         self.evilScore = 0
         self.goodScore = 0
+        self.totalReject = 0
+        self.totalEvil = 0
         self.gameEnded = False
         self.othersGameStatus = []
         self.roleAvailable = False
+
+        # Text for score
+        self.scoreSize = 20
+        self.scoreFont = pygame.font.Font(self.font, self.scoreSize)
 
         # Chat box 
         self.chatPosX, self.chatPosY = 10, 380
@@ -310,6 +318,7 @@ class GameManager(GameScreen):
 
                 gameStart = self.matchSetting[2]
                 matchData = self.matchSetting[1]
+                maxPlayer = self.matchSetting[0]
                 
                 # sync game phase and update match data
                 if gameStart:
@@ -332,13 +341,33 @@ class GameManager(GameScreen):
                     
                     if self.gamePhase == 4 or self.gamePhase == 7:
                         if len(matchData) > 3 and type(matchData[3]) == list:
-                            if self.goodScore < matchData[3][0]:
+                            currentGood = matchData[3][0]
+                            currentEvil = matchData[3][1]
+                            currentRejectStatus = matchData[3][2]
+                            currentRejectCount = matchData[3][3]
+                            currentEvilCount = matchData[3][4]
+                            
+                            self.voteRejected = currentRejectStatus
+                            self.totalEvil = currentEvilCount
+
+                            if self.voteText == None or self.totalReject != currentRejectCount:
+                                # update count
+                                self.totalReject = currentRejectCount
+
+                                acceptScore = maxPlayer - currentRejectCount
+                                rejectScore = currentRejectCount
+                                voteString = f"{acceptScore} / : {rejectScore} X"
+                                self.voteText = self.scoreFont.render(voteString, True, self.control.white)
+
+                            if self.goodScore < currentGood:
                                 self.round.append(1)
-                                self.goodScore = matchData[3][0]
-                            if self.evilScore < matchData[3][1]:
+                                self.goodScore = currentGood
+                                self.missionText.append( self.scoreFont.render(str(0), True, self.control.white) )
+                            
+                            if self.evilScore < currentEvil:
                                 self.round.append(2)
-                                self.evilScore = matchData[3][1]
-                            self.voteRejected = matchData[3][2]
+                                self.evilScore = currentEvil
+                                self.missionText.append( self.scoreFont.render(str(currentEvilCount), True, self.control.white) )
             
             self.checkExistPlayer(self.currentPlayerInMatch)
 
