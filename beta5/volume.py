@@ -19,7 +19,6 @@ class volumeBar():
         self.controlRect = pygame.Rect(self.rangeRect.right - conWidth, ranY, conWidth, ranHeight) # dragable object as controller
         
         self.value = 100 # Position of controller in body as percentage
-        self.x, self.offset = 0, 0 # Position of controller
         self.maxrange = self.rangeRect.width - conWidth # Max range that controller can drag in body
         self.draging = False # Draging state
 
@@ -30,19 +29,19 @@ class volumeBar():
         '''
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:
-                self.mouseX, self.mouseY = event.pos
-                self.offset = self.controlRect.x - self.mouseX
+                self.mouseX, mouseY = event.pos # Mouse position
                 if self.controlRect.collidepoint(event.pos):
                     self.draging = True
                 elif self.rangeRect.collidepoint(event.pos):
-                    self.controlRect.centerx = self.mouseX  
+                    self.controlRect.centerx = self.mouseX
+                    self.draging = True  
         elif event.type == pygame.MOUSEBUTTONUP:
             if event.button == 1:
                 self.draging = False
         if event.type == pygame.MOUSEMOTION:
             if self.draging:
-                self.mouseX, self.mouseY = event.pos
-                self.controlRect.x = self.mouseX + self.offset
+                self.mouseX, mouseY = event.pos
+                self.controlRect.centerx = self.mouseX
             
     def __limit(self):
         '''
