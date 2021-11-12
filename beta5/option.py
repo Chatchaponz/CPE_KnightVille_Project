@@ -9,8 +9,8 @@ class OptionMenu(GameScreen):
         super(OptionMenu, self).__init__(control)
 
         # Button goes here
-        self.buttonMenu = Button(100, 100, 100, 50)
-        self.buttonMenu.addText('back', self.font, 25, control.white, 1, (50,50,50))
+        self.buttonMenu = Button(80, 80, 80, 35)
+        self.buttonMenu.addText('BACK', self.font2, 20, (255,255,255), 1, (50,50,50))
 
         self.sfx = volumeBar(self.screenWidth//2 - 225, 250, 450, 40, 15)
         self.music = volumeBar(self.sfx.rangeRect.x, self.sfx.rangeRect.y + self.sfx.rangeRect.height + 50, 
@@ -48,5 +48,5 @@ class OptionMenu(GameScreen):
             if self.buttonMenu.isButtonClick(self.backButtonOptionSound, self.control.getSoundEffectVol()):
                 self.changePageByInput(True, self.control.menu)
             
-            self.drawText('Option Menu', 40, self.screenWidth//2, 100, self.font, self.control.black)
+            self.drawText('Option Menu', 70, self.screenWidth//2, 120, self.font1, self.control.black)
             self.biltScreen()

@@ -20,10 +20,10 @@ class HostMenu(GameScreen):
 
         # Button
         self.buttonBack = Button(80, 80, 80, 35)
-        self.buttonBack.addText('Back', self.font1, 20, (255,255,255), 1, (50,50,50))
+        self.buttonBack.addText('BACK', self.font2, 20, (255,255,255), 1, (50,50,50))
 
-        self.buttonCreateLobby = Button(970, 600, 230, 35)
-        self.buttonCreateLobby.addText('Create Lobby', self.font1, 20, (255,255,255), 1, (50,50,50))
+        self.buttonCreateLobby = Button(1000, 600, 200, 35)
+        self.buttonCreateLobby.addText('CREATE LOBBY', self.font2, 20, (255,255,255), 1, (50,50,50))
 
         self.prefixNumPlayer = pygame.font.Font(self.font1, 20).render('Number of players', True, self.control.black)
         
@@ -91,22 +91,15 @@ class HostMenu(GameScreen):
         self.count = 0
 
         # Popup
-        # dummy
-        dummy_string = 'Unknown Error'
-        dummy_colorhighlight = pygame.Color('darkblue')
-        popWidth, popHeight = 400, 130
-        self.createFailed = Popup((self.screenWidth - popWidth)//2, (self.screenHeight - popHeight)//2, popWidth, popHeight, dummy_string,
-        self.control.white, dummy_colorhighlight)
-        self.createFailed.adjustComponents(bWidth = 60)
-        self.createFailed.modComponents(self.createFailed.b1, 'button', self.control.black, text = 'OK')
-        self.joinFailed = Popup((self.screenWidth - popWidth)//2, (self.screenHeight - popHeight)//2, popWidth, popHeight, dummy_string,
-        self.control.white, dummy_colorhighlight)
-        self.joinFailed.adjustComponents(bWidth = 60)
-        self.joinFailed.modComponents(self.joinFailed.b1, 'button', self.control.black, text = 'OK')
+        dummy_string = 'Unknown Error' # DUMMY
+        popWidth, popHeight = 500, 130
+        self.hostFailed = Popup((self.screenWidth - popWidth)//2, (self.screenHeight - popHeight)//2, popWidth, popHeight, dummy_string,
+        self.control.white, pygame.Color('darkblue'))
+        self.hostFailed.adjustComponents(bWidth = 60)
+        self.hostFailed.modComponents(self.hostFailed.b1, 'button', (97, 63, 45), (130,83,50), 'CLOSE', self.font2)
 
         # Tracking connect state
-        self.createSuccess = True
-        self.joinSuccess = True
+        self.hostSuccess = True
 
     def resetRole(self):
         # Reset Role
@@ -204,6 +197,7 @@ class HostMenu(GameScreen):
     
     def displayScreen(self):
 
+        self.hostSuccess = True
         buttonList = [self.buttonBack, self.buttonCreateLobby, self.buttonLeft, self.buttonRight]
         rolebuttonList = [self.buttonRole1, self.buttonRole2, self.buttonRole3]
         nonselectableRoles = [[self.merlin, self.merlinRect], [self.servant, self.servantRect], [self.assasin, self.assasinRect], 
@@ -270,6 +264,7 @@ class HostMenu(GameScreen):
             # Back to menu
             if self.buttonBack.isButtonClick(self.clickChoiceSound,self.control.getSoundEffectVol()):
                 self.resetRole()
+                self.numPlayer = 5
                 if self.network.connectStatus == True:
                     self.network.disconnectFromServer()
                 self.changePageByInput(True)
@@ -291,28 +286,29 @@ class HostMenu(GameScreen):
                 createResult, createError = self.network.createLobby(self.numPlayer, [True, self.rolePercival, True, self.roleMordred, 
                                          True, self.roleMorgana, self.roleMinion, self.roleOberon], 0, 0)
                 if createResult:
-                    self.createSuccess = True
+                    self.hostSuccess = True
                     joinResult, joinError = self.network.joinGame()
                     if joinResult:
                         self.player.host = True
                         self.player.id = 0
                         self.changePageByInput(True, self.control.createPlayer)
-                        self.joinSuccess = True
+                        self.hostSuccess = True
                     else:
-                        self.joinFailed.text = joinError
-                        self.joinSuccess = False
-
+                        self.hostFailed.text = joinError.upper()
+                        self.hostSuccess = False
                 else:
-                    self.createFailed.text = createError
-                    self.createSuccess = False
-            # dummy
-            if not self.joinSuccess:
-                self.joinFailed.draw(self.display, None, 28, textAlign = 'centerAlign', image = self.control.popupBackground)
-                if self.joinFailed.b1.isButtonClick():
-                    self.joinSuccess = True
-            if not self.createSuccess:
-                self.createFailed.draw(self.display, None, 28, textAlign = 'centerAlign', image = self.control.popupBackground)
-                if self.createFailed.b1.isButtonClick():
-                    self.createSuccess = True
+                    self.hostFailed.text = createError.upper()
+                    self.hostSuccess = False
+
+            # POPUP
+            if not self.hostSuccess:
+                self.hostFailed.draw(self.display, self.font2, 28, textAlign = 'centerAlign', image = self.control.popupBackground)
+                if self.hostFailed.b1.isButtonClick():    
+                    self.hostSuccess = True
+                    self.resetRole()
+                    self.numPlayer = 5
+                    if self.network.connectStatus == True:
+                        self.network.disconnectFromServer()
+                    self.changePageByInput(True, self.control.menu)
 
             self.biltScreen() # update screen

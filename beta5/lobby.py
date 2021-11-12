@@ -263,7 +263,7 @@ class Lobby(GameManager):
             if self.network.connectStatus == False:
                 self.isError = True
                 self.available = False
-                self.popupFail.text = "Connection lost!"
+                self.popupFail.text = "CONNECTION LOST!"
 
             if self.available:
 
@@ -299,17 +299,17 @@ class Lobby(GameManager):
                                 else:
                                     self.isError = True
                                     failText = f"Some player currently in match"
-                                    self.popupFail.text = failText
+                                    self.popupFail.text = failText.upper()
                                     print("[Error] Cannot start match : ", failText)
                             else:
                                 self.isError = True
                                 failText = f"Not enough players {currentPlayer}/{maxPlayer}"
-                                self.popupFail.text = failText
+                                self.popupFail.text = failText.upper()
                                 print("[Error] Cannot start match : ", failText)
                     else:
                         self.isError = True
                         failText = "You are not the host"
-                        self.popupFail.text = failText
+                        self.popupFail.text = failText.upper()
                         print("[Error] ", failText)
                 
                 if self.buttonEditPlayer.isButtonClick():

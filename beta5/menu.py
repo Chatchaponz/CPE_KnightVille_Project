@@ -257,7 +257,7 @@ class MainMenu(GameScreen):
                             self.changePageByInput(True, self.control.host)
                             self.successConnect = True
                         else:
-                            self.popupFail.text = self.errorMessage
+                            self.popupFail.text = self.errorMessage.upper()
                             self.successConnect = False
                         
                         self.available = True
@@ -300,7 +300,7 @@ class MainMenu(GameScreen):
                         self.popupJoin.activeButton = True
 
                         if not self.connectResult:
-                            self.popupFail.text = self.errorMessage
+                            self.popupFail.text = self.errorMessage.upper()
                             self.successConnect = False
 
                     else:
@@ -312,7 +312,7 @@ class MainMenu(GameScreen):
                             self.changePageByInput(True, self.control.createPlayer)
                             self.successConnect = True
                         else:
-                            self.popupFail.text = joinError
+                            self.popupFail.text = joinError.upper()
                             self.network.disconnectFromServer()
                             self.successConnect = False
 
