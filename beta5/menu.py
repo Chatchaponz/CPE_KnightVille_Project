@@ -28,15 +28,26 @@ class MainMenu(GameScreen):
         self.BGCover = control.BGCover
         self.BGCoverWidth = self.BGCover.get_rect().width
         self.BGCoverPosition = -2500
-        self.skyCover = control.skyCover
-        self.woodBoard = control.woodBoard
+        self.skyCover = self.control.skyCover
+        self.woodBoard = self.control.woodBoard
         self.woodBoardWidth = self.woodBoard.get_rect().width
         self.woodBoardHeight = self.woodBoard.get_rect().height
-        self.choice = control.choice
+        self.choice = self.control.choice
         self.choiceWidth = self.choice.get_rect().width
         self.skyPosition = 0
         self.skyCoverWidth = self.skyCover.get_rect().width
-        self.popupBackground = control.popupBackground
+        self.popupBackground = self.control.popupBackground
+
+        self.howToPlay = self.control.howToPlay
+        self.amountOfHowToPlayPage = len(self.howToPlay)
+
+        self.tapeRightArrow = self.control.tapeRightArrow
+        self.tapeLeftArrow = self.control.tapeLeftArrow
+        self.tapeArrowWidth = self.tapeLeftArrow.get_rect().width
+        self.tapeArrowHeight = self.tapeLeftArrow.get_rect().height
+        self.tapeClose = self.control.tapeClose
+        self.tapeCloseWidth = self.tapeClose.get_rect().width
+        self.tapeCloseHeight = self.tapeClose.get_rect().height
 
         # Button
         self.buttonHost = Button(self.screenWidth//4, 270, 100, 70)
@@ -50,6 +61,18 @@ class MainMenu(GameScreen):
 
         self.buttonQuit = Button(self.screenWidth//4, 540, 100, 70)
         self.buttonQuit.addText('Quit', self.font1, 40, control.white, (50,50,50))
+
+        self.buttonHowToPlay = Button(self.screenWidth - 170, 20, 150, 50)
+        self.buttonHowToPlay.addText('How to play', self.font1, 30, control.white, (50,50,50), pygame.Color("brown"))
+
+        self.buttonRight = Button(self.screenWidth - self.tapeArrowWidth - 80, self.screenHeight//2 - 20, self.tapeArrowWidth, self.tapeArrowHeight)
+        self.buttonRight.addImage(self.tapeRightArrow)
+
+        self.buttonLeft = Button(80, self.screenHeight//2 - 20, self.tapeArrowWidth, self.tapeArrowHeight)
+        self.buttonLeft.addImage(self.tapeLeftArrow)
+
+        self.buttonClose = Button(self.screenWidth - self.tapeCloseWidth - 120, 20, self.tapeCloseWidth, self.tapeCloseHeight)
+        self.buttonClose.addImage(self.tapeClose)
 
         # Popup
         self.popupHost = Popup((self.display.get_width() - 700)//2, (self.display.get_height() - 250)//2, 700, 250, 
@@ -123,6 +146,9 @@ class MainMenu(GameScreen):
         self.displayRunning = True
         
         buttonList = [self.buttonHost, self.buttonJoin, self.buttonOption, self.buttonQuit]
+        buttonHowToPlayList = (self.buttonClose, self.buttonLeft, self.buttonRight)
+        currentPage = 0
+        howToPlayStatus = 0
 
         while self.displayRunning:
             
@@ -151,6 +177,7 @@ class MainMenu(GameScreen):
             # Draw button
             for buttonSurface in buttonList:
                 buttonSurface.draw(self.display, self.available)
+            self.buttonHowToPlay.draw(self.display, self.available)
             self.display.blit(self.logo, (self.screenWidth//4 - self.logo.get_width()//2 + 50, 100))
 
             # Menu available to click
@@ -173,6 +200,27 @@ class MainMenu(GameScreen):
                 if self.buttonQuit.isButtonClick(self.clickChoiceSound,self.control.getSoundEffectVol()):
                     pygame.quit()
                     sys.exit()
+                if self.buttonHowToPlay.isButtonClick(self.clickChoiceSound,self.control.getSoundEffectVol()):
+                    howToPlayStatus = 1
+
+                if howToPlayStatus == 1:
+                    self.display.blit(self.howToPlay[currentPage], (0, 0))
+                    for button in buttonHowToPlayList:
+                        button.draw(self.display, self.available)
+                    if self.buttonLeft.isButtonClick():
+                        if currentPage == 0:
+                               currentPage = self.amountOfHowToPlayPage-1
+                        else:
+                            currentPage -= 1
+                    if self.buttonRight.isButtonClick():
+                        if currentPage == self.amountOfHowToPlayPage-1:
+                            currentPage = 0
+                        else:
+                            currentPage += 1
+                    if self.buttonClose.isButtonClick():
+                        howToPlayStatus = 0
+                else:
+                    currentPage = 0
             
             # POPUP
             if self.hosting:  # HOSTING

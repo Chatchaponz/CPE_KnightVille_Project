@@ -57,6 +57,9 @@ class GameSetting:
         self.oberonIcon = pygame.image.load("images\icon\oberonIcon.PNG")
         self.rightArrow = pygame.image.load("images\icon\pointerRight.PNG")
         self.leftArrow = pygame.image.load("images\icon\pointerLeft.PNG")
+        self.tapeRightArrow = pygame.image.load("images\icon\TapeRightArrow.PNG")
+        self.tapeLeftArrow = pygame.image.load("images\icon\TapeLeftArrow.PNG")
+        self.tapeClose = pygame.image.load("images\icon\TapeClose.PNG")
 
         self.lobbyFloor = pygame.image.load("images\lobby\lobbyFloor.JPG")
         self.lobbyWall = pygame.image.load("images\lobby\lobbyWall.PNG")
@@ -85,6 +88,14 @@ class GameSetting:
         self.checked = pygame.image.load("images/profile/yes.PNG")
 
         pygame.display.set_icon(self.oberonIcon)
+
+        #load How-to-play material
+        self.howToPlay = []
+        howToPlayPath = "images/howToPlay/"
+        howToPlayList = os.listdir(howToPlayPath)
+        for howToPlayPage in howToPlayList:
+            self.howToPlay.append(pygame.image.load( howToPlayPath + howToPlayPage).convert_alpha())
+        print(howToPlayList)
 
         #load skins
         self.skins = []
