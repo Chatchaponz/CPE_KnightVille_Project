@@ -67,14 +67,14 @@ class MainMenu(GameScreen):
         limit = 5)
 
         for popupObj in [self.popupHost, self.popupJoin]:
-            popupObj.modComponents(popupObj.b1, 'button', (97, 63, 45), (130,83,50), 'Connect')
-            popupObj.modComponents(popupObj.b2, 'button', (97, 63, 45), (130,83,50), 'Cancel')
+            popupObj.modComponents(popupObj.b1, 'button', (97, 63, 45), (130,83,50), 'Connect', self.font2)
+            popupObj.modComponents(popupObj.b2, 'button', (97, 63, 45), (130,83,50), 'Cancel', self.font2)
 
         self.popupFail = Popup((self.display.get_width() - 500)//2, (self.display.get_height() - 200)//2, 500, 200, 
         'UNABLE TO CONNECT HOST SERVER', pygame.Color('white'), pygame.Color('cyan3'), type = 0)
         self.popupFail.adjustComponents(bWidth=70, fontPath = self.font2)
         self.popupFail.modComponents(self.popupFail.b1, 'button', (97, 63, 45), (130,83,50), 'Close', 
-        self.font1, 22)
+        self.font2, 22)
 
 
         # Popup state

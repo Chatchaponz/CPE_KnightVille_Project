@@ -26,8 +26,8 @@ class CreatePlayer(GameScreen):
         self.dressingCabWidth = self.dressingCab.get_rect().width
         self.dressingRoom = control.dressingRoom
         
-        self.buttonJoin = Button(100, 200, 100, 50)
-        self.buttonJoin.addText('Join', self.font, 20, (255,255,255), 1, (50,50,50))
+        self.buttonJoin = Button(self.screenWidth//2 - 40, self.dressingCab.get_height(), 80, 35)
+        self.buttonJoin.addText('Join', self.font2, 20, (255, 255, 255), 1, (144, 109, 99), (120, 90, 82))
 
         self.buttonLeft = Button((self.screenWidth//2) - (self.arrowWidth) - 80, 360, self.arrowWidth, self.arrowHeight)
         self.buttonLeft.addImage(self.leftArrow)
@@ -41,8 +41,7 @@ class CreatePlayer(GameScreen):
 
         self.popupNoIGN = Popup(self.screenWidth//2 - 250, self.screenHeight//2 - 90, 500, 180, 
         'Please enter your/> In-game name with no spacebar', pygame.Color('white'), pygame.Color('darkblue'))
-        self.popupNoIGN.modComponents(self.popupNoIGN.b1, 'button', pygame.Color('darkseagreen4'), 
-        pygame.Color('darkslategray'), 'understand')
+        self.popupNoIGN.modComponents(self.popupNoIGN.b1, 'button', (97, 63, 45), (130,83,50), 'understand', self.font2)
 
         self.triggerNoIGN = False
 
@@ -107,10 +106,8 @@ class CreatePlayer(GameScreen):
                 else:
                     self.triggerNoIGN = True
             if self.triggerNoIGN:
-                self.popupNoIGN.draw(self.display, self.font1, size = 28, textAlign = 'centerAlign', image = self.control.popupBackground)
+                self.popupNoIGN.draw(self.display, self.font2, size = 28, textAlign = 'centerAlign', image = self.control.popupBackground)
                 if self.popupNoIGN.b1.isButtonClick(self.clickChoiceSound, self.control.getSoundEffectVol()):
                     self.triggerNoIGN = False
 
-            self.drawText('Create Player[Under construction]', 20 , 100, 100, self.font, self.control.white)
-            self.drawText('Your test character already created', 20 , 100, 150, self.font, self.control.white)
             self.biltScreen() # update screen

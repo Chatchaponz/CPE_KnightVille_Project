@@ -52,11 +52,10 @@ class Lobby(GameManager):
         self.buttonRoomSetting.addImage(self.map, self.mapAura)
 
         # Setup edit player
-        
         self.popEditBg = control.dressingCab.get_rect()
         self.popEditBg.x, self.popEditBg.y = self.screenWidth/2 - self.popEditBg.centerx, self.screenHeight/2 - self.popEditBg.centery
         self.popEditSummit = Button(self.popEditBg.centerx - 50, self.popEditBg.y + 515, 100, 50)
-        self.popEditSummit.addText('Submit', self.font, 20, (255, 255, 255), bgColor = (144, 109, 99), bgColorOver = (120, 90, 82))
+        self.popEditSummit.addText('Submit', self.font2, 20, (255, 255, 255), bgColor = (144, 109, 99), bgColorOver = (120, 90, 82))
         
         self.buttonLeft = Button(self.screenWidth//2 - self.control.leftArrow.get_width() - 80, 360, 
         self.control.leftArrow.get_width(), self.control.leftArrow.get_height())
@@ -66,21 +65,26 @@ class Lobby(GameManager):
         self.control.rightArrow.get_height())
         self.buttonRight.addImage(self.control.rightArrow)
 
+        self.topicMap = pygame.font.Font(self.font1, 30).render('Room Setting', True, self.control.black)
+        self.topicMapRect = self.topicMap.get_rect()
+        self.topicKnight = pygame.font.Font(self.font1, 30).render('Edit Player', True, self.control.black)
+        self.topicKnightRect = self.topicKnight.get_rect()
+
         self.currentSkin = None
         self.currentName = None
         self.skins = self.control.skins
         self.amountSkins = len(self.skins)
         
         self.newPlayername = Textbox(self.popEditBg.centerx - 110, self.popEditBg.y + 70, 220, 30, pygame.Color('white'), 
-        pygame.Color('white'), 15, fontPath = self.font1, size = 26)
+        pygame.Color('white'), 15, fontPath = None, size = 26)
 
         self.popupNoIGN = Popup(self.screenWidth//2 - 250, self.screenHeight//2 - 90, 500, 180, 'Please enter your/> In-game name with no spacebar', 
         pygame.Color('white'), pygame.Color('darkblue'))
-        self.popupNoIGN.modComponents(self.popupNoIGN.b1, 'button', pygame.Color('darkseagreen4'), pygame.Color('darkslategray'), 'understand')
+        self.popupNoIGN.modComponents(self.popupNoIGN.b1, 'button', pygame.Color('darkseagreen4'), pygame.Color('darkslategray'), 'Understand', self.font2)
 
         self.popupFail = Popup((self.display.get_width() - 500)//2, (self.display.get_height() - 200)//2, 500, 200, 
         'Unknown Error', pygame.Color('white'), pygame.Color('cyan3'), type = 0)
-        self.popupFail.adjustComponents(bWidth=70, fontPath = self.font1)
+        self.popupFail.adjustComponents(bWidth = 70, fontPath = self.font1)
         self.popupFail.modComponents(self.popupFail.b1, 'button', (132, 85, 47), (100, 64, 44), 'Close', self.font1, 22)
         self.isError = False
 
@@ -97,7 +101,7 @@ class Lobby(GameManager):
         self.popEditBg.y + 230))
 
         self.currentName = self.newPlayername.getText()
-        self.drawText(self.currentName, 20, self.popEditBg.centerx , self.popEditBg.y + 210, self.font1, self.control.white)
+        self.drawText(self.currentName, 20, self.popEditBg.centerx , self.popEditBg.y + 210, self.font, self.control.white)
 
         self.newPlayername.draw(self.display)
 
@@ -130,7 +134,7 @@ class Lobby(GameManager):
             else:
                 self.triggerNoIGN = True
         if self.triggerNoIGN:
-            self.popupNoIGN.draw(self.display, self.font1, size = 28, textAlign = 'centerAlign', image = self.control.popupBackground)
+            self.popupNoIGN.draw(self.display, self.font2, size = 28, textAlign = 'centerAlign', image = self.control.popupBackground)
             if self.popupNoIGN.b1.isButtonClick():
                 self.triggerNoIGN = False
     
@@ -270,6 +274,9 @@ class Lobby(GameManager):
                 # self.font1, self.control.black)
                 # self.drawText('Room Setting', 30, self.buttonRoomSetting.rect.centerx + 3, self.buttonRoomSetting.rect.y - 45, 
                 # self.font1, self.control.black)
+                for i in range(5):
+                    self.display.blit(self.topicKnight, ((self.buttonEditPlayer.rect.centerx + 2 + i) - self.topicKnightRect.centerx, self.buttonEditPlayer.rect.y - 33 + i))
+                    self.display.blit(self.topicMap, ((self.buttonRoomSetting.rect.centerx + 2 + i) - self.topicMapRect.centerx, self.buttonRoomSetting.rect.y - 63 + i))
 
                 self.drawText('Edit Player', 30, self.buttonEditPlayer.rect.centerx, self.buttonEditPlayer.rect.y - 15, 
                 self.font1, self.control.white)
@@ -327,7 +334,7 @@ class Lobby(GameManager):
 
             if self.isError:
 
-                self.popupFail.draw(self.display, self.font1, 30, textAlign= 'centerAlign',  bgColor = None, 
+                self.popupFail.draw(self.display, self.font2, 30, textAlign= 'centerAlign',  bgColor = None, 
                 image = self.popupBackground)
                 self.available = False
                 if self.popupFail.b1.isButtonClick(self.backButtonSound,self.control.getSoundEffectVol()):
