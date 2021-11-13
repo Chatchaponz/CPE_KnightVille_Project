@@ -93,6 +93,8 @@ class Lobby(GameManager):
         # Setup match setting
 
         roleWidth, roleHeight = 80, 80
+        self.closeSetting = Button(self.screenWidth - 300 - 100 - 20, self.screenHeight - 168 - 60, 100, 40)
+        self.closeSetting.addText('SAVE', self.font2, 30, bgColor = pygame.Color('grey40'), bgColorOver = pygame.Color('darkgrey'))
 
         # Special role image/button
         self.buttonRole1 = Button(self.screenWidth//2 + 40, 250, roleWidth, roleHeight)
@@ -240,15 +242,20 @@ class Lobby(GameManager):
     def editMatch(self, maxPlayer):
 
         self.available = False
-
         # Popup background
         pygame.draw.rect(self.display, pygame.Color('white'), (300, 168, 680, 384))
+
+        self.closeSetting.draw(self.display)
+        
         if maxPlayer <= 6:
             self.configRole(1)
         if maxPlayer > 6 and maxPlayer < 10:
             self.configRole(2)
         if maxPlayer > 9:
             self.configRole(3)
+        if self.closeSetting.isButtonClick():
+            roleList = [True, self.rolePercival, True, self.roleMordred, True, self.roleMorgana, self.roleMinion, self.roleOberon]
+            self.popSetting = False
         
     
     def editPlayer(self):
