@@ -503,8 +503,10 @@ class Lobby(GameManager):
                     if self.player.host == True:
                         self.popSetting = True
                     else:
-                        # Error popup no host
-                        pass
+                        self.isError = True
+                        failText = "You are not the host"
+                        self.popupFail.text = failText.upper()
+                        print("[Error] ", failText)
 
             if len(self.matchSetting) > 2:
                 gameStart = self.matchSetting[2]
