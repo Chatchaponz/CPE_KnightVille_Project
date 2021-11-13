@@ -37,6 +37,7 @@ class Textbox():
             self.limit = limit # limit of character in object.
         else:
             self.limit = None
+        self.pos = len(self.text) - 1
 
     def getText(self):
         '''
@@ -63,16 +64,33 @@ class Textbox():
                 self.color = self.activeColor
                 if self.text == self.initText and initReset:
                     self.text = ''
+                    self.pos = len(self.text)
             else:
                 self.color = self.inactiveColor
         if self.active:
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_BACKSPACE:
-                    self.text = self.text[:-1]
+                if event.key == pygame.K_LEFT:
+                    if not self.pos < 1:
+                        self.pos -= 1
+                        print(self.pos)
+                elif event.key == pygame.K_RIGHT:
+                    if not self.pos > len(self.text) - 1:
+                        self.pos += 1
+                        print(self.pos)
+                elif event.key == pygame.K_BACKSPACE:
+                    if self.pos > 0:
+                        # Divide text into 2 part.
+                        textFront = self.text[:self.pos][:-1] 
+                        textBack = self.text[self.pos:]
+                        self.text = textFront + textBack # merge 2 part
+                        self.pos -= 1
                 elif self.limit != None and len(self.text) < self.limit or self.limit == None:
                     if event.key not in [pygame.K_RETURN, pygame.K_KP_ENTER]:
-                        self.text += event.unicode
-            self.textSurface = self.fontSurface.render(self.text + '|', True, pygame.Color('black'))
+                        textFront = self.text[:self.pos] + event.unicode
+                        textBack = self.text[self.pos:]
+                        self.text = textFront + textBack
+                        self.pos += 1
+            self.textSurface = self.fontSurface.render(self.text[:self.pos] + '|' + self.text[self.pos : :], True, pygame.Color('black'))
         else:
             if self.prevText != self.initText and self.text == '':
                 self.textSurface = self.fontSurface.render(self.text, True, pygame.Color('grey'))
@@ -86,6 +104,7 @@ class Textbox():
         resetText - empty text in object.
         '''
         self.text = ''
+        self.pos = len(self.text)
 
     def update(self):
         '''
