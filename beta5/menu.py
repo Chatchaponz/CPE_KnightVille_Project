@@ -150,7 +150,7 @@ class MainMenu(GameScreen):
         buttonList = [self.buttonHost, self.buttonJoin, self.buttonOption, self.buttonQuit]
         buttonHowToPlayList = (self.buttonClose, self.buttonLeft, self.buttonRight)
         currentPage = 0
-        howToPlayStatus = 0
+        howToPlayStatus = False
 
         while self.displayRunning:
             
@@ -203,9 +203,10 @@ class MainMenu(GameScreen):
                     pygame.quit()
                     sys.exit()
                 if self.buttonHowToPlay.isButtonClick(self.clickChoiceSound,self.control.getSoundEffectVol()):
-                    howToPlayStatus = 1
+                    howToPlayStatus = True
 
-                if howToPlayStatus == 1:
+                if howToPlayStatus:
+                    self.available = False
                     self.display.blit(self.howToPlay[currentPage], (0, 0))
                     for button in buttonHowToPlayList:
                         button.draw(self.display, self.available)
@@ -220,7 +221,8 @@ class MainMenu(GameScreen):
                         else:
                             currentPage += 1
                     if self.buttonClose.isButtonClick(random.choice(self.paperSoundList),self.control.getSoundEffectVol()):
-                        howToPlayStatus = 0
+                        self.available = True
+                        howToPlayStatus = False
                 else:
                     currentPage = 0
             
