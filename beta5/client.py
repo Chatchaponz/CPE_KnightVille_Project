@@ -160,7 +160,8 @@ class Client:
         '''
         try: success = self.__sendData(Signal.SETTING_MATCH, [maxPlayer, otherSetting])
         except ClientException as e: raise e
-        
+        if success == []: success = [True, 1]
+
         if(success[0]):
             print("[CLIENT] Match setting has been change.")
         else:
@@ -169,7 +170,7 @@ class Client:
             if success[1] == -2 : raise ServerMatchException("Current player already exceed new max player.")
             if success[1] == -3 : raise ServerMatchException("You are not the host.")
             if success[1] == -4 : raise ServerMatchException("Match is not created.")
-        return success
+        return success[0]
 
     
     def startMatch(self):
@@ -191,6 +192,7 @@ class Client:
         '''
         try: success = self.__sendData(Signal.START_MATCH, "")
         except ClientException as e: raise e
+        if success == []: success = [True, 1]
 
         if(success[0]):
             print("[CLIENT] Start match successfully")
@@ -221,6 +223,7 @@ class Client:
         '''
         try: success = self.__sendData(Signal.STOP_MATCH, "")
         except ClientException as e: raise e
+        if success == []: success = [True, 1]
 
         if(success[0]):
             print("[CLIENT] Stop match successfully")
@@ -310,6 +313,7 @@ class Client:
         '''
         try: success = self.__sendData(Signal.JOIN, data)
         except ClientException as e: raise e
+        if success == []: success = [True, 1]
 
         if(success[0]):
             print("[CLIENT] Join match successfully.")

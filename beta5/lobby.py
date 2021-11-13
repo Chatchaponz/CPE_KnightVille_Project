@@ -239,6 +239,7 @@ class Lobby(GameManager):
             self.control.playSoundWithVol(self.soundList[6],self.control.getSoundEffectVol())
             self.alreadyPlay = True
 
+    # override
     def editMatch(self, maxPlayer):
 
         self.available = False
@@ -255,7 +256,17 @@ class Lobby(GameManager):
             self.configRole(3)
         if self.closeSetting.isButtonClick():
             roleList = [True, self.rolePercival, True, self.roleMordred, True, self.roleMorgana, self.roleMinion, self.roleOberon]
-            self.popSetting = False
+            settingResult, settingError = self.network.changeMatchSetting(maxPlayer, [roleList, 0, 0])
+            if settingResult:
+                # popup success = Ture
+                self.popSetting = False
+                self.available = True
+            else:
+                self.available = False
+                # popup success = False
+                # self.popSetting = True
+                # popup text = settingError.upper
+                pass
         
     
     def editPlayer(self):
@@ -316,6 +327,7 @@ class Lobby(GameManager):
         self.currentSkin = None
         self.isError = False
         self.popEdit = False
+        self.popSetting = False
         self.available = True
 
         if leaveToMain:
@@ -486,8 +498,13 @@ class Lobby(GameManager):
                         self.currentSkin = self.player.skin
                         self.currentName = self.player.name
                     self.newPlayername.text = self.currentName
+                
                 if self.buttonMatchSetting.isButtonClick():
-                    self.popSetting = True
+                    if self.player.host == True:
+                        self.popSetting = True
+                    else:
+                        # Error popup no host
+                        pass
 
             if len(self.matchSetting) > 2:
                 gameStart = self.matchSetting[2]

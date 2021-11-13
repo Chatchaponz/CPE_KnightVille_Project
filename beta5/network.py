@@ -1,4 +1,4 @@
-from pickle import TRUE
+import logging
 from client import Client
 '''
 network - Manage connection between game(client) and server
@@ -75,22 +75,26 @@ class Network :
             print("[ERROR] ", e)
             return (False, str(e))
     
-    def changeMatchSetting(self, maxPlayer : int, availableRole):
+    def changeMatchSetting(self, maxPlayer : int, matchSetting):
         '''
         changeMatchSetting - Modify current match setting
         + maxPlayer - Maximum player in this match (must be integer)
-        + availableRole - List of boolean indicate role that allow in this match
-
-        + return - Boolean
-          - True if success
-          - False if fail
+        + matchSetting - Setting of a match including availableRole, syncPhase, syncRound
+            x availableRole - List of boolean indicate role that allow in this match
+            x syncPhase - Integer indicate initial phase
+            x syncRound - Integer indicate initial round
+        
+        + return - Tuple
+          - (True, "") if success
+          - (False, <error>) if fail
         '''
         try:
-            self.__connect.settingMatch(maxPlayer, availableRole)
-            return True
+            self.__connect.settingMatch(maxPlayer, matchSetting)
+            return (True, "")
         except Exception as e:
             print("[ERROR] ", e)
-            return False
+            logging.exception(str(e))
+            return (False, str(e))
 
     def tryGetData(self, sendData):
         '''

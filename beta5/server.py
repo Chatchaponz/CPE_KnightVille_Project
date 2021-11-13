@@ -497,13 +497,14 @@ def handleSignal(signal, data, addr, conn):
             thisMatch['status'] == True):
             thisMatch['maxPlayer'] = newMaxPlayer
             thisMatch['setting'] = newSetting
-            sendData(conn, [True, 1])
+            returnData = [True, 1]
+            sendData(conn, returnData)
         else:
             failStatus = 0
             if thisMatch['playing'] == True: failStatus = -1
             if len(thisMatch['players']) > newMaxPlayer : failStatus = -2
             if addr != thisMatch['host']: failStatus = -3
-            if thisMatch['status'] == False: -4
+            if thisMatch['status'] == False: failStatus = -4
             sendData(conn, [False, failStatus])
 
 
