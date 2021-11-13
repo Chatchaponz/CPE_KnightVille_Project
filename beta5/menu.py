@@ -1,6 +1,7 @@
 import sys
 import threading
 import pygame
+import random
 from screen import GameScreen
 from button import Button
 from popup import Popup
@@ -17,6 +18,7 @@ class MainMenu(GameScreen):
 
         # Sound Effect
         self.soundList = control.soundList
+        self.paperSoundList = control.paperSoundList
         self.clickChoiceSound = self.soundList[2]
         self.isMouseOverSound = self.soundList[0]
         self.backButtonSound = self.soundList[3]
@@ -207,17 +209,17 @@ class MainMenu(GameScreen):
                     self.display.blit(self.howToPlay[currentPage], (0, 0))
                     for button in buttonHowToPlayList:
                         button.draw(self.display, self.available)
-                    if self.buttonLeft.isButtonClick():
+                    if self.buttonLeft.isButtonClick(random.choice(self.paperSoundList),self.control.getSoundEffectVol()):
                         if currentPage == 0:
                                currentPage = self.amountOfHowToPlayPage-1
                         else:
                             currentPage -= 1
-                    if self.buttonRight.isButtonClick():
+                    if self.buttonRight.isButtonClick(random.choice(self.paperSoundList),self.control.getSoundEffectVol()):
                         if currentPage == self.amountOfHowToPlayPage-1:
                             currentPage = 0
                         else:
                             currentPage += 1
-                    if self.buttonClose.isButtonClick():
+                    if self.buttonClose.isButtonClick(random.choice(self.paperSoundList),self.control.getSoundEffectVol()):
                         howToPlayStatus = 0
                 else:
                     currentPage = 0
