@@ -95,7 +95,6 @@ class GameSetting:
         howToPlayList = os.listdir(howToPlayPath)
         for howToPlayPage in howToPlayList:
             self.howToPlay.append(pygame.image.load( howToPlayPath + howToPlayPage).convert_alpha())
-        print(howToPlayList)
 
         #load skins
         self.skins = []

@@ -72,11 +72,9 @@ class Textbox():
                 if event.key == pygame.K_LEFT:
                     if not self.pos < 1:
                         self.pos -= 1
-                        print(self.pos)
                 elif event.key == pygame.K_RIGHT:
                     if not self.pos > len(self.text) - 1:
                         self.pos += 1
-                        print(self.pos)
                 elif event.key == pygame.K_BACKSPACE:
                     if self.pos > 0:
                         # Divide text into 2 part.
