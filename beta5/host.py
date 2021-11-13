@@ -48,7 +48,7 @@ class HostMenu(GameScreen):
         self.roleMordred = False
         self.roleMinion = True
 
-        # Role Selector
+        # Special role image/button
         buttonWidth, buttonHeight = 120, 120
 
         self.buttonRole1 = Button(self.screenWidth//2 + 60, 250, buttonWidth, buttonHeight)
@@ -61,7 +61,7 @@ class HostMenu(GameScreen):
         buttonWidth, buttonHeight)
         self.buttonRole3.addImage(self.control.morganaPercival)
 
-        # Nonselectable role image
+        # Standard role image
         self.minion = pygame.transform.scale(self.control.minion, (buttonWidth, buttonHeight))
         self.minionRect = pygame.Rect(self.screenWidth//2 - ((self.buttonRole1.rect.width) + 60), 
         self.buttonRole3.rect.y, buttonWidth, buttonHeight)
@@ -199,8 +199,8 @@ class HostMenu(GameScreen):
 
         self.hostSuccess = True
         buttonList = [self.buttonBack, self.buttonCreateLobby, self.buttonLeft, self.buttonRight]
-        rolebuttonList = [self.buttonRole1, self.buttonRole2, self.buttonRole3]
-        nonselectableRoles = [[self.merlin, self.merlinRect], [self.servant, self.servantRect], [self.assasin, self.assasinRect], 
+        specialRoleList = [self.buttonRole1, self.buttonRole2, self.buttonRole3]
+        standardRoleList = [[self.merlin, self.merlinRect], [self.servant, self.servantRect], [self.assasin, self.assasinRect], 
         [self.minion, self.minionRect]]
         
         self.displayRunning = True
@@ -230,7 +230,7 @@ class HostMenu(GameScreen):
                 button.draw(self.display)
 
             # Standard Roles
-            for role, rect in nonselectableRoles:
+            for role, rect in standardRoleList:
                 self.display.blit(self.roleFrame, (rect.centerx - self.roleFrame.get_width()//2, 
                 rect.centery - self.roleFrame.get_height()//2))
                 self.display.blit(role, rect)  
@@ -255,11 +255,11 @@ class HostMenu(GameScreen):
             # Role selector
             #       Number Player -> Evil Number -> Can choose role on certain number
             if self.numPlayer <= 6: # can select 1 evil role + assasin
-                self.configRole(1, rolebuttonList)
+                self.configRole(1, specialRoleList)
             if self.numPlayer > 6 and self.numPlayer < 10: # can select 2 evil role + assasin
-                self.configRole(2, rolebuttonList)
+                self.configRole(2, specialRoleList)
             if self.numPlayer > 9: # can select 3 evil role + assasin
-                self.configRole(3, rolebuttonList)
+                self.configRole(3, specialRoleList)
             
             # Back to menu
             if self.buttonBack.isButtonClick(self.clickChoiceSound,self.control.getSoundEffectVol()):

@@ -37,7 +37,7 @@ class Textbox():
             self.limit = limit # limit of character in object.
         else:
             self.limit = None
-        self.pos = len(self.text) - 1
+        self.pos = len(self.text)
 
     def getText(self):
         '''
@@ -96,6 +96,7 @@ class Textbox():
                 self.textSurface = self.fontSurface.render(self.text, True, pygame.Color('grey'))
             elif self.text == '' and self.prevText == self.initText:
                 self.textSurface = self.fontSurface.render(self.initText, True, pygame.Color('grey'))
+            self.pos = len(self.text)
     
     def resetText(self):
         '''
@@ -108,10 +109,10 @@ class Textbox():
         '''
         update - update width of object due to text lenght.
         '''
-        if self.textSurface.get_width() > self.rect.width - 10:
-            width = max(200, self.textSurface.get_width() + 10)
+        if self.textSurface.get_width() > self.initRect.width - 10:
+            width = self.textSurface.get_width() + 10
             self.rect.width = width
-        elif self.textSurface.get_width() < self.rect.width - 10: 
+        elif self.textSurface.get_width() < self.rect.width - 10 and self.textSurface.get_width() < self.initRect.width: 
             self.rect.width = self.initRect.width
 
     def draw(self, screen):
