@@ -39,6 +39,7 @@ class MainMenu(GameScreen):
         self.skyPosition = 0
         self.skyCoverWidth = self.skyCover.get_rect().width
         self.popupBackground = self.control.popupBackground
+        self.buttonBG = self.control.buttonBG
 
         self.howToPlay = self.control.howToPlay
         self.amountOfHowToPlayPage = len(self.howToPlay)
@@ -64,8 +65,9 @@ class MainMenu(GameScreen):
         self.buttonQuit = Button(self.screenWidth//4, 540, 100, 70)
         self.buttonQuit.addText('Quit', self.font1, 40, control.white, (50,50,50))
 
-        self.buttonHowToPlay = Button(self.screenWidth - 170, 20, 150, 50)
-        self.buttonHowToPlay.addText('How to play', self.font1, 30, control.white, (50,50,50), pygame.Color("brown"))
+        self.buttonHowToPlay = Button(self.screenWidth - 200, 20, 170, 60)
+        self.buttonHowToPlay.addText('How to play', self.font1, 30, control.white, (50,50,50))
+        self.buttonHowToPlay.addImage(self.buttonBG)
 
         self.buttonRight = Button(self.screenWidth - self.tapeArrowWidth - 80, self.screenHeight//2 - 20, self.tapeArrowWidth, self.tapeArrowHeight)
         self.buttonRight.addImage(self.tapeRightArrow)

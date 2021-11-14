@@ -46,6 +46,7 @@ class GameSetting:
         self.woodBoard = pygame.image.load("images\menuUI\woodBoard.PNG")
         self.choice = pygame.image.load("images\menuUI\choice.PNG")
         self.logo = pygame.image.load("images\menuUI\gameLogo.PNG")
+        self.buttonBG = pygame.image.load("images\menuUI\BGbutton.PNG")
 
         self.popupBackground = pygame.image.load("images\popup1.PNG")
 
@@ -86,6 +87,8 @@ class GameSetting:
         self.roleFrame = pygame.image.load("images/profile/frame.JPG")
         self.lock = pygame.image.load("images/profile/lock.PNG")
         self.checked = pygame.image.load("images/profile/yes.PNG")
+
+        self.backMap = pygame.image.load("images/game/backMap.JPG")
 
         pygame.display.set_icon(self.oberonIcon)
 

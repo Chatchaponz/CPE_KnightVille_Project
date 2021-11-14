@@ -18,6 +18,7 @@ class Game(GameManager):
 
         # Image
         self.popupBackground = control.popupBackground
+        self.backMap = control.backMap
 
         # List for all button of name
         self.nameList = []
@@ -402,6 +403,7 @@ class Game(GameManager):
             
             # page blackground
             self.display.fill((0, 0, 0))
+            self.display.blit(self.backMap, (-900,0))
 
             # if self.waitForOthers():
             if (len(self.matchSetting) > 0 and 
