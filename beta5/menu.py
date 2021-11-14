@@ -219,7 +219,7 @@ class MainMenu(GameScreen):
                         currentPage = 0
                     else:
                         currentPage += 1
-                if self.buttonClose.isButtonClick(random.choice(self.paperSoundList),self.control.getSoundEffectVol()):
+                if self.buttonClose.isButtonClick(self.backButtonSound,self.control.getSoundEffectVol()):
                     self.available = True
                     howToPlayStatus = False
             else:

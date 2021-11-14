@@ -108,12 +108,12 @@ class GameSetting:
         self.currentMusic = pygame.mixer.music
         self.musicList = ['musics/JOAK_Final.wav','musics/BGM.wav']
         # Set default volume to 50%
-        self.currentMusic.set_volume(0.5)
+        self.currentMusic.set_volume(0.25)
 
         #load sounds effect
-        self.soundList = ['sounds/button-30.wav','sounds/button-1.wav','sounds/button-28.wav','sounds/back.wav','sounds/select.wav','sounds/aclick.wav','sounds/lock.wav']
+        self.soundList = ['sounds/button-30.wav','sounds/button-1.wav','sounds/clickSound.wav','sounds/back.wav','sounds/select.wav','sounds/aclick.wav','sounds/lock.wav']
         self.paperSoundList = ['sounds/paper1.wav','sounds/paper4.wav']
-        self.soundEffectVol = 1
+        self.soundEffectVol = 0.5
     
     def getSoundEffectVol(self):
         return self.soundEffectVol

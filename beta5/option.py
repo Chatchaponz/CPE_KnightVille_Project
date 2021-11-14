@@ -16,7 +16,8 @@ class OptionMenu(GameScreen):
         self.music = volumeBar(self.sfx.rangeRect.x, self.sfx.rangeRect.y + self.sfx.rangeRect.height + 50, 
         450, self.sfx.rangeRect.height, self.sfx.controlRect.width)
         
-        self.music.controlRect.x = self.music.rangeRect.x + self.music.rangeRect.width/2
+        self.music.controlRect.x = self.music.rangeRect.x + self.music.rangeRect.width/4
+        self.sfx.controlRect.x = self.sfx.rangeRect.x + self.sfx.rangeRect.width/2
         self.volumeList = [[self.sfx, 'SFX'], [self.music, 'MUSIC']]
         # Sound goes here
         self.soundList = control.soundList
