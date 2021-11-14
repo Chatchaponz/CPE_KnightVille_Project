@@ -15,6 +15,7 @@ class Lobby(GameManager):
 
         # Sound Effect
         self.soundList = control.soundList
+        self.clickSound = self.soundList[2]
         self.backButtonSound = self.soundList[3]
         
         # Image / Button goes here vvvv
@@ -285,21 +286,21 @@ class Lobby(GameManager):
         self.newPlayername.draw(self.display)
 
         self.buttonLeft.draw(self.display)
-        if self.buttonLeft.isButtonClick():
+        if self.buttonLeft.isButtonClick(self.soundList[4],self.control.getSoundEffectVol()):
             if self.currentSkin == 0:
                 self.currentSkin = self.amountSkins-1
             else:
                 self.currentSkin -= 1
 
         self.buttonRight.draw(self.display)
-        if self.buttonRight.isButtonClick():
+        if self.buttonRight.isButtonClick(self.soundList[4],self.control.getSoundEffectVol()):
             if self.currentSkin == self.amountSkins-1:
                 self.currentSkin = 0
             else:
                 self.currentSkin += 1
 
         self.popEditSummit.draw(self.display)
-        if self.popEditSummit.isButtonClick():
+        if self.popEditSummit.isButtonClick(self.clickSound,self.control.getSoundEffectVol()):
             if len(self.currentName) > 1:
                 if self.currentName[-1] == ' ':
                     self.currentName = self.currentName[:-1]
@@ -492,14 +493,14 @@ class Lobby(GameManager):
                         self.popupFail.text = failText.upper()
                         print("[Error] ", failText)
                 
-                if self.buttonEditPlayer.isButtonClick():
+                if self.buttonEditPlayer.isButtonClick(self.soundList[8],self.control.getSoundEffectVol()):
                     self.popEdit = True
                     if self.currentName == None and self.currentSkin == None:
                         self.currentSkin = self.player.skin
                         self.currentName = self.player.name
                     self.newPlayername.text = self.currentName
                 
-                if self.buttonMatchSetting.isButtonClick():
+                if self.buttonMatchSetting.isButtonClick(self.soundList[7],self.control.getSoundEffectVol()):
                     if self.player.host == True:
                         self.popSetting = True
                     else:

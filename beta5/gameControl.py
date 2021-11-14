@@ -111,7 +111,7 @@ class GameSetting:
         self.currentMusic.set_volume(0.25)
 
         #load sounds effect
-        self.soundList = ['sounds/button-30.wav','sounds/button-1.wav','sounds/clickSound.wav','sounds/back.wav','sounds/select.wav','sounds/aclick.wav','sounds/lock.wav']
+        self.soundList = ['sounds/button-30.wav','sounds/button-1.wav','sounds/clickSound.wav','sounds/back.wav','sounds/select.wav','sounds/aclick.wav','sounds/lock.wav','sounds/paper4.wav','sounds/metal2.wav']
         self.paperSoundList = ['sounds/paper1.wav','sounds/paper4.wav']
         self.soundEffectVol = 0.5
     
