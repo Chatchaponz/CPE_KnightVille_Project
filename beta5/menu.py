@@ -147,10 +147,10 @@ class MainMenu(GameScreen):
 
         self.displayRunning = True
         
-        buttonList = [self.buttonHost, self.buttonJoin, self.buttonOption, self.buttonQuit]
+        buttonList = [self.buttonHost, self.buttonJoin, self.buttonOption, self.buttonQuit, self.buttonHowToPlay]
         buttonHowToPlayList = (self.buttonClose, self.buttonLeft, self.buttonRight)
         currentPage = 0
-        howToPlayStatus = 0
+        howToPlayStatus = False
 
         while self.displayRunning:
             
@@ -179,7 +179,6 @@ class MainMenu(GameScreen):
             # Draw button
             for buttonSurface in buttonList:
                 buttonSurface.draw(self.display, self.available)
-            self.buttonHowToPlay.draw(self.display, self.available)
             self.display.blit(self.logo, (self.screenWidth//4 - self.logo.get_width()//2 + 50, 100))
 
             # Menu available to click
@@ -203,26 +202,28 @@ class MainMenu(GameScreen):
                     pygame.quit()
                     sys.exit()
                 if self.buttonHowToPlay.isButtonClick(self.clickChoiceSound,self.control.getSoundEffectVol()):
-                    howToPlayStatus = 1
+                    howToPlayStatus = True
 
-                if howToPlayStatus == 1:
-                    self.display.blit(self.howToPlay[currentPage], (0, 0))
-                    for button in buttonHowToPlayList:
-                        button.draw(self.display, self.available)
-                    if self.buttonLeft.isButtonClick(random.choice(self.paperSoundList),self.control.getSoundEffectVol()):
-                        if currentPage == 0:
-                               currentPage = self.amountOfHowToPlayPage-1
-                        else:
-                            currentPage -= 1
-                    if self.buttonRight.isButtonClick(random.choice(self.paperSoundList),self.control.getSoundEffectVol()):
-                        if currentPage == self.amountOfHowToPlayPage-1:
-                            currentPage = 0
-                        else:
-                            currentPage += 1
-                    if self.buttonClose.isButtonClick(random.choice(self.paperSoundList),self.control.getSoundEffectVol()):
-                        howToPlayStatus = 0
-                else:
-                    currentPage = 0
+            if howToPlayStatus:
+                self.available = False
+                self.display.blit(self.howToPlay[currentPage], (0, 0))
+                for button in buttonHowToPlayList:
+                    button.draw(self.display, self.available)
+                if self.buttonLeft.isButtonClick(random.choice(self.paperSoundList),self.control.getSoundEffectVol()):
+                    if currentPage == 0:
+                            currentPage = self.amountOfHowToPlayPage-1
+                    else:
+                        currentPage -= 1
+                if self.buttonRight.isButtonClick(random.choice(self.paperSoundList),self.control.getSoundEffectVol()):
+                    if currentPage == self.amountOfHowToPlayPage-1:
+                        currentPage = 0
+                    else:
+                        currentPage += 1
+                if self.buttonClose.isButtonClick(random.choice(self.paperSoundList),self.control.getSoundEffectVol()):
+                    self.available = True
+                    howToPlayStatus = False
+            else:
+                currentPage = 0
             
             # POPUP
             if self.hosting:  # HOSTING
