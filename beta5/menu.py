@@ -147,7 +147,7 @@ class MainMenu(GameScreen):
 
         self.displayRunning = True
         
-        buttonList = [self.buttonHost, self.buttonJoin, self.buttonOption, self.buttonQuit, self.buttonHowToPlay]
+        buttonList = [self.buttonHost, self.buttonJoin, self.buttonOption, self.buttonQuit]
         buttonHowToPlayList = (self.buttonClose, self.buttonLeft, self.buttonRight)
         currentPage = 0
         howToPlayStatus = False
@@ -179,6 +179,7 @@ class MainMenu(GameScreen):
             # Draw button
             for buttonSurface in buttonList:
                 buttonSurface.draw(self.display, self.available)
+            self.buttonHowToPlay.draw(self.display, self.available)
             self.display.blit(self.logo, (self.screenWidth//4 - self.logo.get_width()//2 + 50, 100))
 
             # Menu available to click
