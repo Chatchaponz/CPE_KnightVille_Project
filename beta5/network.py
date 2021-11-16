@@ -1,4 +1,3 @@
-import logging
 from client import Client
 '''
 network - Manage connection between game(client) and server
@@ -93,7 +92,6 @@ class Network :
             return (True, "")
         except Exception as e:
             print("[ERROR] ", e)
-            logging.exception(str(e))
             return (False, str(e))
 
     def tryGetData(self, sendData):
