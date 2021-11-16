@@ -241,7 +241,7 @@ class Lobby(GameManager):
 
         self.available = False
         # Popup background
-        pygame.draw.rect(self.display, pygame.Color('white'), (300, 168, 680, 384))
+        pygame.draw.rect(self.display, pygame.Color('white'), ((self.screenWidth - 800)/2, (self.screenHeight - 450)/2, 800, 450))
 
         self.closeSetting.draw(self.display)
         
@@ -274,7 +274,7 @@ class Lobby(GameManager):
         
         # Skin
         self.display.blit(self.skins[self.currentSkin], (self.popEditBg.centerx - self.skins[self.currentSkin].get_width()/2, 
-        self.popEditBg.y + 230))
+        self.popEditBg.bottom - self.skins[self.currentSkin].get_rect().bottom - 125))
 
         self.currentName = self.newPlayername.getText()
         self.drawText(self.currentName, 20, self.popEditBg.centerx , self.popEditBg.y + 210, self.font, self.control.white)
