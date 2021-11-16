@@ -313,7 +313,9 @@ class GameManager(GameScreen):
 
         if self.othersPlayerData != None and self.currentPlayerInMatch != None:
 
-            if self.matchSetting != [] and type(self.matchSetting) is list:
+            if (self.matchSetting != [] and 
+                type(self.matchSetting) is list and
+                len(self.matchSetting) > 2):
             # print(self.matchSetting)
 
                 gameStart = self.matchSetting[2]
