@@ -134,11 +134,7 @@ class Lobby(GameManager):
         
         self.checked = pygame.transform.scale(self.control.checked, (roleWidth - 45, roleHeight - 45))
 
-        self.roleMorgana = False
-        self.rolePercival = False
-        self.roleOberon = False
-        self.roleMordred = False
-        self.roleMinion = True
+        self.role = [False, False, False, False, True]
 
         self.specialRoleList = [self.buttonRole1, self.buttonRole2, self.buttonRole3]
         self.standardRoleList = [[self.merlin, self.merlinRect], [self.servant, self.servantRect], [self.assasin, self.assasinRect], 
@@ -164,75 +160,75 @@ class Lobby(GameManager):
                 self.display.blit(self.checked, (rect.right - self.checked.get_width()//2, 
                 rect.top - self.checked.get_height()//2))
             elif rect is self.minionRect:
-                if self.roleMinion:
+                if self.role[4]:
                     self.display.blit(self.checked, (rect.right - self.checked.get_width()//2, 
                     rect.top - self.checked.get_height()//2))
 
         # Role Oberon
         if self.buttonRole1.isButtonClick():
             # Check Role Number can be available
-            if not self.roleOberon and self.count < maxrole:
+            if not self.role[1] and self.count < maxrole:
                 self.count += 1
-                self.roleOberon = True
-            elif self.roleOberon:
+                self.role[1] = True
+            elif self.role[1]:
                 self.count -= 1
-                self.roleOberon = False
+                self.role[1] = False
         # Display role available
-        if self.roleOberon:
+        if self.role[1]:
             self.display.blit(self.checked, (self.buttonRole1.rect.right - self.checked.get_width()//2, 
             self.buttonRole1.rect.top - self.checked.get_height()//2))
         
         # Role Mordred
         if self.buttonRole2.isButtonClick():
             # Check Role Number can be available
-            if not self.roleMordred and self.count < maxrole:
+            if not self.role[0] and self.count < maxrole:
                 self.count += 1
-                self.roleMordred = True
-            elif self.roleMordred:
+                self.role[0] = True
+            elif self.role[0]:
                 self.count -= 1
-                self.roleMordred = False
+                self.role[0] = False
         # Display role available
-        if self.roleMordred:
+        if self.role[0]:
             self.display.blit(self.checked, (self.buttonRole2.rect.right - self.checked.get_width()//2, 
             self.buttonRole2.rect.top - self.checked.get_height()//2))
 
         # Role Morgana and Percival
         if self.buttonRole3.isButtonClick():
             # Check Role Number can be available
-            if not self.roleMorgana and self.count < maxrole:
+            if not self.role[2] and self.count < maxrole:
                 self.count += 1
-                self.roleMorgana = True
-                self.rolePercival = True
-            elif self.roleMorgana and self.rolePercival:
+                self.role[2] = True
+                self.role[3] = True
+            elif self.role[2] and self.role[3]:
                 self.count -= 1
-                self.roleMorgana = False
-                self.rolePercival = False
+                self.role[2] = False
+                self.role[3] = False
         # Display role available
-        if self.roleMorgana and self.rolePercival:
+        if self.role[2] and self.role[3]:
             self.display.blit(self.checked, (self.buttonRole3.rect.right - self.checked.get_width()//2, 
             self.buttonRole3.rect.top - self.checked.get_height()//2))
 
         # Display not available role
         if self.count == maxrole:
-            self.roleMinion = False
-            if not self.roleOberon:
+            self.role[4] = False
+            if not self.role[1]:
                 self.display.blit(self.offFilter, self.buttonRole1.rect)
                 self.display.blit(self.lock, (self.buttonRole1.rect.centerx - self.lock.get_width()//2, self.buttonRole1.rect.y))
                 self.lockSoundOn = True            
-            if not self.roleMordred:
+            if not self.role[0]:
                 self.display.blit(self.offFilter, self.buttonRole2.rect)
                 self.display.blit(self.lock, (self.buttonRole2.rect.centerx - self.lock.get_width()//2, self.buttonRole2.rect.y))
                 self.lockSoundOn = True
-            if not self.roleMorgana and not self.rolePercival:
+            if not self.role[2] and not self.role[3]:
                 self.display.blit(self.offFilter, self.buttonRole3.rect)
                 self.display.blit(self.lock, (self.buttonRole3.rect.centerx - self.lock.get_width()//2, self.buttonRole3.rect.y))
                 self.lockSoundOn = True
-            if not self.roleMinion:
+            if not self.role[4]:
                 self.display.blit(self.offFilter, self.minionRect)
                 self.display.blit(self.lock, (self.minionRect.centerx - self.lock.get_width()//2, self.minionRect.y))
                 self.lockSoundOn = True
         elif self.count < maxrole:
-            self.roleMinion = True
+            self.role[4] = True
             self.lockSoundOn = False
             self.alreadyPlay = False
 
@@ -256,7 +252,7 @@ class Lobby(GameManager):
         if maxPlayer > 9:
             self.configRole(3)
         if self.closeSetting.isButtonClick():
-            roleList = [True, self.rolePercival, True, self.roleMordred, True, self.roleMorgana, self.roleMinion, self.roleOberon]
+            roleList = [True, self.role[3], True, self.role[0], True, self.role[2], self.role[4], self.role[1]]
             settingResult, settingError = self.network.changeMatchSetting(maxPlayer, [roleList, 0, 0])
             if settingResult:
                 # popup success = Ture

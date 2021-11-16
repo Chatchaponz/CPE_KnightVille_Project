@@ -42,11 +42,7 @@ class HostMenu(GameScreen):
         self.hostBoard = pygame.transform.scale(control.hostBoard, (1280, 720))
 
         # Role Selection State
-        self.roleMorgana = False
-        self.rolePercival = False
-        self.roleOberon = False
-        self.roleMordred = False
-        self.roleMinion = True
+        self.role = [False, False, False, False, True] # Moudred, Oberon, Morgana, Percival, Minion of moudred
 
         # Special role image/button
         buttonWidth, buttonHeight = 120, 120
@@ -103,61 +99,58 @@ class HostMenu(GameScreen):
 
     def resetRole(self):
         # Reset Role
-        self.roleMordred = False
-        self.roleMorgana = False
-        self.roleOberon = False
-        self.rolePercival = False
-        self.roleMinion = True
+        self.role = [False, False, False, False, True] 
         self.count = 0
         
     def configRole(self, maxrole, buttonList):
         # Draw role selector button
-        for button in buttonList:
+        for button, name in buttonList:
             self.display.blit(self.roleFrame, (button.rect.centerx - self.roleFrame.get_width()//2, 
             button.rect.centery - self.roleFrame.get_height()//2))
-            button.draw(self.display) 
+            button.draw(self.display)
+            self.drawText(name, 22 , button.rect.centerx, button.rect.bottom + 35, self.font2, self.control.black) 
 
         # Role Oberon
         if self.buttonRole1.isButtonClick():
             # Check Role Number can be available
-            if not self.roleOberon and self.count < maxrole:
+            if not self.role[1] and self.count < maxrole:
                 self.count += 1
-                self.roleOberon = True
-            elif self.roleOberon:
+                self.role[1] = True
+            elif self.role[1]:
                 self.count -= 1
-                self.roleOberon = False
+                self.role[1] = False
         # Display role available
-        if self.roleOberon:
+        if self.role[1]:
             self.display.blit(self.checked, (self.buttonRole1.rect.right - self.checked.get_width()//2, 
             self.buttonRole1.rect.top - self.checked.get_height()//2))
         
         # Role Mordred
         if self.buttonRole2.isButtonClick():
             # Check Role Number can be available
-            if not self.roleMordred and self.count < maxrole:
+            if not self.role[0] and self.count < maxrole:
                 self.count += 1
-                self.roleMordred = True
-            elif self.roleMordred:
+                self.role[0] = True
+            elif self.role[0]:
                 self.count -= 1
-                self.roleMordred = False
+                self.role[0] = False
         # Display role available
-        if self.roleMordred:
+        if self.role[0]:
             self.display.blit(self.checked, (self.buttonRole2.rect.right - self.checked.get_width()//2, 
             self.buttonRole2.rect.top - self.checked.get_height()//2))
 
         # Role Morgana and Percival
         if self.buttonRole3.isButtonClick():
             # Check Role Number can be available
-            if not self.roleMorgana and self.count < maxrole:
+            if not self.role[2] and self.count < maxrole:
                 self.count += 1
-                self.roleMorgana = True
-                self.rolePercival = True
-            elif self.roleMorgana and self.rolePercival:
+                self.role[2] = True
+                self.role[3] = True
+            elif self.role[2] and self.role[3]:
                 self.count -= 1
-                self.roleMorgana = False
-                self.rolePercival = False
+                self.role[2] = False
+                self.role[3] = False
         # Display role available
-        if self.roleMorgana and self.rolePercival:
+        if self.role[2] and self.role[3]:
             self.display.blit(self.checked, (self.buttonRole3.rect.right - self.checked.get_width()//2, 
             self.buttonRole3.rect.top - self.checked.get_height()//2))
         
@@ -169,25 +162,25 @@ class HostMenu(GameScreen):
 
         # Display not available role
         if self.count == maxrole:
-            self.roleMinion = False
-            if not self.roleOberon:
+            self.role[4] = False
+            if not self.role[1]:
                 self.display.blit(self.offFilter, self.buttonRole1.rect)
                 self.display.blit(self.lock, (self.buttonRole1.rect.centerx - self.lock.get_width()//2, self.buttonRole1.rect.y))
                 self.lockSoundOn = True            
-            if not self.roleMordred:
+            if not self.role[0]:
                 self.display.blit(self.offFilter, self.buttonRole2.rect)
                 self.display.blit(self.lock, (self.buttonRole2.rect.centerx - self.lock.get_width()//2, self.buttonRole2.rect.y))
                 self.lockSoundOn = True
-            if not self.roleMorgana and not self.rolePercival:
+            if not self.role[2] and not self.role[3]:
                 self.display.blit(self.offFilter, self.buttonRole3.rect)
                 self.display.blit(self.lock, (self.buttonRole3.rect.centerx - self.lock.get_width()//2, self.buttonRole3.rect.y))
                 self.lockSoundOn = True
-            if not self.roleMinion:
+            if not self.role[4]:
                 self.display.blit(self.offFilter, self.minionRect)
                 self.display.blit(self.lock, (self.minionRect.centerx - self.lock.get_width()//2, self.minionRect.y))
                 self.lockSoundOn = True
         elif self.count < maxrole:
-            self.roleMinion = True
+            self.role[4] = True
             self.lockSoundOn = False
             self.alreadyPlay = False
 
@@ -199,9 +192,9 @@ class HostMenu(GameScreen):
 
         self.hostSuccess = True
         buttonList = [self.buttonBack, self.buttonCreateLobby, self.buttonLeft, self.buttonRight]
-        specialRoleList = [self.buttonRole1, self.buttonRole2, self.buttonRole3]
-        standardRoleList = [[self.merlin, self.merlinRect], [self.servant, self.servantRect], [self.assasin, self.assasinRect], 
-        [self.minion, self.minionRect]]
+        specialRoleList = [[self.buttonRole1, 'Oberon'], [self.buttonRole2, 'Mordred'], [self.buttonRole3, 'Morgana and Percival']]
+        standardRoleList = [[self.merlin, self.merlinRect, 'Merlin'], [self.servant, self.servantRect, 'Royal Servant'], 
+        [self.assasin, self.assasinRect, 'Assasin'], [self.minion, self.minionRect, 'Minion of Mordred']]
         
         self.displayRunning = True
         
@@ -230,7 +223,7 @@ class HostMenu(GameScreen):
                 button.draw(self.display)
 
             # Standard Roles
-            for role, rect in standardRoleList:
+            for role, rect, name in standardRoleList:
                 self.display.blit(self.roleFrame, (rect.centerx - self.roleFrame.get_width()//2, 
                 rect.centery - self.roleFrame.get_height()//2))
                 self.display.blit(role, rect)  
@@ -238,9 +231,10 @@ class HostMenu(GameScreen):
                     self.display.blit(self.checked, (rect.right - self.checked.get_width()//2, 
                     rect.top - self.checked.get_height()//2))
                 elif rect is self.minionRect:
-                    if self.roleMinion:
+                    if self.role[4]:
                         self.display.blit(self.checked, (rect.right - self.checked.get_width()//2, 
-                        rect.top - self.checked.get_height()//2))    
+                        rect.top - self.checked.get_height()//2))
+                self.drawText(name, 22 , rect.centerx, rect.bottom + 35, self.font2, self.control.black)    
 
             # Player number config
             if self.buttonLeft.isButtonClick(self.soundList[4],self.control.getSoundEffectVol()):
@@ -269,22 +263,10 @@ class HostMenu(GameScreen):
                     self.network.disconnectFromServer()
                 self.changePageByInput(True)
 
-            # Draw role name
-            self.drawText('Merlin', 18 , self.merlinRect.centerx, self.merlinRect.bottom + 25, self.font1, self.control.black)
-            self.drawText('Loyal Servant', 18 , self.servantRect.centerx, self.servantRect.bottom + 25, self.font1, self.control.black)
-            self.drawText('of King Arthur', 18 , self.servantRect.centerx, self.servantRect.bottom + 45, self.font1, self.control.black)
-            self.drawText('Oberon', 18 , self.buttonRole1.rect.centerx, self.buttonRole1.rect.bottom + 25, self.font1, self.control.black)
-            self.drawText('Percival / Morgana', 18 , self.buttonRole3.rect.centerx, self.buttonRole3.rect.bottom + 25, self.font1, 
-            self.control.black)
-            self.drawText('Mordred', 18 , self.buttonRole2.rect.centerx, self.buttonRole2.rect.bottom + 25, self.font1, self.control.black)
-            self.drawText('Assasin', 18 , self.assasinRect.centerx, self.assasinRect.bottom + 25, self.font1, self.control.black)
-            self.drawText('Minion of', 18 , self.minionRect.centerx, self.minionRect.bottom + 25, self.font1, self.control.black)
-            self.drawText('Mordred', 18 , self.minionRect.centerx, self.minionRect.bottom + 45, self.font1, self.control.black)
-
             if self.buttonCreateLobby.isButtonClick(self.clickChoiceSound,self.control.getSoundEffectVol()):
                 # if self.network.createLobby(self.numPlayer, [True, False, True, False, True, False, True, False], 0, 0):
-                createResult, createError = self.network.createLobby(self.numPlayer, [True, self.rolePercival, True, self.roleMordred, 
-                                         True, self.roleMorgana, self.roleMinion, self.roleOberon], 0, 0)
+                createResult, createError = self.network.createLobby(self.numPlayer, [True, self.role[3], True, self.role[0], 
+                                         True, self.role[2], self.role[4], self.role[1]], 0, 0)
                 if createResult:
                     self.hostSuccess = True
                     joinResult, joinError = self.network.joinGame()

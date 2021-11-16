@@ -63,8 +63,12 @@ class CreatePlayer(GameScreen):
 
         self.displayRunning = True
 
-        skin = 0
+        skinRect = []
         self.player.isPlaying = False
+        for i in range(self.amountSkins):
+            skinRect.append(self.skins[i].get_rect())
+        
+        skin = 0
         
         while self.displayRunning:
 
@@ -78,7 +82,7 @@ class CreatePlayer(GameScreen):
             # Things in page vvv
             self.playerName.draw(self.display)
 
-            self.display.blit(self.skins[skin], ((self.screenWidth//2) - 95, 300))
+            self.display.blit(self.skins[skin], ((self.screenWidth//2) - 95, 550 - skinRect[skin].bottom))
             self.buttonLeft.draw(self.display)
             if self.buttonLeft.isButtonClick(self.soundList[4],self.control.getSoundEffectVol()):
                 if skin == 0:
