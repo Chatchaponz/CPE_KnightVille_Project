@@ -94,11 +94,11 @@ class Lobby(GameManager):
         # Setup match setting
 
         roleWidth, roleHeight = 80, 80
-        self.closeSetting = Button(self.screenWidth - 300 - 100 - 20, self.screenHeight - 168 - 60, 100, 40)
-        self.closeSetting.addText('SAVE', self.font2, 30, bgColor = pygame.Color('grey40'), bgColorOver = pygame.Color('darkgrey'))
+        self.closeSetting = Button(self.screenWidth - 370, self.screenHeight - 168 - 40, 100, 35)
+        self.closeSetting.addText('SAVE', self.font2, 30, bgColor = pygame.Color('grey35'), bgColorOver = pygame.Color('grey27'))
 
         # Special role image/button
-        self.buttonRole1 = Button(self.screenWidth//2 + 40, 250, roleWidth, roleHeight)
+        self.buttonRole1 = Button(self.screenWidth//2 + 40, 265, roleWidth, roleHeight)
         self.buttonRole1.addImage(self.control.oberon)
 
         self.buttonRole2 = Button(self.buttonRole1.rect.right + 40, self.buttonRole1.rect.y, roleWidth, roleHeight)
@@ -241,7 +241,8 @@ class Lobby(GameManager):
 
         self.available = False
         # Popup background
-        pygame.draw.rect(self.display, pygame.Color('white'), ((self.screenWidth - 800)/2, (self.screenHeight - 450)/2, 800, 450))
+        self.display.blit(self.control.boardSetting, ((self.screenWidth - 800)/2, (self.screenHeight - 450)/2))
+        self.drawText('MATCH  SETTING', 40, self.screenWidth/2, (self.screenHeight - 450)/2 + 55, self.font2, self.control.black)
 
         self.closeSetting.draw(self.display)
         

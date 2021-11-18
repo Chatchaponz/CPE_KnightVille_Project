@@ -73,6 +73,7 @@ class GameSetting:
         self.map = pygame.image.load("images\lobby\map.PNG")
         self.mapAura = pygame.image.load("images\lobby\mapAura.PNG")
         self.lobbyTable = pygame.image.load("images\lobby\lobbyTable.PNG")
+        self.boardSetting = pygame.image.load("images/lobby/boardGameSetting.JPG")
 
         self.morgana = pygame.image.load("images\profile\Morgana.JPG")
         self.mordred = pygame.image.load("images\profile\Mordred.JPG")
