@@ -17,6 +17,8 @@ class Lobby(GameManager):
         self.soundList = control.soundList
         self.clickSound = self.soundList[2]
         self.backButtonSound = self.soundList[3]
+        self.lockSoundOn = False
+        self.alreadyPlay = False
         
         # Image / Button goes here vvvv
         self.lobbyWall = control.lobbyWall
@@ -135,6 +137,7 @@ class Lobby(GameManager):
         self.checked = pygame.transform.scale(self.control.checked, (roleWidth - 45, roleHeight - 45))
 
         self.role = [False, False, False, False, True]
+        self.setRoleFirstTime = False
 
         self.specialRoleList = [self.buttonRole1, self.buttonRole2, self.buttonRole3]
         self.standardRoleList = [[self.merlin, self.merlinRect], [self.servant, self.servantRect], [self.assasin, self.assasinRect], 
@@ -335,6 +338,10 @@ class Lobby(GameManager):
             self.matchSetting.clear()
             self.allMessages.clear()
 
+            self.role = [False, False, False, False, True]
+            self.setRoleFirstTime = False
+            self.count = 0
+
             # Main music is loaded here
             self.currentMusic.stop()
             self.currentMusic.load(self.musicList[0])
@@ -494,7 +501,7 @@ class Lobby(GameManager):
                 
                 if self.buttonMatchSetting.isButtonClick(self.soundList[7],self.control.getSoundEffectVol()):
                     if self.player.host == True:
-                        if len(self.matchSetting) > 1:
+                        if len(self.matchSetting) > 1 and self.setRoleFirstTime == False:
                             # [True, self.role[3], True, self.role[0], True, self.role[2], self.role[4], self.role[1]]
                             setting = self.matchSetting[1]
                             if type(setting) is list and len(setting) > 0:
@@ -506,8 +513,9 @@ class Lobby(GameManager):
                                     self.role[4] = role[6]
                                     self.role[1] = role[7]
                                     for i in range(4):
-                                        if self.role[i] == True:
+                                        if self.role[i] == True and i in [0, 1, 2]:
                                             self.count += 1
+                        self.setRoleFirstTime = True
                         self.popSetting = True
                     else:
                         self.isError = True
