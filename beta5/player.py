@@ -26,6 +26,21 @@ class Player:
         self.playerSkin = pygame.image.load( self.imagePath + self.skinList[self.skin]).convert_alpha()
         self.playerRect = self.playerSkin.get_rect(bottomleft = (self.x, self.y))
 
+        #role icon
+        self.evil = pygame.image.load("images\icon\Evil.PNG")
+        self.death = pygame.image.load("images\icon\Death.PNG")
+        self.leader = pygame.image.load("images\icon\leader.PNG")
+        self.merlin = pygame.image.load("images\icon\Merlin.PNG")
+        self.member = pygame.image.load("images\icon\member.PNG")
+        self.aim = pygame.image.load("images\icon\Aim.PNG")
+
+        self.evil = pygame.transform.scale(self.evil, (30,30))
+        self.death = pygame.transform.scale(self.death, (100,100))
+        self.leader = pygame.transform.scale(self.leader, (30,30))
+        self.merlin = pygame.transform.scale(self.merlin, (30,30))
+        self.member = pygame.transform.scale(self.member, (30,30))
+        self.aim = pygame.transform.scale(self.aim, (100,100))
+
         # Name
         self.name = name
         self.fontColor = (255, 255, 255)
@@ -62,6 +77,7 @@ class Player:
     def draw(self, screen):
         
         nameX, nameY = self.playerRect.midtop
+        iconX = nameX - 40
         if(self.__role != None):
         # Role reveal
             if(self.__roleReveal == True):
@@ -74,23 +90,31 @@ class Player:
                 pygame.draw.rect(screen, (255,0,0), pygame.Rect(nameX, nameY - 25, 30, 30) )
         # Unknown reveal
             if(self.__unknownReveal == True):
-                pygame.draw.rect(screen, (100,100,100), pygame.Rect(nameX, nameY - 25, 30, 30) )
+                #pygame.draw.rect(screen, (100,100,100), pygame.Rect(nameX, nameY - 25, 30, 30) )
+                screen.blit(self.merlin, (iconX, nameY - 50))
+                iconX += 30
         
         # Party leader
             if(self.partyLeader == True):
-                pygame.draw.rect(screen, (0,255,0), pygame.Rect(nameX, nameY - 25, 30, 30) )
+                #pygame.draw.rect(screen, (0,255,0), pygame.Rect(nameX, nameY - 25, 30, 30) )
+                screen.blit(self.leader, (iconX, nameY - 50))
+                iconX += 30
         
         # Party Member
             if(self.isSelected == True):
-                pygame.draw.rect(screen, (0,0,255), pygame.Rect(nameX, nameY - 50, 30, 30) )
+                #pygame.draw.rect(screen, (0,0,255), pygame.Rect(nameX, nameY - 50, 30, 30) )
+                screen.blit(self.member, (iconX, nameY - 50))
+                iconX += 30
         
         # Target
             if(self.isTarget == True):
-                pygame.draw.rect(screen, (255,0,255), pygame.Rect(nameX, nameY - 50, 30, 30) )
+                #pygame.draw.rect(screen, (255,0,255), pygame.Rect(nameX, nameY - 50, 30, 30) )
+                screen.blit(self.aim, (nameX - 40, nameY - 50))
         
         # Killed
             if(self.isKilled == True):
-                pygame.draw.rect(screen, (255,255,0), pygame.Rect(nameX, nameY - 50, 30, 30) )
+                #pygame.draw.rect(screen, (255,255,0), pygame.Rect(nameX, nameY - 50, 30, 30) )
+                screen.blit(self.death, (nameX - 40, nameY - 50))
 
         # Draw player's name
         playerNameRect = self.playerName.get_rect(center = (nameX, nameY))

@@ -61,6 +61,13 @@ class GameSetting:
         self.tapeRightArrow = pygame.image.load("images\icon\TapeRightArrow.PNG")
         self.tapeLeftArrow = pygame.image.load("images\icon\TapeLeftArrow.PNG")
         self.tapeClose = pygame.image.load("images\icon\TapeClose.PNG")
+        self.mission1 = pygame.image.load("images\icon\Mission1.PNG")
+        self.mission2 = pygame.image.load("images\icon\Mission2.PNG")
+        self.mission3 = pygame.image.load("images\icon\Mission3.PNG")
+        self.mission4 = pygame.image.load("images\icon\Mission4.PNG")
+        self.mission5 = pygame.image.load("images\icon\Mission5.PNG")
+        self.fail = pygame.image.load("images\icon\Fail.PNG")
+        self.success = pygame.image.load("images\icon\Success.PNG")
 
         self.lobbyFloor = pygame.image.load("images\lobby\lobbyFloor.JPG")
         self.lobbyWall = pygame.image.load("images\lobby\lobbyWall.PNG")
