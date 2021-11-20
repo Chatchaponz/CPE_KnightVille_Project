@@ -66,7 +66,7 @@ class Role:
                     thisPlayerRole.getName() == self.__allRoles[5][0]):  # Morgana
                     player.setUnknownReveal(True)
         
-            if self.getIdentity() == "Evil":
+            if self.getIdentity() == "Evil" and self.getName() != self.__allRoles[7][0]: # Evil and not Oberon
                 if (playerIdentity == "Evil" and 
                     playerRoleName != self.__allRoles[7][0]): # Oberon
                     player.setIdentityReveal(True)

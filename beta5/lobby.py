@@ -256,15 +256,10 @@ class Lobby(GameManager):
             roleList = [True, self.role[3], True, self.role[0], True, self.role[2], self.role[4], self.role[1]]
             settingResult, settingError = self.network.changeMatchSetting(maxPlayer, [roleList, 0, 0])
             if settingResult:
-                # popup success = Ture
                 self.popSetting = False
                 self.available = True
             else:
                 self.available = False
-                # popup success = False
-                # self.popSetting = True
-                # popup text = settingError.upper
-                pass
         
     
     def editPlayer(self):
@@ -499,6 +494,17 @@ class Lobby(GameManager):
                 
                 if self.buttonMatchSetting.isButtonClick(self.soundList[7],self.control.getSoundEffectVol()):
                     if self.player.host == True:
+                        if len(self.matchSetting) > 1:
+                            # [True, self.role[3], True, self.role[0], True, self.role[2], self.role[4], self.role[1]]
+                            setting = self.matchSetting[1]
+                            if type(setting) is list and len(setting) > 0:
+                                if type(setting[0]) is list and len(setting[0]) == 8:
+                                    role = setting[0]
+                                    self.role[3] = role[1]
+                                    self.role[0] = role[3]
+                                    self.role[2] = role[5]
+                                    self.role[4] = role[6]
+                                    self.role[1] = role[7]
                         self.popSetting = True
                     else:
                         self.isError = True
