@@ -505,6 +505,9 @@ class Lobby(GameManager):
                                     self.role[2] = role[5]
                                     self.role[4] = role[6]
                                     self.role[1] = role[7]
+                                    for i in range(4):
+                                        if self.role[i] == True:
+                                            self.count += 1
                         self.popSetting = True
                     else:
                         self.isError = True
