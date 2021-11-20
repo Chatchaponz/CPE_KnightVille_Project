@@ -343,6 +343,7 @@ class GameEvent:
                                 self.voteRejected += 1
                                 if self.voteRejected == 5:
                                     self.evilScore += 1
+                                    self.totalEvil = 0
                                     self.round += 1
                                     self.voteRejected = 0
                             else:
