@@ -35,11 +35,11 @@ class Player:
         self.aim = pygame.image.load("images\icon\Aim.PNG")
 
         self.evil = pygame.transform.scale(self.evil, (30,30))
-        self.death = pygame.transform.scale(self.death, (100,100))
+        self.death = pygame.transform.scale(self.death, (30,30))
         self.leader = pygame.transform.scale(self.leader, (30,30))
         self.merlin = pygame.transform.scale(self.merlin, (30,30))
         self.member = pygame.transform.scale(self.member, (30,30))
-        self.aim = pygame.transform.scale(self.aim, (100,100))
+        self.aim = pygame.transform.scale(self.aim, (120,120))
 
         # Name
         self.name = name
@@ -77,7 +77,11 @@ class Player:
     def draw(self, screen):
         
         nameX, nameY = self.playerRect.midtop
-        iconX = nameX - 40
+        iconX = nameX - 60
+
+        # Draw player
+        screen.blit(self.playerSkin, self.playerRect)
+
         if(self.__role != None):
         # Role reveal
             if(self.__roleReveal == True):
@@ -109,12 +113,12 @@ class Player:
         # Target
             if(self.isTarget == True):
                 #pygame.draw.rect(screen, (255,0,255), pygame.Rect(nameX, nameY - 50, 30, 30) )
-                screen.blit(self.aim, (nameX - 40, nameY - 50))
+                screen.blit(self.aim, (nameX - 60, nameY))
         
         # Killed
             if(self.isKilled == True):
                 #pygame.draw.rect(screen, (255,255,0), pygame.Rect(nameX, nameY - 50, 30, 30) )
-                screen.blit(self.death, (nameX - 40, nameY - 50))
+                screen.blit(self.death, (nameX, nameY - 50))
 
         # Draw player's name
         playerNameRect = self.playerName.get_rect(center = (nameX, nameY))
@@ -125,9 +129,6 @@ class Player:
         bgPlayerName.fill((0, 0, 0))
         screen.blit(bgPlayerName, bgPlayerNameRect)
         screen.blit(self.playerName, playerNameRect)
-
-        # Draw player
-        screen.blit(self.playerSkin, self.playerRect)
     
     def update(self):
         self.velX = 0
