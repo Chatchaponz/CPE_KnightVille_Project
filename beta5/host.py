@@ -113,6 +113,20 @@ class HostMenu(GameScreen):
         # Role Oberon
         if self.buttonRole1.isButtonClick():
             # Check Role Number can be available
+            if not self.role[4] and self.count < maxrole:
+                self.count += 1
+                self.role[4] = True
+            elif self.role[4]:
+                self.count -= 1
+                self.role[4] = False
+        # Display role available
+        if self.role[4]:
+            self.display.blit(self.checked, (self.buttonRole1.rect.right - self.checked.get_width()//2, 
+            self.buttonRole1.rect.top - self.checked.get_height()//2))
+        
+        # Role Mordred
+        if self.buttonRole2.isButtonClick():
+            # Check Role Number can be available
             if not self.role[1] and self.count < maxrole:
                 self.count += 1
                 self.role[1] = True
@@ -121,20 +135,6 @@ class HostMenu(GameScreen):
                 self.role[1] = False
         # Display role available
         if self.role[1]:
-            self.display.blit(self.checked, (self.buttonRole1.rect.right - self.checked.get_width()//2, 
-            self.buttonRole1.rect.top - self.checked.get_height()//2))
-        
-        # Role Mordred
-        if self.buttonRole2.isButtonClick():
-            # Check Role Number can be available
-            if not self.role[0] and self.count < maxrole:
-                self.count += 1
-                self.role[0] = True
-            elif self.role[0]:
-                self.count -= 1
-                self.role[0] = False
-        # Display role available
-        if self.role[0]:
             self.display.blit(self.checked, (self.buttonRole2.rect.right - self.checked.get_width()//2, 
             self.buttonRole2.rect.top - self.checked.get_height()//2))
 
@@ -144,13 +144,13 @@ class HostMenu(GameScreen):
             if not self.role[2] and self.count < maxrole:
                 self.count += 1
                 self.role[2] = True
-                self.role[3] = True
-            elif self.role[2] and self.role[3]:
+                self.role[0] = True
+            elif self.role[2] and self.role[0]:
                 self.count -= 1
                 self.role[2] = False
-                self.role[3] = False
+                self.role[0] = False
         # Display role available
-        if self.role[2] and self.role[3]:
+        if self.role[2] and self.role[0]:
             self.display.blit(self.checked, (self.buttonRole3.rect.right - self.checked.get_width()//2, 
             self.buttonRole3.rect.top - self.checked.get_height()//2))
         
@@ -162,25 +162,25 @@ class HostMenu(GameScreen):
 
         # Display not available role
         if self.count == maxrole:
-            self.role[4] = False
-            if not self.role[1]:
+            self.role[3] = False
+            if not self.role[4]:
                 self.display.blit(self.offFilter, self.buttonRole1.rect)
                 self.display.blit(self.lock, (self.buttonRole1.rect.centerx - self.lock.get_width()//2, self.buttonRole1.rect.y))
                 self.lockSoundOn = True            
-            if not self.role[0]:
+            if not self.role[1]:
                 self.display.blit(self.offFilter, self.buttonRole2.rect)
                 self.display.blit(self.lock, (self.buttonRole2.rect.centerx - self.lock.get_width()//2, self.buttonRole2.rect.y))
                 self.lockSoundOn = True
-            if not self.role[2] and not self.role[3]:
+            if not self.role[2] and not self.role[0]:
                 self.display.blit(self.offFilter, self.buttonRole3.rect)
                 self.display.blit(self.lock, (self.buttonRole3.rect.centerx - self.lock.get_width()//2, self.buttonRole3.rect.y))
                 self.lockSoundOn = True
-            if not self.role[4]:
+            if not self.role[3]:
                 self.display.blit(self.offFilter, self.minionRect)
                 self.display.blit(self.lock, (self.minionRect.centerx - self.lock.get_width()//2, self.minionRect.y))
                 self.lockSoundOn = True
         elif self.count < maxrole:
-            self.role[4] = True
+            self.role[3] = True
             self.lockSoundOn = False
             self.alreadyPlay = False
 
@@ -231,7 +231,7 @@ class HostMenu(GameScreen):
                     self.display.blit(self.checked, (rect.right - self.checked.get_width()//2, 
                     rect.top - self.checked.get_height()//2))
                 elif rect is self.minionRect:
-                    if self.role[4]:
+                    if self.role[3]:
                         self.display.blit(self.checked, (rect.right - self.checked.get_width()//2, 
                         rect.top - self.checked.get_height()//2))
                 self.drawText(name, 22 , rect.centerx, rect.bottom + 35, self.font2, self.control.black)    
@@ -265,8 +265,8 @@ class HostMenu(GameScreen):
 
             if self.buttonCreateLobby.isButtonClick(self.clickChoiceSound,self.control.getSoundEffectVol()):
                 # if self.network.createLobby(self.numPlayer, [True, False, True, False, True, False, True, False], 0, 0):
-                createResult, createError = self.network.createLobby(self.numPlayer, [True, self.role[3], True, self.role[0], 
-                                         True, self.role[2], self.role[4], self.role[1]], 0, 0)
+                createResult, createError = self.network.createLobby(self.numPlayer, [True, self.role[0], True, self.role[1], 
+                                         True, self.role[2], self.role[3], self.role[4]], 0, 0)
                 if createResult:
                     self.hostSuccess = True
                     joinResult, joinError = self.network.joinGame()
