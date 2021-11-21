@@ -136,7 +136,7 @@ class Lobby(GameManager):
         
         self.checked = pygame.transform.scale(self.control.checked, (roleWidth - 45, roleHeight - 45))
 
-        self.role = [False, False, False, False, True]
+        self.role = [False, False, False, True, False]
         self.setRoleFirstTime = False
 
         self.count = 0 
@@ -336,7 +336,7 @@ class Lobby(GameManager):
             self.matchSetting.clear()
             self.allMessages.clear()
 
-            self.role = [False, False, False, False, True]
+            self.role = [False, False, False, True, False]
             self.setRoleFirstTime = False
             self.count = 0
 
@@ -505,13 +505,9 @@ class Lobby(GameManager):
                             if type(setting) is list and len(setting) > 0:
                                 if type(setting[0]) is list and len(setting[0]) == 8:
                                     role = setting[0]
-                                    self.role[0] = role[1]
-                                    self.role[1] = role[3]
-                                    self.role[2] = role[5]
-                                    self.role[3] = role[6]
-                                    self.role[4] = role[7]
-                                    for i in range(4):
-                                        if self.role[i] == True and i in [0, 1, 2]:
+                                    self.role = [role[1], role[3], role[5], role[6], role[7]]
+                                    for i in range(5):
+                                        if self.role[i] == True and i in [1, 2, 4]:
                                             self.count += 1
                         self.setRoleFirstTime = True
                         self.popSetting = True

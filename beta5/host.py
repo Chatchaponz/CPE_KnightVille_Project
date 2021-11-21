@@ -42,7 +42,7 @@ class HostMenu(GameScreen):
         self.hostBoard = pygame.transform.scale(control.hostBoard, (1280, 720))
 
         # Role Selection State
-        self.role = [False, False, False, False, True] # Moudred, Oberon, Morgana, Percival, Minion of moudred
+        self.role = [False, False, False, True, False] # Percival Mordred Morgana Minion Oberon
 
         # Special role image/button
         buttonWidth, buttonHeight = 120, 120
@@ -99,7 +99,7 @@ class HostMenu(GameScreen):
 
     def resetRole(self):
         # Reset Role
-        self.role = [False, False, False, False, True] 
+        self.role = [False, False, False, True, False] 
         self.count = 0
         
     def configRole(self, maxrole, buttonList):
