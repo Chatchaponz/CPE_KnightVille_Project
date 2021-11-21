@@ -34,11 +34,11 @@ class Player:
         self.member = pygame.image.load("images\icon\member.PNG")
         self.aim = pygame.image.load("images\icon\Aim.PNG")
 
-        self.evil = pygame.transform.scale(self.evil, (30,30))
-        self.death = pygame.transform.scale(self.death, (30,30))
-        self.leader = pygame.transform.scale(self.leader, (30,30))
-        self.merlin = pygame.transform.scale(self.merlin, (30,30))
-        self.member = pygame.transform.scale(self.member, (30,30))
+        self.evil = pygame.transform.scale(self.evil, (40,40))
+        self.death = pygame.transform.scale(self.death, (40,40))
+        self.leader = pygame.transform.scale(self.leader, (40,40))
+        self.merlin = pygame.transform.scale(self.merlin, (40,40))
+        self.member = pygame.transform.scale(self.member, (40,40))
         self.aim = pygame.transform.scale(self.aim, (120,120))
 
         # Name
@@ -91,34 +91,37 @@ class Player:
                 nameY -= 25
         # Identity reveal
             if(self.__identityReveal == True):
-                pygame.draw.rect(screen, (255,0,0), pygame.Rect(nameX, nameY - 25, 30, 30) )
+                #pygame.draw.rect(screen, (255,0,0), pygame.Rect(nameX, nameY - 25, 30, 30) )
+                screen.blit(self.evil, (iconX, nameY - 50))
+                iconX += 40
+
         # Unknown reveal
             if(self.__unknownReveal == True):
                 #pygame.draw.rect(screen, (100,100,100), pygame.Rect(nameX, nameY - 25, 30, 30) )
                 screen.blit(self.merlin, (iconX, nameY - 50))
-                iconX += 30
+                iconX += 40
         
         # Party leader
             if(self.partyLeader == True):
                 #pygame.draw.rect(screen, (0,255,0), pygame.Rect(nameX, nameY - 25, 30, 30) )
                 screen.blit(self.leader, (iconX, nameY - 50))
-                iconX += 30
+                iconX += 40
         
         # Party Member
             if(self.isSelected == True):
                 #pygame.draw.rect(screen, (0,0,255), pygame.Rect(nameX, nameY - 50, 30, 30) )
                 screen.blit(self.member, (iconX, nameY - 50))
-                iconX += 30
+                iconX += 40
         
         # Target
             if(self.isTarget == True):
                 #pygame.draw.rect(screen, (255,0,255), pygame.Rect(nameX, nameY - 50, 30, 30) )
-                screen.blit(self.aim, (nameX - 60, nameY))
+                screen.blit(self.aim, (nameX - 60, nameY + 50))
         
         # Killed
             if(self.isKilled == True):
                 #pygame.draw.rect(screen, (255,255,0), pygame.Rect(nameX, nameY - 50, 30, 30) )
-                screen.blit(self.death, (nameX, nameY - 50))
+                screen.blit(self.death, (nameX - 20, nameY - 50))
 
         # Draw player's name
         playerNameRect = self.playerName.get_rect(center = (nameX, nameY))
