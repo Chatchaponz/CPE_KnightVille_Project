@@ -94,8 +94,6 @@ class Game(GameManager):
                 self.player.resetMovement()
     
     def resetAll(self):
-        self.currentPlayerInMatch = None
-        self.othersPlayerData = None
         self.sendData = []
         self.gamePhase = 0
         self.targetPlayer = None
@@ -475,6 +473,8 @@ class Game(GameManager):
                         self.playersData.clear()
                         self.matchSetting.clear()
                         self.allMessages.clear()
+                        self.currentPlayerInMatch.clear()
+                        self.othersPlayerData.clear()
 
                         # Main music is loaded here
                         self.currentMusic.stop()

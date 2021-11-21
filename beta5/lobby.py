@@ -335,6 +335,8 @@ class Lobby(GameManager):
             self.playersData.clear()
             self.matchSetting.clear()
             self.allMessages.clear()
+            self.currentPlayerInMatch.clear()
+            self.othersPlayerData.clear()
 
             self.role = [False, False, False, True, False]
             self.setRoleFirstTime = False

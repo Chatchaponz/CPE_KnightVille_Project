@@ -37,7 +37,9 @@ class GameSetting:
         # 1 -> players data
         # 2 -> current match setting
         # 3 -> chat data
-        self.globalData = [[], [], [], []]
+        # 4 -> current player in match
+        # 5 -> other player's data
+        self.globalData = [[], [], [], [], [], []]
 
         #load game image
         self.knightCover = pygame.image.load("images\menuUI\knightCover.PNG")

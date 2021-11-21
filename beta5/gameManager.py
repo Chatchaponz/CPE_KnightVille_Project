@@ -15,8 +15,8 @@ class GameManager(GameScreen):
         self.playersData = control.globalData[1]
         self.matchSetting = control.globalData[2]
         self.allMessages = control.globalData[3]
-        self.currentPlayerInMatch = None
-        self.othersPlayerData = None
+        self.currentPlayerInMatch = control.globalData[4]
+        self.othersPlayerData = control.globalData[5]
 
         self.sendData = []
         self.sendDataThread = None
@@ -294,8 +294,12 @@ class GameManager(GameScreen):
         data = self.network.tryGetData(sendData)
         if data != None:
             if len(data) > 3:
-                if type(data[0]) is list: self.currentPlayerInMatch = data[0]
-                if type(data[1]) is list: self.othersPlayerData = data[1]
+                if type(data[0]) is list: 
+                    self.currentPlayerInMatch.clear()
+                    self.currentPlayerInMatch += data[0]
+                if type(data[1]) is list:
+                    self.othersPlayerData.clear() 
+                    self.othersPlayerData += data[1]
                 if type(data[2]) is list: 
                     self.matchSetting.clear()    
                     self.matchSetting += data[2]
