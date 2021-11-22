@@ -54,7 +54,7 @@ class GameManager(GameScreen):
         self.fontsize = 20
         self.textFont = pygame.font.Font(self.font, self.fontsize)
         self.chatText = Textbox(self.chatPosX, self.chatPosY + self.chatHeight, 
-                                chatWidth, 30, self.control.white, limit = 89, text= "Chat with others", 
+                                chatWidth, 30, self.control.white, limit = 85, text= "Chat with others", 
                                 fontPath= self.font, size = self.fontsize)
         
         self.offset = 0 # to make chat box scroll
