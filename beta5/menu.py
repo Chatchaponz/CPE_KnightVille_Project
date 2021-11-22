@@ -241,9 +241,13 @@ class MainMenu(GameScreen):
                         self.network.connectStatus != True):
                         ipHost = self.popupHost.t1.getText()
                         portHost = self.popupHost.t2.getText()
-                        self.doConnection(str(ipHost), int(portHost))
-                        self.hostClicked = True
-                        self.popupHost.activeButton = False
+                        if portHost.isdigit():
+                            self.doConnection(str(ipHost), int(portHost))
+                            self.hostClicked = True
+                            self.popupHost.activeButton = False
+                        else:
+                            self.successConnect = False
+                            self.popupFail.text = "PORT MUST BE POSITIVE INTEGER"
                     
                     if self.popupHost.b2.isButtonClick(self.backButtonSound,self.control.getSoundEffectVol()):
                         self.available = True
@@ -287,9 +291,13 @@ class MainMenu(GameScreen):
                         self.network.connectStatus != True):
                         ipJoin = self.popupJoin.t1.getText()
                         portJoin = self.popupJoin.t2.getText()
-                        self.doConnection(str(ipJoin), int(portJoin))
-                        self.joinClicked = True
-                        self.popupJoin.activeButton = False
+                        if portJoin.isdigit():  
+                            self.doConnection(str(ipJoin), int(portJoin))
+                            self.joinClicked = True
+                            self.popupJoin.activeButton = False
+                        else:
+                            self.successConnect = False
+                            self.popupFail.text = "PORT MUST BE POSITIVE INTEGER"
                     
                     if self.popupJoin.b2.isButtonClick(self.backButtonSound,self.control.getSoundEffectVol()): # POPUP CLOSE BUTTON
                         self.available = True
