@@ -247,7 +247,7 @@ class MainMenu(GameScreen):
                             self.popupHost.activeButton = False
                         else:
                             self.successConnect = False
-                            self.popupFail.text = "PORT MUST BE POSITIVE INTEGER"
+                            self.popupFail.text = "PORT MUST BE POSITIVE INTEGER."
                     
                     if self.popupHost.b2.isButtonClick(self.backButtonSound,self.control.getSoundEffectVol()):
                         self.available = True
@@ -297,7 +297,7 @@ class MainMenu(GameScreen):
                             self.popupJoin.activeButton = False
                         else:
                             self.successConnect = False
-                            self.popupFail.text = "PORT MUST BE POSITIVE INTEGER"
+                            self.popupFail.text = "PORT MUST BE POSITIVE INTEGER."
                     
                     if self.popupJoin.b2.isButtonClick(self.backButtonSound,self.control.getSoundEffectVol()): # POPUP CLOSE BUTTON
                         self.available = True
