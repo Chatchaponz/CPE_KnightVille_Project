@@ -1,4 +1,4 @@
-import pygame, sys, threading
+import pygame, sys, threading, random
 from button import Button 
 from gameManager import GameManager
 from textbox import Textbox
@@ -19,6 +19,7 @@ class Lobby(GameManager):
         self.backButtonSound = self.soundList[3]
         self.lockSoundOn = False
         self.alreadyPlay = False
+        self.paperSoundList = control.paperSoundList
         
         # Image / Button goes here vvvv
         self.lobbyWall = control.lobbyWall
@@ -38,12 +39,37 @@ class Lobby(GameManager):
         self.lobbyTable = control.lobbyTable
         self.lobbyTableWidth = self.lobbyTable.get_rect().width
         self.popupBackground = control.popupBackground
+        self.buttonBG = self.control.buttonBG
+
+        self.howToPlay = self.control.howToPlay
+        self.amountOfHowToPlayPage = len(self.howToPlay)
+
+        self.tapeRightArrow = self.control.tapeRightArrow
+        self.tapeLeftArrow = self.control.tapeLeftArrow
+        self.tapeArrowWidth = self.tapeLeftArrow.get_rect().width
+        self.tapeArrowHeight = self.tapeLeftArrow.get_rect().height
+        self.tapeClose = self.control.tapeClose
+        self.tapeCloseWidth = self.tapeClose.get_rect().width
+        self.tapeCloseHeight = self.tapeClose.get_rect().height
 
         self.buttonLeave = Button(22, 259, self.startShadowWidth, self.startShadowHeight)
         self.buttonLeave.addImage(self.leaveShadow, self.leaveLight)
 
         self.buttonStart = Button(self.screenWidth - self.startShadowWidth - 22, 259, self.startShadowWidth, self.startShadowHeight)
         self.buttonStart.addImage(self.startShadow, self.startLight)
+
+        self.buttonHowToPlay = Button(self.screenWidth - 200, 20, 170, 60)
+        self.buttonHowToPlay.addText('How to play', self.font1, 30, control.white, (50,50,50))
+        self.buttonHowToPlay.addImage(self.buttonBG)
+
+        self.buttonTapeRight = Button(self.screenWidth - self.tapeArrowWidth - 80, self.screenHeight//2 - 20, self.tapeArrowWidth, self.tapeArrowHeight)
+        self.buttonTapeRight.addImage(self.tapeRightArrow)
+
+        self.buttonTapeLeft = Button(80, self.screenHeight//2 - 20, self.tapeArrowWidth, self.tapeArrowHeight)
+        self.buttonTapeLeft.addImage(self.tapeLeftArrow)
+
+        self.buttonClose = Button(self.screenWidth - self.tapeCloseWidth - 120, 20, self.tapeCloseWidth, self.tapeCloseHeight)
+        self.buttonClose.addImage(self.tapeClose)
 
         # Edit player
         self.buttonEditPlayer = Button(820, 220, 156, 333)
@@ -406,7 +432,10 @@ class Lobby(GameManager):
         #     print(thread.name)
 
         # all buttons
-        buttonList = [self.buttonEditPlayer, self.buttonMatchSetting, self.buttonStart, self.buttonLeave]
+        buttonList = [self.buttonEditPlayer, self.buttonMatchSetting, self.buttonStart, self.buttonLeave, self.buttonHowToPlay]
+        buttonHowToPlayList = (self.buttonClose, self.buttonTapeLeft, self.buttonTapeRight)
+        currentPage = 0
+        howToPlayStatus = False
 
         # Set collision
         self.player.collided = []
@@ -432,6 +461,9 @@ class Lobby(GameManager):
             # draw all button
             for roomButton in buttonList:
                 roomButton.draw(self.display, self.available)
+
+            if self.buttonHowToPlay.isButtonClick(self.clickSound,self.control.getSoundEffectVol()):
+                    howToPlayStatus = True
             
             self.display.blit(self.lobbyTable, ((self.screenWidth//2) - (self.lobbyTableWidth//2), 385))
 
@@ -546,6 +578,27 @@ class Lobby(GameManager):
                     else:
                         self.isError = False
                         self.available = True
+            
+            if howToPlayStatus:
+                self.available = False
+                self.display.blit(self.howToPlay[currentPage], (0, 0))
+                for button in buttonHowToPlayList:
+                    button.draw(self.display, self.available)
+                if self.buttonTapeLeft.isButtonClick(random.choice(self.paperSoundList),self.control.getSoundEffectVol()):
+                    if currentPage == 0:
+                            currentPage = self.amountOfHowToPlayPage-1
+                    else:
+                        currentPage -= 1
+                if self.buttonTapeRight.isButtonClick(random.choice(self.paperSoundList),self.control.getSoundEffectVol()):
+                    if currentPage == self.amountOfHowToPlayPage-1:
+                        currentPage = 0
+                    else:
+                        currentPage += 1
+                if self.buttonClose.isButtonClick(self.backButtonSound,self.control.getSoundEffectVol()):
+                    self.available = True
+                    howToPlayStatus = False
+            else:
+                currentPage = 0
 
-            self.biltScreen() # update screen
+            self.blitScreen() # update screen
             self.clock.tick(60) # run at 60 fps

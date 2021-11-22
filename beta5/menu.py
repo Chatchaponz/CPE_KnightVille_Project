@@ -335,4 +335,4 @@ class MainMenu(GameScreen):
                     self.successConnect = True
                     self.available = True
                 
-            self.biltScreen()
+            self.blitScreen()

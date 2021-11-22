@@ -18,7 +18,10 @@ class Game(GameManager):
 
         # Image
         self.popupBackground = control.popupBackground
-        self.backMap = control.backMap
+        self.town = control.town
+        self.townSky = control.townSky
+        self.townSkyWidth = self.townSky.get_rect().width
+        self.townSkyPositionX = 0
 
         # List for all button of name
         self.nameList = []
@@ -401,7 +404,16 @@ class Game(GameManager):
             
             # page blackground
             self.display.fill((0, 0, 0))
-            self.display.blit(self.backMap, (-900,0))
+            self.display.blit(self.townSky, (self.townSkyPositionX,0))
+            
+            self.townSkyPositionX -= 2.7
+            if self.townSkyPositionX < -(self.townSkyWidth - 1280):
+               self.display.blit(self.townSky, (self.townSkyPositionX + self.townSkyWidth,0))
+            if self.townSkyPositionX < -self.townSkyWidth:
+                self.townSkyPositionX = 0
+
+            self.display.blit(self.town, (-900,0))
+
 
             # if self.waitForOthers():
             if (len(self.matchSetting) > 0 and 
@@ -489,5 +501,5 @@ class Game(GameManager):
                             self.network.stopThisGame()
                         self.changePageByInput(True, self.control.lobby)
 
-            self.biltScreen() # update screen
+            self.blitScreen() # update screen
             self.clock.tick(60) # run at 60 fps

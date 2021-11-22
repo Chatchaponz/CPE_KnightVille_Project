@@ -17,7 +17,7 @@ class GameScreen():
         self.font1 = 'font/Black-Chancery.TTF'
         self.font2 = 'font/Dragon Fire.TTF'
         
-    def biltScreen(self):
+    def blitScreen(self):
         self.control.screen.blit(self.display, (0, 0))
         pygame.display.update()
     

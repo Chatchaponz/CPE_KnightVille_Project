@@ -114,4 +114,4 @@ class CreatePlayer(GameScreen):
                 if self.popupNoIGN.b1.isButtonClick(self.clickChoiceSound, self.control.getSoundEffectVol()):
                     self.triggerNoIGN = False
 
-            self.biltScreen() # update screen
+            self.blitScreen() # update screen

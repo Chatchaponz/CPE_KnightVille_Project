@@ -24,4 +24,4 @@ class PageName(GameScreen):
             # Things in page vvv
             
 
-            self.biltScreen() # update screen
+            self.blitScreen() # update screen
