@@ -81,7 +81,7 @@ class Lobby(GameManager):
         self.amountSkins = len(self.skins)
         
         self.newPlayername = Textbox(self.popEditBg.centerx - 110, self.popEditBg.y + 70, 220, 30, pygame.Color('white'), 
-        pygame.Color('white'), 15, fontPath = None, size = 26)
+        pygame.Color('white'), 15, fontPath = self.font, size = 26)
 
         self.popupNoIGN = Popup(self.screenWidth//2 - 250, self.screenHeight//2 - 90, 500, 180, 'Please enter your/> In-game name with no spacebar', 
         pygame.Color('white'), pygame.Color('darkblue'))
