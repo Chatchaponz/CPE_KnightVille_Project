@@ -87,9 +87,9 @@ class HostMenu(GameScreen):
         self.count = 0
 
         # Popup
-        dummy_string = 'Unknown Error' # DUMMY
+        
         popWidth, popHeight = 500, 130
-        self.hostFailed = Popup((self.screenWidth - popWidth)//2, (self.screenHeight - popHeight)//2, popWidth, popHeight, dummy_string,
+        self.hostFailed = Popup((self.screenWidth - popWidth)//2, (self.screenHeight - popHeight)//2, popWidth, popHeight, 'Unknown Error',
         self.control.white, pygame.Color('darkblue'))
         self.hostFailed.adjustComponents(bWidth = 60)
         self.hostFailed.modComponents(self.hostFailed.b1, 'button', (97, 63, 45), (130,83,50), 'CLOSE', self.font2)
