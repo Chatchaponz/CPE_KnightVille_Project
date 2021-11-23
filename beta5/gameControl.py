@@ -99,7 +99,8 @@ class GameSetting:
         self.checked = pygame.image.load("images/profile/yes.PNG")
 
         self.town = pygame.image.load("images/game/town.PNG")
-        self.townSky = pygame.image.load("images/game/townSky.PNG")
+        self.townSky = pygame.image.load("images/game/townSky.JPG")
+        self.sign = pygame.image.load("images/game/sign.JPG")
 
         pygame.display.set_icon(self.oberonIcon)
 

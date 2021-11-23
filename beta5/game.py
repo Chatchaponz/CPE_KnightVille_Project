@@ -22,6 +22,18 @@ class Game(GameManager):
         self.townSky = control.townSky
         self.townSkyWidth = self.townSky.get_rect().width
         self.townSkyPositionX = 0
+        self.sign = control.sign
+
+        self.buttonBG = self.control.buttonBG
+
+        # Button
+        self.buttonHowToPlay = Button(30, 20, 170, 60)
+        self.buttonHowToPlay.addText('How to play', self.font1, 30, control.white, (50,50,50))
+        self.buttonHowToPlay.addImage(self.buttonBG)
+
+        self.buttonReveal = Button(30, 100, 170, 60)
+        self.buttonReveal.addText('Reveal role', self.font1, 30, control.white, (50,50,50))
+        self.buttonReveal.addImage(self.buttonBG)
 
         # List for all button of name
         self.nameList = []
@@ -40,6 +52,11 @@ class Game(GameManager):
 
         self.fail = Button( 150 , 100, 100, 30)
         self.fail.addText("fail", self.font, 20, self.control.white, 1, (50,50,50))
+
+        # render font
+        signSize = 12
+        signFont = pygame.font.Font(self.font, signSize)
+        self.signtext = signFont.render("select your team member", True, self.control.white)
 
         # Error popup
         self.popupFail = Popup((self.display.get_width() - 500)//2, (self.display.get_height() - 200)//2, 500, 200, 
@@ -130,12 +147,13 @@ class Game(GameManager):
 
     # vvv Name list make here (Can Change)
     def makeNameList(self):
-        initPositionY = 50
+        initPositionY = 100
         nameList = []
         self.playersData.sort(key = lambda player: player.id, reverse = False)
         for player in self.playersData:
-            tempButton = Button(950, initPositionY, 100, 30)
+            tempButton = Button(1060, initPositionY, 170, 40)
             tempButton.addText(player.name, self.font, 20, self.control.white, 1, (50,50,50))
+            tempButton.addImage(self.buttonBG)
             nameList.append(tempButton)
             initPositionY += 50
         return nameList
@@ -213,6 +231,10 @@ class Game(GameManager):
 
         if self.gamePhase == 2:
             if self.player.partyLeader == True:
+                pygame.draw.rect( self.display, (255, 255, 255), pygame.Rect(self.screenWidth-200, 0, 5,  50 + 50*len(self.nameList)) )
+                pygame.draw.rect( self.display, (255, 255, 255), pygame.Rect(self.screenWidth-80, 0, 5,  50 + 50*len(self.nameList)) )
+                self.display.blit( self.sign, (self.screenWidth-230, 20))
+                self.display.blit( self.signtext, (self.screenWidth-222, 40))
                 memberLimit = self.assignment[playerNumber][self.roundCount]
                 if self.nameList == []:
                     self.nameList = self.makeNameList()
@@ -357,7 +379,7 @@ class Game(GameManager):
         # Set collision
         self.player.collided = []
         if self.player.collided == []:
-            self.player.collided = [[0, self.screenWidth], [360, self.screenHeight]]
+            self.player.collided = [[0, self.screenWidth], [560, self.screenHeight + 20]]
 
         while self.displayRunning:
 
@@ -406,14 +428,15 @@ class Game(GameManager):
             self.display.fill((0, 0, 0))
             self.display.blit(self.townSky, (self.townSkyPositionX,0))
             
-            self.townSkyPositionX -= 2.7
+            self.townSkyPositionX -= 1
             if self.townSkyPositionX < -(self.townSkyWidth - 1280):
                self.display.blit(self.townSky, (self.townSkyPositionX + self.townSkyWidth,0))
             if self.townSkyPositionX < -self.townSkyWidth:
                 self.townSkyPositionX = 0
 
-            self.display.blit(self.town, (-900,0))
+            self.display.blit(self.town, (0,0))
 
+            self.buttonReveal.draw(self.display)
 
             # if self.waitForOthers():
             if (len(self.matchSetting) > 0 and 
@@ -500,6 +523,8 @@ class Game(GameManager):
                         if self.player.host == True:
                             self.network.stopThisGame()
                         self.changePageByInput(True, self.control.lobby)
+            
+            self.buttonHowToPlay.draw(self.display)
 
             self.blitScreen() # update screen
             self.clock.tick(60) # run at 60 fps
