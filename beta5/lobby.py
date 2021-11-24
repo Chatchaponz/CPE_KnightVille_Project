@@ -107,7 +107,7 @@ class Lobby(GameManager):
         self.amountSkins = len(self.skins)
         
         self.newPlayername = Textbox(self.popEditBg.centerx - 110, self.popEditBg.y + 70, 220, 30, pygame.Color('white'), 
-        pygame.Color('white'), 15, fontPath = self.font, size = 26)
+        pygame.Color('white'), 15, fontPath = self.font, size = 20)
 
         self.popupNoIGN = Popup(self.screenWidth//2 - 250, self.screenHeight//2 - 90, 500, 180, 'Please enter your/> In-game name with no spacebar', 
         pygame.Color('white'), pygame.Color('darkblue'))
@@ -461,9 +461,6 @@ class Lobby(GameManager):
             # draw all button
             for roomButton in buttonList:
                 roomButton.draw(self.display, self.available)
-
-            if self.buttonHowToPlay.isButtonClick(self.clickSound,self.control.getSoundEffectVol()):
-                    howToPlayStatus = True
             
             self.display.blit(self.lobbyTable, ((self.screenWidth//2) - (self.lobbyTableWidth//2), 385))
 
@@ -482,6 +479,8 @@ class Lobby(GameManager):
 
             if self.available:
 
+                if self.buttonHowToPlay.isButtonClick(self.clickSound,self.control.getSoundEffectVol()):
+                    howToPlayStatus = True
                 if self.buttonLeave.isButtonClick():
                     self.resetLobby(leaveToMain = True)
 

@@ -126,6 +126,7 @@ class HostMenu(GameScreen):
 
         # Tracking connect state
         self.hostSuccess = True
+        self.available = True
 
     def resetRole(self):
         # Reset Role
@@ -140,45 +141,46 @@ class HostMenu(GameScreen):
             button.draw(self.display)
             self.drawText(name, 22 , button.rect.centerx, button.rect.bottom + 35, self.font2, self.control.black) 
 
-        # Role Oberon
-        if self.buttonRole1.isButtonClick():
-            # Check Role Number can be available
-            if not self.role[4] and self.count < maxrole:
-                self.count += 1
-                self.role[4] = True
-            elif self.role[4]:
-                self.count -= 1
-                self.role[4] = False
-        # Display role available
-        if self.role[4]:
-            self.display.blit(self.checked, (self.buttonRole1.rect.right - self.checked.get_width()//2, 
-            self.buttonRole1.rect.top - self.checked.get_height()//2))
-        
-        # Role Mordred
-        if self.buttonRole2.isButtonClick():
-            # Check Role Number can be available
-            if not self.role[1] and self.count < maxrole:
-                self.count += 1
-                self.role[1] = True
-            elif self.role[1]:
-                self.count -= 1
-                self.role[1] = False
-        # Display role available
-        if self.role[1]:
-            self.display.blit(self.checked, (self.buttonRole2.rect.right - self.checked.get_width()//2, 
-            self.buttonRole2.rect.top - self.checked.get_height()//2))
+        if self.available:
+            # Role Oberon
+            if self.buttonRole1.isButtonClick():
+                # Check Role Number can be available
+                if not self.role[4] and self.count < maxrole:
+                    self.count += 1
+                    self.role[4] = True
+                elif self.role[4]:
+                    self.count -= 1
+                    self.role[4] = False
+            # Display role available
+            if self.role[4]:
+                self.display.blit(self.checked, (self.buttonRole1.rect.right - self.checked.get_width()//2, 
+                self.buttonRole1.rect.top - self.checked.get_height()//2))
+            
+            # Role Mordred
+            if self.buttonRole2.isButtonClick():
+                # Check Role Number can be available
+                if not self.role[1] and self.count < maxrole:
+                    self.count += 1
+                    self.role[1] = True
+                elif self.role[1]:
+                    self.count -= 1
+                    self.role[1] = False
+            # Display role available
+            if self.role[1]:
+                self.display.blit(self.checked, (self.buttonRole2.rect.right - self.checked.get_width()//2, 
+                self.buttonRole2.rect.top - self.checked.get_height()//2))
 
-        # Role Morgana and Percival
-        if self.buttonRole3.isButtonClick():
-            # Check Role Number can be available
-            if not self.role[2] and self.count < maxrole:
-                self.count += 1
-                self.role[2] = True
-                self.role[0] = True
-            elif self.role[2] and self.role[0]:
-                self.count -= 1
-                self.role[2] = False
-                self.role[0] = False
+            # Role Morgana and Percival
+            if self.buttonRole3.isButtonClick():
+                # Check Role Number can be available
+                if not self.role[2] and self.count < maxrole:
+                    self.count += 1
+                    self.role[2] = True
+                    self.role[0] = True
+                elif self.role[2] and self.role[0]:
+                    self.count -= 1
+                    self.role[2] = False
+                    self.role[0] = False
         # Display role available
         if self.role[2] and self.role[0]:
             self.display.blit(self.checked, (self.buttonRole3.rect.right - self.checked.get_width()//2, 
@@ -253,7 +255,7 @@ class HostMenu(GameScreen):
 
             # UI Button
             for button in buttonList:
-                button.draw(self.display)
+                button.draw(self.display, self.available)
 
             # Standard Roles
             for role, rect, name in standardRoleList:
@@ -269,15 +271,45 @@ class HostMenu(GameScreen):
                         rect.top - self.checked.get_height()//2))
                 self.drawText(name, 22 , rect.centerx, rect.bottom + 35, self.font2, self.control.black)    
 
-            # Player number config
-            if self.buttonLeft.isButtonClick(self.soundList[4],self.control.getSoundEffectVol()):
-                self.numPlayer -= 1
-                if self.numPlayer < 5:
-                    self.numPlayer = 10
-            if self.buttonRight.isButtonClick(self.soundList[4],self.control.getSoundEffectVol()):
-                self.numPlayer += 1
-                if self.numPlayer > 10:
+            if self.available:
+                # Player number config
+                if self.buttonLeft.isButtonClick(self.soundList[4],self.control.getSoundEffectVol()):
+                    self.numPlayer -= 1
+                    if self.numPlayer < 5:
+                        self.numPlayer = 10
+                if self.buttonRight.isButtonClick(self.soundList[4],self.control.getSoundEffectVol()):
+                    self.numPlayer += 1
+                    if self.numPlayer > 10:
+                        self.numPlayer = 5
+                # Back to menu
+                if self.buttonBack.isButtonClick(self.clickChoiceSound,self.control.getSoundEffectVol()):
+                    self.resetRole()
                     self.numPlayer = 5
+                    if self.network.connectStatus == True:
+                        self.network.disconnectFromServer()
+                    self.changePageByInput(True)
+
+                if self.buttonCreateLobby.isButtonClick(self.clickChoiceSound,self.control.getSoundEffectVol()):
+                    # if self.network.createLobby(self.numPlayer, [True, False, True, False, True, False, True, False], 0, 0):
+                    createResult, createError = self.network.createLobby(self.numPlayer, [True, self.role[0], True, self.role[1], 
+                                            True, self.role[2], self.role[3], self.role[4]], 0, 0)
+                    if createResult:
+                        self.hostSuccess = True
+                        joinResult, joinError = self.network.joinGame()
+                        if joinResult:
+                            self.player.host = True
+                            self.player.id = 0
+                            self.changePageByInput(True, self.control.createPlayer)
+                            self.hostSuccess = True
+                        else:
+                            self.hostFailed.text = joinError.upper()
+                            self.hostSuccess = False
+                    else:
+                        self.hostFailed.text = createError.upper()
+                        self.hostSuccess = False
+            
+                if self.buttonHowToPlay.isButtonClick(self.clickChoiceSound,self.control.getSoundEffectVol()):
+                    howToPlayStatus = True
                     
             # Role selector
             #       Number Player -> Evil Number -> Can choose role on certain number
@@ -287,33 +319,6 @@ class HostMenu(GameScreen):
                 self.configRole(2, specialRoleList)
             if self.numPlayer > 9: # can select 3 evil role + assasin
                 self.configRole(3, specialRoleList)
-            
-            # Back to menu
-            if self.buttonBack.isButtonClick(self.clickChoiceSound,self.control.getSoundEffectVol()):
-                self.resetRole()
-                self.numPlayer = 5
-                if self.network.connectStatus == True:
-                    self.network.disconnectFromServer()
-                self.changePageByInput(True)
-
-            if self.buttonCreateLobby.isButtonClick(self.clickChoiceSound,self.control.getSoundEffectVol()):
-                # if self.network.createLobby(self.numPlayer, [True, False, True, False, True, False, True, False], 0, 0):
-                createResult, createError = self.network.createLobby(self.numPlayer, [True, self.role[0], True, self.role[1], 
-                                         True, self.role[2], self.role[3], self.role[4]], 0, 0)
-                if createResult:
-                    self.hostSuccess = True
-                    joinResult, joinError = self.network.joinGame()
-                    if joinResult:
-                        self.player.host = True
-                        self.player.id = 0
-                        self.changePageByInput(True, self.control.createPlayer)
-                        self.hostSuccess = True
-                    else:
-                        self.hostFailed.text = joinError.upper()
-                        self.hostSuccess = False
-                else:
-                    self.hostFailed.text = createError.upper()
-                    self.hostSuccess = False
 
             # POPUP
             if not self.hostSuccess:
@@ -326,8 +331,6 @@ class HostMenu(GameScreen):
                         self.network.disconnectFromServer()
                     self.changePageByInput(True, self.control.menu)
 
-            if self.buttonHowToPlay.isButtonClick(self.clickChoiceSound,self.control.getSoundEffectVol()):
-                    howToPlayStatus = True
 
             if howToPlayStatus:
                 self.available = False

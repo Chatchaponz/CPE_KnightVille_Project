@@ -36,7 +36,7 @@ class CreatePlayer(GameScreen):
         self.buttonRight.addImage(self.rightArrow)
 
         self.playerName = Textbox(self.screenWidth//2 - 125, 150, 250, 35, 
-        pygame.Color('white'), pygame.Color('white'), 15, 'Your In-game name',self.font, 28)
+        pygame.Color('white'), pygame.Color('white'), 15, 'Your In-game name',self.font, 20)
         self.playerName.text = ''
 
         self.popupNoIGN = Popup(self.screenWidth//2 - 250, self.screenHeight//2 - 90, 500, 180, 
