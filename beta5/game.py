@@ -23,6 +23,14 @@ class Game(GameManager):
         self.townSkyWidth = self.townSky.get_rect().width
         self.townSkyPositionX = 0
         self.sign = control.sign
+        self.baseSkip = control.baseSkip
+        self.baseSkip = pygame.transform.scale(self.baseSkip, (50, 50))
+        self.skip = []
+        for n in range(int(len(control.skip))):
+            self.skip.append(pygame.transform.scale(control.skip[n], (50, 50)))
+        self.missionShow = control.missionShow
+        self.successMission = control.success
+        self.failMission = control.fail
 
         self.buttonBG = self.control.buttonBG
 
@@ -38,13 +46,13 @@ class Game(GameManager):
         # List for all button of name
         self.nameList = []
 
-        self.summit = Button( 50 , 100, 100, 30)
+        self.summit = Button( self.screenWidth//2 - 50 , 100, 100, 30)
         self.summit.addText("Summit", self.font, 20, self.control.white, 1, (50,50,50))
 
-        self.accept = Button( 50 , 100, 100, 30)
+        self.accept = Button( self.screenWidth//2 - 100 , 100, 100, 30)
         self.accept.addText("Accept", self.font, 20, self.control.white, 1, (50,50,50))
 
-        self.reject = Button( 150 , 100, 100, 30)
+        self.reject = Button( self.screenWidth//2 , 100, 100, 30)
         self.reject.addText("Reject", self.font, 20, self.control.white, 1, (50,50,50))
 
         self.success = Button( 50 , 100, 100, 30)
@@ -435,6 +443,16 @@ class Game(GameManager):
                 self.townSkyPositionX = 0
 
             self.display.blit(self.town, (0,0))
+            self.display.blit(self.baseSkip, (self.screenWidth//2 - 25, 70))
+
+            # draw mission board
+            for i in range(5):
+                #print (self.assignment[self.matchSetting[0]][i])
+                if self.matchSetting[0] >= 7 and i >= 3:
+                    self.display.blit(self.missionShow[self.assignment[self.matchSetting[0]][i] + 1], (self.screenWidth//2 - 150 + (i*60), 10))
+                else:
+                    self.display.blit(self.missionShow[self.assignment[self.matchSetting[0]][i] - 1], (self.screenWidth//2 - 150 + (i*60), 10))
+
 
             self.buttonReveal.draw(self.display)
 
@@ -464,23 +482,27 @@ class Game(GameManager):
             x = 0
             for i in self.round:
                 if i == 1:
-                    pygame.draw.rect(self.display, (0,0,255), pygame.Rect(x, 0, 30, 30) )
+                    #pygame.draw.rect(self.display, (0,0,255), pygame.Rect(x, 0, 30, 30) )
+                    self.display.blit(self.successMission, (self.screenWidth//2 - 150 + (x*60), 10))
                 if i == 2:
-                    pygame.draw.rect(self.display, (255,0,0), pygame.Rect(x, 0, 30, 30) )
-                x += 35
+                    #pygame.draw.rect(self.display, (255,0,0), pygame.Rect(x, 0, 30, 30) )
+                    self.display.blit(self.failMission, (self.screenWidth//2 - 150 + (x*60), 10))
+                x += 1
+
             # draw amount of success / fail
             x = 0
             for textSurface in self.missionText:
                 rect = textSurface.get_rect()
-                rect.center = pygame.Rect(x, 0, 30, 30).center
+                rect.center = pygame.Rect(self.screenWidth//2 - 140 + (x*60), 60, 30, 30).center
                 self.display.blit( textSurface, rect)
-                x += 35
+                x += 1
 
             # draw reject round 
             x = 0
             for i in range(self.voteRejected):
-                pygame.draw.rect(self.display, (255,0,255), pygame.Rect(x, 35, 30, 30) )
-                x += 35
+                #pygame.draw.rect(self.display, (255,0,255), pygame.Rect(x, 35, 30, 30) )
+                self.display.blit(self.skip[x], (self.screenWidth//2 - 25, 70))
+                x += 1
 
             # draw vote text
             if self.voteText != None:

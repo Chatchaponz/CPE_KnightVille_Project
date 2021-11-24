@@ -63,13 +63,6 @@ class GameSetting:
         self.tapeRightArrow = pygame.image.load("images\icon\TapeRightArrow.PNG")
         self.tapeLeftArrow = pygame.image.load("images\icon\TapeLeftArrow.PNG")
         self.tapeClose = pygame.image.load("images\icon\TapeClose.PNG")
-        self.mission1 = pygame.image.load("images\icon\Mission1.PNG")
-        self.mission2 = pygame.image.load("images\icon\Mission2.PNG")
-        self.mission3 = pygame.image.load("images\icon\Mission3.PNG")
-        self.mission4 = pygame.image.load("images\icon\Mission4.PNG")
-        self.mission5 = pygame.image.load("images\icon\Mission5.PNG")
-        self.fail = pygame.image.load("images\icon\Fail.PNG")
-        self.success = pygame.image.load("images\icon\Success.PNG")
 
         self.lobbyFloor = pygame.image.load("images\lobby\lobbyFloor.JPG")
         self.lobbyWall = pygame.image.load("images\lobby\lobbyWall.PNG")
@@ -101,6 +94,23 @@ class GameSetting:
         self.town = pygame.image.load("images/game/town.PNG")
         self.townSky = pygame.image.load("images/game/townSky.JPG")
         self.sign = pygame.image.load("images/game/sign.JPG")
+        self.baseSkip = pygame.image.load("images/game/BaseSkip.PNG")
+        self.skip = []
+        self.skip.append(pygame.image.load("images/game/Skip1.PNG"))
+        self.skip.append(pygame.image.load("images/game/Skip2.PNG"))
+        self.skip.append(pygame.image.load("images/game/Skip3.PNG"))
+        self.skip.append(pygame.image.load("images/game/Skip4.PNG"))
+        self.skip.append(pygame.image.load("images/game/Skip5.PNG"))
+        self.missionShow = []
+        self.missionShow.append(pygame.image.load("images/game/Mission1.PNG"))
+        self.missionShow.append(pygame.image.load("images/game/Mission2.PNG"))
+        self.missionShow.append(pygame.image.load("images/game/Mission3.PNG"))
+        self.missionShow.append(pygame.image.load("images/game/Mission4.PNG"))
+        self.missionShow.append(pygame.image.load("images/game/Mission5.PNG"))
+        self.missionShow.append(pygame.image.load("images/game/Mission4F.PNG"))
+        self.missionShow.append(pygame.image.load("images/game/Mission5F.PNG"))
+        self.success = pygame.image.load("images/game/success.PNG")
+        self.fail = pygame.image.load("images/game/fail.PNG")
 
         pygame.display.set_icon(self.oberonIcon)
 
