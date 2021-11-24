@@ -46,25 +46,26 @@ class Game(GameManager):
         # List for all button of name
         self.nameList = []
 
-        self.summit = Button( self.screenWidth//2 - 50 , 100, 100, 30)
+        self.summit = Button( self.screenWidth//2 - 50 , 145, 100, 30)
         self.summit.addText("Summit", self.font, 20, self.control.white, 1, (50,50,50))
 
-        self.accept = Button( self.screenWidth//2 - 100 , 100, 100, 30)
+        self.accept = Button( self.screenWidth//2 - 100 , 145, 100, 30)
         self.accept.addText("Accept", self.font, 20, self.control.white, 1, (50,50,50))
 
-        self.reject = Button( self.screenWidth//2 , 100, 100, 30)
+        self.reject = Button( self.screenWidth//2 , 145, 100, 30)
         self.reject.addText("Reject", self.font, 20, self.control.white, 1, (50,50,50))
 
-        self.success = Button( 50 , 100, 100, 30)
+        self.success = Button( self.screenWidth//2 - 100 , 145, 100, 30)
         self.success.addText("Success", self.font, 20, self.control.white, 1, (50,50,50))
 
-        self.fail = Button( 150 , 100, 100, 30)
-        self.fail.addText("fail", self.font, 20, self.control.white, 1, (50,50,50))
+        self.fail = Button( self.screenWidth//2 , 145, 100, 30)
+        self.fail.addText("Fail", self.font, 20, self.control.white, 1, (50,50,50))
 
         # render font
         signSize = 12
         signFont = pygame.font.Font(self.font, signSize)
-        self.signtext = signFont.render("select your team member", True, self.control.white)
+        self.signText = signFont.render("select your team member", True, self.control.white)
+        self.assassinText = signFont.render("kill the merlin", True, self.control.white)
 
         # Error popup
         self.popupFail = Popup((self.display.get_width() - 500)//2, (self.display.get_height() - 200)//2, 500, 200, 
@@ -242,7 +243,7 @@ class Game(GameManager):
                 pygame.draw.rect( self.display, (255, 255, 255), pygame.Rect(self.screenWidth-200, 0, 5,  50 + 50*len(self.nameList)) )
                 pygame.draw.rect( self.display, (255, 255, 255), pygame.Rect(self.screenWidth-80, 0, 5,  50 + 50*len(self.nameList)) )
                 self.display.blit( self.sign, (self.screenWidth-230, 20))
-                self.display.blit( self.signtext, (self.screenWidth-222, 40))
+                self.display.blit( self.signText, (self.screenWidth-222, 40))
                 memberLimit = self.assignment[playerNumber][self.roundCount]
                 if self.nameList == []:
                     self.nameList = self.makeNameList()
@@ -315,6 +316,10 @@ class Game(GameManager):
                 if self.player.getRole() != None:
                     if self.player.getRole().getName() == "Assassin" and not self.gameEnded:
                         self.player.setRoleReveal(True)
+                        pygame.draw.rect( self.display, (255, 255, 255), pygame.Rect(self.screenWidth-200, 0, 5,  50 + 50*len(self.nameList)) )
+                        pygame.draw.rect( self.display, (255, 255, 255), pygame.Rect(self.screenWidth-80, 0, 5,  50 + 50*len(self.nameList)) )
+                        self.display.blit( self.sign, (self.screenWidth-230, 20))
+                        self.display.blit( self.assassinText, (self.screenWidth-182, 40))
                         if self.nameList == []:
                             self.nameList = self.makeNameList()
                         for id, name in enumerate(self.nameList):
@@ -443,7 +448,7 @@ class Game(GameManager):
                 self.townSkyPositionX = 0
 
             self.display.blit(self.town, (0,0))
-            self.display.blit(self.baseSkip, (self.screenWidth//2 - 25, 70))
+            self.display.blit(self.baseSkip, (self.screenWidth//2 - 130, 85))
 
             # draw mission board
             for i in range(5):
@@ -501,12 +506,12 @@ class Game(GameManager):
             x = 0
             for i in range(self.voteRejected):
                 #pygame.draw.rect(self.display, (255,0,255), pygame.Rect(x, 35, 30, 30) )
-                self.display.blit(self.skip[x], (self.screenWidth//2 - 25, 70))
+                self.display.blit(self.skip[x], (self.screenWidth//2 - 130, 85))
                 x += 1
 
             # draw vote text
             if self.voteText != None:
-                self.display.blit( self.voteText, pygame.Rect( 5, 70, 30, 30))
+                self.display.blit( self.voteText, pygame.Rect( self.screenWidth//2 - 65, 80, 30, 30))
             
             if self.isError:
 

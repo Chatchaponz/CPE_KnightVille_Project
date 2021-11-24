@@ -336,6 +336,9 @@ class GameManager(GameScreen):
 
                     # if len(matchData) > 3:
                     #     print(matchData[1], matchData[3])
+                    if self.voteText == None:
+                        voteString = f"reject vote : 0 / {maxPlayer}"
+                        self.voteText = self.scoreFont.render(voteString, True, self.control.white)
                     
                     if self.gamePhase == 0:
                         if len(matchData) > 3:
@@ -356,13 +359,13 @@ class GameManager(GameScreen):
                             self.voteRejected = currentRejectStatus
                             self.totalEvil = currentEvilCount
 
-                            if self.voteText == None or self.totalReject != currentRejectCount:
+                            if self.totalReject != currentRejectCount:
                                 # update count
                                 self.totalReject = currentRejectCount
 
-                                acceptScore = maxPlayer - currentRejectCount
+                                #acceptScore = maxPlayer - currentRejectCount
                                 rejectScore = currentRejectCount
-                                voteString = f"{acceptScore} / : {rejectScore} X"
+                                voteString = f"reject vote : {rejectScore} / {maxPlayer}"
                                 self.voteText = self.scoreFont.render(voteString, True, self.control.white)
 
                             if self.goodScore < currentGood:
