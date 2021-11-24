@@ -21,19 +21,21 @@ class HostMenu(GameScreen):
         self.paperSoundList = control.paperSoundList
 
         # Image
-        self.buttonBG = self.control.buttonBG
-        self.howToPlay = []
-        self.howToPlay.append(self.control.howToPlay[0])
-        self.howToPlay.append(self.control.howToPlay[3])
-        self.amountOfHowToPlayPage = len(self.howToPlay)
+        #self.buttonBG = self.control.buttonBG
+        #self.howToPlay = []
+        #self.howToPlay.append(self.control.howToPlay[0])
+        #self.howToPlay.append(self.control.howToPlay[3])
+        #self.amountOfHowToPlayPage = len(self.howToPlay)
 
-        self.tapeRightArrow = self.control.tapeRightArrow
-        self.tapeLeftArrow = self.control.tapeLeftArrow
-        self.tapeArrowWidth = self.tapeLeftArrow.get_rect().width
-        self.tapeArrowHeight = self.tapeLeftArrow.get_rect().height
-        self.tapeClose = self.control.tapeClose
-        self.tapeCloseWidth = self.tapeClose.get_rect().width
-        self.tapeCloseHeight = self.tapeClose.get_rect().height
+        #self.tapeRightArrow = self.control.tapeRightArrow
+        #self.tapeLeftArrow = self.control.tapeLeftArrow
+        #self.tapeArrowWidth = self.tapeLeftArrow.get_rect().width
+        #self.tapeArrowHeight = self.tapeLeftArrow.get_rect().height
+        #self.tapeClose = self.control.tapeClose
+        #self.tapeCloseWidth = self.tapeClose.get_rect().width
+        #self.tapeCloseHeight = self.tapeClose.get_rect().height
+
+        self.howToPlaySetup( self.screenWidth - 250, 80, 'Help',  [1,0,0,1,0,0,0,0,0,0])
 
         # Button
         self.buttonBack = Button(80, 80, 80, 35)
@@ -50,18 +52,18 @@ class HostMenu(GameScreen):
         self.buttonRight = Button(self.buttonLeft.rect.right + 70, self.buttonLeft.rect.y, 55, self.buttonLeft.rect.height)
         self.buttonRight.addText('>', self.font1, 20, pygame.Color('white'), pygame.Color('darkgreen'), pygame.Color('darkgrey'))
         
-        self.buttonHowToPlay = Button(self.screenWidth - 250, 80, 170, 60)
-        self.buttonHowToPlay.addText('Help', self.font1, 30, control.white, (50,50,50))
-        self.buttonHowToPlay.addImage(self.buttonBG)
+        #self.buttonHowToPlay = Button(self.screenWidth - 250, 80, 170, 60)
+        #self.buttonHowToPlay.addText('Help', self.font1, 30, control.white, (50,50,50))
+        #self.buttonHowToPlay.addImage(self.buttonBG)
 
-        self.buttonTapeRight = Button(self.screenWidth - self.tapeArrowWidth - 80, self.screenHeight//2 - 20, self.tapeArrowWidth, self.tapeArrowHeight)
-        self.buttonTapeRight.addImage(self.tapeRightArrow)
+        #self.buttonTapeRight = Button(self.screenWidth - self.tapeArrowWidth - 80, self.screenHeight//2 - 20, self.tapeArrowWidth, self.tapeArrowHeight)
+        #self.buttonTapeRight.addImage(self.tapeRightArrow)
 
-        self.buttonTapeLeft = Button(80, self.screenHeight//2 - 20, self.tapeArrowWidth, self.tapeArrowHeight)
-        self.buttonTapeLeft.addImage(self.tapeLeftArrow)
+        #self.buttonTapeLeft = Button(80, self.screenHeight//2 - 20, self.tapeArrowWidth, self.tapeArrowHeight)
+        #self.buttonTapeLeft.addImage(self.tapeLeftArrow)
 
-        self.buttonClose = Button(self.screenWidth - self.tapeCloseWidth - 120, 20, self.tapeCloseWidth, self.tapeCloseHeight)
-        self.buttonClose.addImage(self.tapeClose)
+        #self.buttonClose = Button(self.screenWidth - self.tapeCloseWidth - 120, 20, self.tapeCloseWidth, self.tapeCloseHeight)
+        #self.buttonClose.addImage(self.tapeClose)
 
         # Player numbers
         self.numPlayer = 5
@@ -223,13 +225,16 @@ class HostMenu(GameScreen):
     def displayScreen(self):
 
         self.hostSuccess = True
-        buttonList = [self.buttonBack, self.buttonCreateLobby, self.buttonLeft, self.buttonRight, self.buttonHowToPlay]
-        buttonHowToPlayList = (self.buttonClose, self.buttonTapeLeft, self.buttonTapeRight)
-        currentPage = 0
-        howToPlayStatus = False
+        buttonList = [self.buttonBack, self.buttonCreateLobby, self.buttonLeft, self.buttonRight]
+        #buttonHowToPlayList = (self.buttonClose, self.buttonTapeLeft, self.buttonTapeRight)
+        #currentPage = 0
+        #howToPlayStatus = False
         specialRoleList = [[self.buttonRole1, 'Oberon'], [self.buttonRole2, 'Mordred'], [self.buttonRole3, 'Morgana and Percival']]
         standardRoleList = [[self.merlin, self.merlinRect, 'Merlin'], [self.servant, self.servantRect, 'Royal Servant'], 
         [self.assasin, self.assasinRect, 'Assasin'], [self.minion, self.minionRect, 'Minion of Mordred']]
+
+        checkHowToPlay = False
+        checkHowToPlayPrevious = False
         
         self.displayRunning = True
         
@@ -307,9 +312,6 @@ class HostMenu(GameScreen):
                     else:
                         self.hostFailed.text = createError.upper()
                         self.hostSuccess = False
-            
-                if self.buttonHowToPlay.isButtonClick(self.clickChoiceSound,self.control.getSoundEffectVol()):
-                    howToPlayStatus = True
                     
             # Role selector
             #       Number Player -> Evil Number -> Can choose role on certain number
@@ -331,26 +333,12 @@ class HostMenu(GameScreen):
                         self.network.disconnectFromServer()
                     self.changePageByInput(True, self.control.menu)
 
+            checkHowToPlayPrevious = checkHowToPlay
+            checkHowToPlay = self.howToPlayDraw(self.paperSoundList, self.backButtonSound, self.available)
 
-            if howToPlayStatus:
+            if checkHowToPlay == False and checkHowToPlayPrevious == True:
+                self.available = True
+            elif checkHowToPlay == True and checkHowToPlayPrevious == False:
                 self.available = False
-                self.display.blit(self.howToPlay[currentPage], (0, 0))
-                for button in buttonHowToPlayList:
-                    button.draw(self.display, self.available)
-                if self.buttonTapeLeft.isButtonClick(random.choice(self.paperSoundList),self.control.getSoundEffectVol()):
-                    if currentPage == 0:
-                            currentPage = self.amountOfHowToPlayPage-1
-                    else:
-                        currentPage -= 1
-                if self.buttonTapeRight.isButtonClick(random.choice(self.paperSoundList),self.control.getSoundEffectVol()):
-                    if currentPage == self.amountOfHowToPlayPage-1:
-                        currentPage = 0
-                    else:
-                        currentPage += 1
-                if self.buttonClose.isButtonClick(self.backButtonSound,self.control.getSoundEffectVol()):
-                    self.available = True
-                    howToPlayStatus = False
-            else:
-                currentPage = 0
 
             self.blitScreen() # update screen

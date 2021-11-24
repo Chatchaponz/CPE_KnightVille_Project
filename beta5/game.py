@@ -15,6 +15,8 @@ class Game(GameManager):
         # Sound Effect
         self.soundList = control.soundList
         self.backButtonSound = self.soundList[3]
+        self.clickChoiceSound = self.soundList[2]
+        self.paperSoundList = control.paperSoundList
 
         # Image
         self.popupBackground = control.popupBackground
@@ -33,11 +35,12 @@ class Game(GameManager):
         self.failMission = control.fail
 
         self.buttonBG = self.control.buttonBG
+        self.blackFilter = pygame.transform.scale(control.offFilter, (400,160))
+
+        self.available = True
 
         # Button
-        self.buttonHowToPlay = Button(30, 20, 170, 60)
-        self.buttonHowToPlay.addText('How to play', self.font1, 30, control.white, (50,50,50))
-        self.buttonHowToPlay.addImage(self.buttonBG)
+        self.howToPlaySetup( 30, 20, 'How to play', [0,0,0,1,1,1,1,1,1,1])
 
         self.buttonReveal = Button(30, 100, 170, 60)
         self.buttonReveal.addText('Reveal role', self.font1, 30, control.white, (50,50,50))
@@ -386,13 +389,16 @@ class Game(GameManager):
         self.sendDataThread.daemon = True
         self.sendDataThread.start()
 
+        checkHowToPlay = False
+        checkHowToPlayPrevious = False
+
         # for thread in threading.enumerate(): 
         #     print(thread.name)
         
         # Set collision
         self.player.collided = []
         if self.player.collided == []:
-            self.player.collided = [[0, self.screenWidth], [560, self.screenHeight + 20]]
+            self.player.collided = [[0, self.screenWidth], [600, self.screenHeight + 20]]
 
         while self.displayRunning:
 
@@ -448,6 +454,7 @@ class Game(GameManager):
                 self.townSkyPositionX = 0
 
             self.display.blit(self.town, (0,0))
+            self.display.blit(self.blackFilter, (self.screenWidth//2 - 200,0))
             self.display.blit(self.baseSkip, (self.screenWidth//2 - 130, 85))
 
             # draw mission board
@@ -511,8 +518,16 @@ class Game(GameManager):
 
             # draw vote text
             if self.voteText != None:
-                self.display.blit( self.voteText, pygame.Rect( self.screenWidth//2 - 65, 80, 30, 30))
+                self.display.blit( self.voteText, pygame.Rect( self.screenWidth//2 - 65, 85, 30, 30))
             
+            # draw how to play button
+            checkHowToPlayPrevious = checkHowToPlay
+            checkHowToPlay = self.howToPlayDraw(self.paperSoundList, self.backButtonSound, self.available)
+            if checkHowToPlay == False and checkHowToPlayPrevious == True:
+                self.available = True
+            elif checkHowToPlay == True and checkHowToPlayPrevious == False:
+                self.available = False
+
             if self.isError:
 
                 self.popupFail.draw(self.display, self.font1, 30, textAlign= 'centerAlign',  bgColor = None, 
@@ -550,8 +565,6 @@ class Game(GameManager):
                         if self.player.host == True:
                             self.network.stopThisGame()
                         self.changePageByInput(True, self.control.lobby)
-            
-            self.buttonHowToPlay.draw(self.display)
 
             self.blitScreen() # update screen
             self.clock.tick(60) # run at 60 fps
