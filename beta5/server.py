@@ -184,11 +184,14 @@ class GameEvent:
 
                     if condition and type(checkData) == list:
                         leaderData = self.getPartyLeader(self.currentPartyLeader)
-                        if len(leaderData) > 9:
+                        if type(leaderData) == list and len(leaderData) > 9:
                             if (countId in leaderData[9] and 
                                 thisPlayer[dataIndex] not in checkData):
                                 allSame = False
                                 break
+                        else:
+                            allSame = False
+                            break
                         countId += 1
                     elif (type(thisPlayer[dataIndex]) != list and 
                          type(checkData) == list):
