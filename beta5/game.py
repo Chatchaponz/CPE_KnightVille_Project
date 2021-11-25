@@ -67,6 +67,9 @@ class Game(GameManager):
         self.popupFail.modComponents(self.popupFail.b1, 'button', (132, 85, 47), (100, 64, 44), 'Close', self.font1, 22)
         self.isError = False
 
+        # Reveal Role
+        self.buttonRevealStatus = False
+
         # number of assignment in each round per maxplayer
         self.assignment = {
             5: [2, 3, 2, 3, 3],
@@ -116,6 +119,8 @@ class Game(GameManager):
                 self.player.resetMovement()
     
     def resetAll(self):
+        self.buttonRevealStatus = False
+        self.available = True
         self.sendData = []
         self.gamePhase = 0
         self.targetPlayer = None
@@ -241,8 +246,8 @@ class Game(GameManager):
                 if self.nameList == []:
                     self.nameList = self.makeNameList()
                 for id, name in enumerate(self.nameList):
-                    name.draw(self.display)
-                    if name.isButtonClick():
+                    name.draw(self.display, self.available)
+                    if name.isButtonClick() and self.available:
                         if id in self.partyMember:
                             self.partyMember.remove(id)
                         elif (id not in self.partyMember and
@@ -252,19 +257,19 @@ class Game(GameManager):
                             print("[GAME] Error assign party member")
                 self.updateSelectedPlayer(self.partyMember)
                 if len(self.partyMember) == memberLimit:
-                    self.summit.draw(self.display)
-                    if self.summit.isButtonClick():
+                    self.summit.draw(self.display, self.available)
+                    if self.summit.isButtonClick() and self.available:
                         self.player.choose = 3
             else:
                 self.updateSelectedPlayer(self.partyMember)
         
         if self.gamePhase == 3:
             if self.player.choose not in [1, 2]:
-                self.accept.draw(self.display)
-                self.reject.draw(self.display)
-                if self.accept.isButtonClick():
+                self.accept.draw(self.display, self.available)
+                self.reject.draw(self.display, self.available)
+                if self.accept.isButtonClick() and self.available:
                     self.player.choose = 1
-                if self.reject.isButtonClick():
+                if self.reject.isButtonClick() and self.available:
                     self.player.choose = 2
         
         if self.gamePhase == 5:
@@ -274,12 +279,12 @@ class Game(GameManager):
         if self.gamePhase == 6:
             if self.player.id in self.partyMember:
                 if self.player.choose not in [4, 5]:
-                    self.success.draw(self.display)
-                    if self.success.isButtonClick():
+                    self.success.draw(self.display, self.available)
+                    if self.success.isButtonClick() and self.available:
                         self.player.choose = 4
                     if self.player.getRole().getIdentity() == "Evil":
-                        self.fail.draw(self.display)
-                        if self.fail.isButtonClick():
+                        self.fail.draw(self.display, self.available)
+                        if self.fail.isButtonClick() and self.available:
                             self.player.choose = 5
         
         if self.gamePhase == 8:
@@ -316,13 +321,13 @@ class Game(GameManager):
                         if self.nameList == []:
                             self.nameList = self.makeNameList()
                         for id, name in enumerate(self.nameList):
-                            name.draw(self.display)
-                            if name.isButtonClick():
+                            name.draw(self.display, self.available)
+                            if name.isButtonClick() and self.available:
                                 self.targetPlayer = id
                             self.updateTargetPlayer(self.targetPlayer)
                         if self.targetPlayer != None:
-                            self.summit.draw(self.display)
-                            if self.summit.isButtonClick():
+                            self.summit.draw(self.display, self.available)
+                            if self.summit.isButtonClick() and self.available:
                                 self.isKilled = True
                                 killedPlayer = self.killPlayer(self.isKilled)
                     else:
@@ -381,6 +386,8 @@ class Game(GameManager):
 
         checkHowToPlay = False
         checkHowToPlayPrevious = False
+
+        self.buttonRevealStatus = False
 
         # for thread in threading.enumerate(): 
         #     print(thread.name)
@@ -455,8 +462,20 @@ class Game(GameManager):
                 else:
                     self.display.blit(self.missionShow[self.assignment[self.matchSetting[0]][i] - 1], (self.screenWidth//2 - 150 + (i*60), 10))
 
+            # reveal button
+            self.buttonReveal.draw(self.display, self.available)
+            if self.available and self.player.getRole() != None and self.playersData != []:
+                if self.buttonReveal.isButtonClick():
+                    if not self.buttonRevealStatus:
+                        self.buttonRevealStatus = True
+                    elif self.buttonRevealStatus:
+                        self.buttonRevealStatus = False
+                        self.player.unrevealRole(self.playersData)
+                    else:
+                        print("[GAME] Reveal button problem")
 
-            self.buttonReveal.draw(self.display)
+            if self.buttonRevealStatus and self.playersData != []:
+                self.player.revealRole(self.playersData)
 
             # if self.waitForOthers():
             if (len(self.matchSetting) > 0 and 
@@ -464,14 +483,6 @@ class Game(GameManager):
                 self.network.connectStatus == True):
                     self.phaseEvent()
 
-            #[TEST PRINT]
-            # print(self.currentLeader,self.gamePhase, self.player.syncSignal, self.player.choose, self.missionSuccess, self.goodScore, self.evilScore, self.partyMember)
-            # print(self.currentLeader, self.gamePhase, self.player.syncSignal, self.player.choose,self.roundCount, self.round, self.goodScore, self.evilScore)
-            # if self.player.host == True:
-            #     print(sendData)
-            # print(self.gamePhase)
-            # for player in self.playersData:
-            #     print( player.syncSignal, player.choose, end= " ")
 
             if self.network.connectStatus == True:
                 self.updateScreenData()
@@ -522,6 +533,7 @@ class Game(GameManager):
 
                 self.popupFail.draw(self.display, self.font1, 30, textAlign= 'centerAlign',  bgColor = None, 
                 image = self.popupBackground)
+                self.available = False
 
                 if self.popupFail.b1.isButtonClick(self.backButtonSound,self.control.getSoundEffectVol()):
                     
@@ -555,6 +567,9 @@ class Game(GameManager):
                         if self.player.host == True:
                             self.network.stopThisGame()
                         self.changePageByInput(True, self.control.lobby)
+                    else:
+                        self.isError = False
+                        self.available = True
 
             self.blitScreen() # update screen
             self.clock.tick(60) # run at 60 fps
