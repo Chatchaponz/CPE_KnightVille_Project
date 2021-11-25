@@ -127,16 +127,11 @@ class MainMenu(GameScreen):
         self.displayRunning = True
         
         buttonList = [self.buttonHost, self.buttonJoin, self.buttonOption, self.buttonQuit]
-        #buttonHowToPlayList = (self.buttonClose, self.buttonLeft, self.buttonRight)
-        #currentPage = 0
-        #howToPlayStatus = False
 
         checkHowToPlay = False
         checkHowToPlayPrevious = False
 
         while self.displayRunning:
-            
-            # print(f"{threading.activeCount()}") # print number of current thread
             
             self.checkEvent()
             self.display.fill((0, 0, 0))
@@ -161,7 +156,6 @@ class MainMenu(GameScreen):
             # Draw button
             for buttonSurface in buttonList:
                 buttonSurface.draw(self.display, self.available)
-            #self.buttonHowToPlay.draw(self.display, self.available)
             self.display.blit(self.logo, (self.screenWidth//4 - self.logo.get_width()//2 + 50, 100))
 
             checkHowToPlayPrevious = checkHowToPlay
@@ -192,37 +186,12 @@ class MainMenu(GameScreen):
                 if self.buttonQuit.isButtonClick(self.clickChoiceSound,self.control.getSoundEffectVol()):
                     pygame.quit()
                     sys.exit()
-            #    if self.buttonHowToPlay.isButtonClick(self.clickChoiceSound,self.control.getSoundEffectVol()):
-            #        self.howToPlayStatus = True
-
-            #if howToPlayStatus:
-            #    self.available = False
-            #    self.display.blit(self.howToPlay[currentPage], (0, 0))
-            #    for button in buttonHowToPlayList:
-            #        button.draw(self.display, self.available)
-            #    if self.buttonLeft.isButtonClick(random.choice(self.paperSoundList),self.control.getSoundEffectVol()):
-            #        if currentPage == 0:
-            #                currentPage = self.amountOfHowToPlayPage-1
-            #        else:
-            #            currentPage -= 1
-            #    if self.buttonRight.isButtonClick(random.choice(self.paperSoundList),self.control.getSoundEffectVol()):
-            #        if currentPage == self.amountOfHowToPlayPage-1:
-            #            currentPage = 0
-            #        else:
-            #            currentPage += 1
-            #    if self.buttonClose.isButtonClick(self.backButtonSound,self.control.getSoundEffectVol()):
-            #        self.available = True
-            #        howToPlayStatus = False
-            #else:
-            #    currentPage = 0
             
             # POPUP
             if self.hosting:  # HOSTING
                 self.popupHost.draw(self.display, self.font2, 52, textAlign = 'centerAlign', bgColor = None,
                 image = self.popupBackground)
                 self.available = False
-                # self.popupHost.b4.draw(self.display)
-                # self.display.blit(self.popupBackground, ((self.screenWidth//4) - self.popupBackground))
                 if not self.connecting:
 
                     if( self.popupHost.b1.isButtonClick(self.clickChoiceSound,self.control.getSoundEffectVol()) and 
@@ -262,12 +231,6 @@ class MainMenu(GameScreen):
 
                     else:
                         self.drawText("Connecting . . .", 30, 640, 350, self.font1, self.control.white)
-
-
-
-                # elif self.popupHost.b4.isButtonClick():
-                #     print('???')
-                #     self.hosting = True
 
             if self.joining: #JOINING
                 self.popupJoin.draw(self.display, self.font2, 52, textAlign = 'centerAlign', bgColor = None, 
@@ -320,9 +283,6 @@ class MainMenu(GameScreen):
 
                         self.available = True
 
-                # elif self.popupJoin.b4.isButtonClick(): # POPUP GUIDE BUTTON
-                #     print('???')
-                #     self.joining = True
             if not self.successConnect: # FAILED TO CONNECT
                 self.popupFail.draw(self.display, self.font2, 30, textAlign= 'centerAlign',  bgColor = None, 
                 image = self.popupBackground)

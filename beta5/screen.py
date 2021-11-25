@@ -105,7 +105,6 @@ class GameScreen():
                 self.howToPlay.append( self.fullHowToPlay[n])
             n += 1
         self.amountOfHowToPlayPage = len(self.howToPlay)
-    # create all buttons needed and 
 
     def howToPlayDraw(self, paperSound, backSound, available):
         self.buttonHowToPlay.draw(self.display, available)

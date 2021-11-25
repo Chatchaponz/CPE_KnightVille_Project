@@ -20,23 +20,6 @@ class HostMenu(GameScreen):
         self.alreadyPlay = False
         self.paperSoundList = control.paperSoundList
 
-        # Image
-        #self.buttonBG = self.control.buttonBG
-        #self.howToPlay = []
-        #self.howToPlay.append(self.control.howToPlay[0])
-        #self.howToPlay.append(self.control.howToPlay[3])
-        #self.amountOfHowToPlayPage = len(self.howToPlay)
-
-        #self.tapeRightArrow = self.control.tapeRightArrow
-        #self.tapeLeftArrow = self.control.tapeLeftArrow
-        #self.tapeArrowWidth = self.tapeLeftArrow.get_rect().width
-        #self.tapeArrowHeight = self.tapeLeftArrow.get_rect().height
-        #self.tapeClose = self.control.tapeClose
-        #self.tapeCloseWidth = self.tapeClose.get_rect().width
-        #self.tapeCloseHeight = self.tapeClose.get_rect().height
-
-        self.howToPlaySetup( self.screenWidth - 250, 80, 'Help',  [1,0,0,1,0,0,0,0,0,0])
-
         # Button
         self.buttonBack = Button(80, 80, 80, 35)
         self.buttonBack.addText('BACK', self.font2, 20, (255,255,255), 1, (50,50,50))
@@ -51,19 +34,8 @@ class HostMenu(GameScreen):
         
         self.buttonRight = Button(self.buttonLeft.rect.right + 70, self.buttonLeft.rect.y, 55, self.buttonLeft.rect.height)
         self.buttonRight.addText('>', self.font1, 20, pygame.Color('white'), pygame.Color('darkgreen'), pygame.Color('darkgrey'))
-        
-        #self.buttonHowToPlay = Button(self.screenWidth - 250, 80, 170, 60)
-        #self.buttonHowToPlay.addText('Help', self.font1, 30, control.white, (50,50,50))
-        #self.buttonHowToPlay.addImage(self.buttonBG)
 
-        #self.buttonTapeRight = Button(self.screenWidth - self.tapeArrowWidth - 80, self.screenHeight//2 - 20, self.tapeArrowWidth, self.tapeArrowHeight)
-        #self.buttonTapeRight.addImage(self.tapeRightArrow)
-
-        #self.buttonTapeLeft = Button(80, self.screenHeight//2 - 20, self.tapeArrowWidth, self.tapeArrowHeight)
-        #self.buttonTapeLeft.addImage(self.tapeLeftArrow)
-
-        #self.buttonClose = Button(self.screenWidth - self.tapeCloseWidth - 120, 20, self.tapeCloseWidth, self.tapeCloseHeight)
-        #self.buttonClose.addImage(self.tapeClose)
+        self.howToPlaySetup( self.screenWidth - 250, 80, 'Help',  [1,0,0,1,0,0,0,0,0,0])
 
         # Player numbers
         self.numPlayer = 5
@@ -226,9 +198,6 @@ class HostMenu(GameScreen):
 
         self.hostSuccess = True
         buttonList = [self.buttonBack, self.buttonCreateLobby, self.buttonLeft, self.buttonRight]
-        #buttonHowToPlayList = (self.buttonClose, self.buttonTapeLeft, self.buttonTapeRight)
-        #currentPage = 0
-        #howToPlayStatus = False
         specialRoleList = [[self.buttonRole1, 'Oberon'], [self.buttonRole2, 'Mordred'], [self.buttonRole3, 'Morgana and Percival']]
         standardRoleList = [[self.merlin, self.merlinRect, 'Merlin'], [self.servant, self.servantRect, 'Royal Servant'], 
         [self.assasin, self.assasinRect, 'Assasin'], [self.minion, self.minionRect, 'Minion of Mordred']]
