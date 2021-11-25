@@ -8,16 +8,6 @@ class Game(GameManager):
     def __init__(self, control):
         super(Game, self).__init__(control)
 
-        # Music
-        self.currentMusic = control.currentMusic
-        self.musicList = control.musicList
-
-        # Sound Effect
-        self.soundList = control.soundList
-        self.backButtonSound = self.soundList[3]
-        self.clickChoiceSound = self.soundList[2]
-        self.paperSoundList = control.paperSoundList
-
         # Image
         self.popupBackground = control.popupBackground
         self.town = control.town
