@@ -12,13 +12,9 @@ class HostMenu(GameScreen):
         
 
         # Sound goes here 
-        self.soundList = control.soundList
-        # self.soundEffectVol = control.soundEffectVol
-        self.clickChoiceSound = self.soundList[2]
-        self.backButtonSound = self.soundList[3]
+        
         self.lockSoundOn = True
         self.alreadyPlay = False
-        self.paperSoundList = control.paperSoundList
 
         # Button
         self.buttonBack = Button(80, 80, 80, 35)

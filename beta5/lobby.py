@@ -14,12 +14,9 @@ class Lobby(GameManager):
         self.musicList = control.musicList
 
         # Sound Effect
-        self.soundList = control.soundList
-        self.clickChoiceSound = self.soundList[2]
-        self.backButtonSound = self.soundList[3]
+        
         self.lockSoundOn = False
         self.alreadyPlay = False
-        self.paperSoundList = control.paperSoundList
         
         # Image / Button goes here vvvv
         self.lobbyWall = control.lobbyWall

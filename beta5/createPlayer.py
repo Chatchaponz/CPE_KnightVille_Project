@@ -12,11 +12,6 @@ class CreatePlayer(GameScreen):
         self.network = control.network
         self.player = control.player
 
-        # Sound goes here
-
-        self.soundList = control.soundList
-        self.clickChoiceSound = self.soundList[2]
-
         # Image / Button goes here vvvv
         self.rightArrow = control.rightArrow
         self.leftArrow = control.leftArrow

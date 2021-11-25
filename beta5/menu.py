@@ -16,13 +16,6 @@ class MainMenu(GameScreen):
         self.currentMusic = control.currentMusic
         self.musicList = control.musicList
 
-        # Sound Effect
-        self.soundList = control.soundList
-        self.paperSoundList = control.paperSoundList
-        self.clickChoiceSound = self.soundList[2]
-        self.isMouseOverSound = self.soundList[0]
-        self.backButtonSound = self.soundList[3]
-
         # Image
         self.logo = self.control.logo
         self.knightCover = control.knightCover 

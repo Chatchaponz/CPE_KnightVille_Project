@@ -19,9 +19,7 @@ class OptionMenu(GameScreen):
         self.music.controlRect.x = self.music.rangeRect.x + self.music.rangeRect.width/4
         self.sfx.controlRect.x = self.sfx.rangeRect.x + self.sfx.rangeRect.width/2
         self.volumeList = [[self.sfx, 'SFX'], [self.music, 'MUSIC']]
-        # Sound goes here
-        self.soundList = control.soundList
-        self.backButtonOptionSound = self.soundList[2]
+        
 
     def checkEvent(self):
         for event in pygame.event.get():
@@ -46,7 +44,7 @@ class OptionMenu(GameScreen):
             self.control.currentMusic.set_volume(self.music.value/100)
             self.control.soundEffectVol = self.sfx.value/100
             self.buttonMenu.draw(self.display)
-            if self.buttonMenu.isButtonClick(self.backButtonOptionSound, self.control.getSoundEffectVol()):
+            if self.buttonMenu.isButtonClick(self.clickChoiceSound, self.control.getSoundEffectVol()):
                 self.changePageByInput(True, self.control.menu)
             
             self.drawText('Option Menu', 70, self.screenWidth//2, 120, self.font1, self.control.black)

@@ -19,7 +19,12 @@ class GameScreen():
         self.font2 = 'font/Dragon Fire.TTF'
 
         # sound
-        #self.clickChoiceSound = self.control.soundList[2]
+        self.soundList = ['sounds/button-30.wav','sounds/button-1.wav','sounds/clickSound.wav','sounds/back.wav','sounds/select.wav','sounds/aclick.wav','sounds/lock.wav','sounds/paper4.wav','sounds/metal2.wav']
+        self.paperSoundList = ['sounds/paper1.wav','sounds/paper4.wav']
+
+        self.isMouseOverSound = self.soundList[0]
+        self.clickChoiceSound = self.soundList[2]
+        self.backButtonSound = self.soundList[3]
 
         # Image
         self.buttonBG = self.control.buttonBG
