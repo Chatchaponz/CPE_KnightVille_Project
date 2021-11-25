@@ -17,7 +17,7 @@ class Role:
         self.__allRoles = [
             ["Merlin", "Good"], 
             ["Percival", "Good"],
-            ["Royal Servant Of Arthur", "Good"],
+            ["Royal Servant", "Good"],
             ["Mordred", "Evil"],
             ["Assassin", "Evil"],
             ["Morgana", "Evil"],
