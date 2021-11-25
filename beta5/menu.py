@@ -152,7 +152,7 @@ class MainMenu(GameScreen):
             self.display.blit(self.logo, (self.screenWidth//4 - self.logo.get_width()//2 + 50, 100))
 
             checkHowToPlayPrevious = checkHowToPlay
-            checkHowToPlay = self.howToPlayDraw(self.paperSoundList, self.backButtonSound, self.available)
+            checkHowToPlay = self.howToPlayDraw(self.available)
 
             if checkHowToPlay == False and checkHowToPlayPrevious == True:
                 self.available = True

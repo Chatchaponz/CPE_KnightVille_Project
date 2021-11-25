@@ -512,7 +512,7 @@ class Game(GameManager):
             
             # draw how to play button
             checkHowToPlayPrevious = checkHowToPlay
-            checkHowToPlay = self.howToPlayDraw(self.paperSoundList, self.backButtonSound, self.available)
+            checkHowToPlay = self.howToPlayDraw(self.available)
             if checkHowToPlay == False and checkHowToPlayPrevious == True:
                 self.available = True
             elif checkHowToPlay == True and checkHowToPlayPrevious == False:

@@ -111,7 +111,7 @@ class GameScreen():
             n += 1
         self.amountOfHowToPlayPage = len(self.howToPlay)
 
-    def howToPlayDraw(self, paperSound, backSound, available):
+    def howToPlayDraw(self, available):
         self.buttonHowToPlay.draw(self.display, available)
         if available:
             if self.buttonHowToPlay.isButtonClick(self.clickChoiceSound,self.control.getSoundEffectVol()):
@@ -121,17 +121,17 @@ class GameScreen():
                 self.display.blit(self.howToPlay[self.currentPage], (0, 0))
                 for button in self.buttonHowToPlayList:
                     button.draw(self.display, available)
-                if self.buttonTapeLeft.isButtonClick(random.choice(paperSound),self.control.getSoundEffectVol()):
+                if self.buttonTapeLeft.isButtonClick(random.choice(self.paperSoundList),self.control.getSoundEffectVol()):
                     if self.currentPage == 0:
                             self.currentPage = self.amountOfHowToPlayPage-1
                     else:
                         self.currentPage -= 1
-                if self.buttonTapeRight.isButtonClick(random.choice(paperSound),self.control.getSoundEffectVol()):
+                if self.buttonTapeRight.isButtonClick(random.choice(self.paperSoundList),self.control.getSoundEffectVol()):
                     if self.currentPage == self.amountOfHowToPlayPage-1:
                         self.currentPage = 0
                     else:
                         self.currentPage += 1
-                if self.buttonClose.isButtonClick(backSound,self.control.getSoundEffectVol()):
+                if self.buttonClose.isButtonClick(self.backButtonSound, self.control.getSoundEffectVol()):
                     self.howToPlayStatus = False
                     return False
                 else:

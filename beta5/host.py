@@ -299,7 +299,7 @@ class HostMenu(GameScreen):
                     self.changePageByInput(True, self.control.menu)
 
             checkHowToPlayPrevious = checkHowToPlay
-            checkHowToPlay = self.howToPlayDraw(self.paperSoundList, self.backButtonSound, self.available)
+            checkHowToPlay = self.howToPlayDraw(self.available)
 
             if checkHowToPlay == False and checkHowToPlayPrevious == True:
                 self.available = True
