@@ -21,6 +21,8 @@ class Textbox():
         + inactiveColor - border color for inactive textbox object.
         + activeColor - border color for active textbox object.
         + limit - limit input character of an object.
+        + fontPath - font for text.
+        + size - size of font.
         '''
         self.rect = pygame.Rect(x, y, width, height) # area of an object.
         self.initRect = pygame.Rect(x, y, width, height)
