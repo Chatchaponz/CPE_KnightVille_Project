@@ -223,6 +223,7 @@ class GameManager(GameScreen):
     def updatePlayersData(self, othersPlayerData):
 
         foundHost = False
+        hostAddr = None
         othersPlayerId = []
         othersStatus = []
         gameStart = False
@@ -240,6 +241,7 @@ class GameManager(GameScreen):
                 othersPlayerId.append(thisPlayerId)
                 if isHost == 1:
                     foundHost = True
+                    hostAddr = thisAddr
                     
                 if thisAddr not in self.othersPlayerInMatch and thisPlayer != "":
                     tempPlayer = Player(thisPlayer[0], thisPlayer[1], thisPlayer[2], thisPlayer[3])
@@ -257,6 +259,7 @@ class GameManager(GameScreen):
                                 player.updateName(thisPlayer[3])
                             player.id = thisPlayerId
                             player.isPlaying = thisPlayer[4]
+
                             if gameStart and len(thisPlayer) > 12:
                                 player.choose = thisPlayer[5]
                                 player.syncSignal = thisPlayer[6]
@@ -277,12 +280,24 @@ class GameManager(GameScreen):
         # check that others already end there game
         self.othersGameStatus = othersStatus
 
-        # set my host
+        # If I am a host
         if not foundHost:
             self.player.host = True
+            # Set other player back to normal (from host)
+            if self.playersData != [] and hostAddr == None:
+                for player in self.playersData:
+                    if player != self.player:
+                        self.player.host = False
+        # If I am not a host      
         if foundHost:
             self.player.host = False
-        
+            # Set other player as host
+            if self.playersData != [] and hostAddr != None:
+                for player in self.playersData:
+                    if player != self.player and thisAddr == self.player.address:
+                        self.player.host = True
+                    else:
+                        self.player.host = False
         # set my id
         listOfAllId = list(range(len(self.playersData)))
         myId = list(set(listOfAllId) - set(othersPlayerId))
