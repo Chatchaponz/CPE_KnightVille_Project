@@ -10,10 +10,14 @@ from game import Game
 
 class GameSetting:
     def __init__(self):
+        '''
+        __init__ - Constructor of GameSetting class
+        '''
         pygame.init()
         
         pygame.display.set_caption('KnightVILLe')
 
+        # List of sound effects
         self.soundList = ['sounds/button-30.wav','sounds/button-1.wav','sounds/clickSound.wav','sounds/back.wav','sounds/select.wav','sounds/aclick.wav','sounds/lock.wav','sounds/paper4.wav','sounds/metal2.wav']
         self.paperSoundList = ['sounds/paper1.wav','sounds/paper4.wav']
 
@@ -64,6 +68,7 @@ class GameSetting:
         self.tapeLeftArrow = pygame.image.load("images\icon\TapeLeftArrow.PNG")
         self.tapeClose = pygame.image.load("images\icon\TapeClose.PNG")
 
+        # lobby elements 
         self.lobbyFloor = pygame.image.load("images\lobby\lobbyFloor.JPG")
         self.lobbyWall = pygame.image.load("images\lobby\lobbyWall.PNG")
         self.startShadow = pygame.image.load("images\lobby\startShadow.PNG")
@@ -77,6 +82,7 @@ class GameSetting:
         self.lobbyTable = pygame.image.load("images\lobby\lobbyTable.PNG")
         self.boardSetting = pygame.image.load("images/lobby/boardGameSetting.JPG")
 
+        # Match setting elements
         self.morgana = pygame.image.load("images\profile\Morgana.JPG")
         self.mordred = pygame.image.load("images\profile\Mordred.JPG")
         self.oberon = pygame.image.load("images\profile\Oberon.JPG")
@@ -91,6 +97,7 @@ class GameSetting:
         self.lock = pygame.image.load("images/profile/lock.PNG")
         self.checked = pygame.image.load("images/profile/yes.PNG")
 
+        # Mission map elements
         self.town = pygame.image.load("images/game/town.PNG")
         self.townSky = pygame.image.load("images/game/townSky.JPG")
         self.sign = pygame.image.load("images/game/sign.JPG")
@@ -169,9 +176,20 @@ class GameSetting:
         self.soundEffectVol = 0.5
     
     def getSoundEffectVol(self):
+        '''
+        getSoundEffectVol - method to get sound effect volume
+
+        + return - soundEffectVol which is in 0.0 - 1.0
+        '''
         return self.soundEffectVol
 
     def playSoundWithVol(self,soundPath,vol):
+        '''
+        playSoundWithVol - play sound effect that is able to set the volume
+
+        + soundPath - The string name of sound effect to be played
+        + vol - local sound effect volume 
+        '''
         sound = pygame.mixer.Sound(soundPath)
         sound.set_volume(vol)
         sound.play()
@@ -180,6 +198,11 @@ class GameSetting:
 class StateControl(GameSetting):
 
     def __init__(self):
+        '''
+        __init__ - Constructor of StateControl class
+
+        + GameSetting - GameSetting variable
+        '''
         super(StateControl, self).__init__()
 
         # add state here
