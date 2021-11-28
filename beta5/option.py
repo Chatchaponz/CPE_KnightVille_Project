@@ -6,6 +6,11 @@ from volume import volumeBar
 class OptionMenu(GameScreen):
 
     def __init__(self, control):
+        '''
+        __init__ - Constructor of OptionMenu class.
+       
+       + control - gameControl variable
+        '''
         super(OptionMenu, self).__init__(control)
 
         # Button goes here
@@ -22,6 +27,10 @@ class OptionMenu(GameScreen):
         
 
     def checkEvent(self):
+        '''
+        <<overide>>
+        checkEvent - method to check event and input from volume bar
+        '''
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.Running = False
@@ -32,7 +41,9 @@ class OptionMenu(GameScreen):
                 volumeBar.handleEvent(event)
 
     def displayScreen(self):
-
+        '''
+        displayScreen - loop to display the option screen
+        '''
         self.displayRunning = True
 
         while self.displayRunning:
