@@ -294,7 +294,7 @@ class GameManager(GameScreen):
             # Set other player as host
             if self.playersData != [] and hostAddr != None:
                 for player in self.playersData:
-                    if player != self.player and thisAddr == player.address:
+                    if player != self.player and hostAddr == player.address:
                         player.host = True
                     else:
                         player.host = False
