@@ -32,9 +32,6 @@ class GameSetting:
         # network
         self.network = Network()
 
-        # global player object
-        self.player = Player()
-
         # global data
         # 0 -> players in match
         # 1 -> players data
@@ -131,6 +128,35 @@ class GameSetting:
         for nameSkin in skinList:
             self.skins.append(pygame.image.load( imagePath + nameSkin).convert_alpha())
 
+        
+        #load icons
+        self.evil = pygame.image.load("images\icon\Evil.PNG")
+        self.death = pygame.image.load("images\icon\Death.PNG")
+        self.leader = pygame.image.load("images\icon\leader.PNG")
+        self.merlinIcon = pygame.image.load("images\icon\Merlin.PNG")
+        self.member = pygame.image.load("images\icon\member.PNG")
+        self.aim = pygame.image.load("images\icon\Aim.PNG")
+        self.host = pygame.image.load("images\icon\Host.PNG")
+
+        self.evil = pygame.transform.scale(self.evil, (40,40))
+        self.death = pygame.transform.scale(self.death, (40,40))
+        self.leader = pygame.transform.scale(self.leader, (40,40))
+        self.merlinIcon = pygame.transform.scale(self.merlinIcon, (40,40))
+        self.member = pygame.transform.scale(self.member, (40,40))
+        self.aim = pygame.transform.scale(self.aim, (120,120))
+        self.host = pygame.transform.scale(self.host, (40,40))
+
+        self.iconList = []
+        self.iconList.append(self.host)
+        self.iconList.append(self.evil)
+        self.iconList.append(self.merlinIcon)
+        self.iconList.append(self.leader)
+        self.iconList.append(self.member)
+        self.iconList.append(self.death)
+
+        # global player object
+        self.player = Player(icons = self.iconList)
+        
         # Initialize music player
         pygame.mixer.init(frequency = 44100, size = -16, channels = 2, buffer = 512)
         self.currentMusic = pygame.mixer.music

@@ -244,7 +244,7 @@ class GameManager(GameScreen):
                     hostAddr = thisAddr
                     
                 if thisAddr not in self.othersPlayerInMatch and thisPlayer != "":
-                    tempPlayer = Player(thisPlayer[0], thisPlayer[1], thisPlayer[2], thisPlayer[3])
+                    tempPlayer = Player(thisPlayer[0], thisPlayer[1], thisPlayer[2], thisPlayer[3], icons= self.control.iconList)
                     tempPlayer.address = thisAddr
                     tempPlayer.id = thisPlayerId
                     self.playersData.append(tempPlayer)

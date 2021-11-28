@@ -4,7 +4,7 @@ import os
 
 
 class Player:
-    def __init__(self, x = 0, y = 0, skin = 0, name = "Unknown"):
+    def __init__(self, x = 0, y = 0, skin = 0, name = "Unknown", icons = None):
         # Position
         self.x = int(x)
         self.y = int(y)
@@ -26,31 +26,11 @@ class Player:
         self.playerSkin = pygame.image.load( self.imagePath + self.skinList[self.skin]).convert_alpha()
         self.playerRect = self.playerSkin.get_rect(bottomleft = (self.x, self.y))
 
-        #role icon
-        self.evil = pygame.image.load("images\icon\Evil.PNG")
-        self.death = pygame.image.load("images\icon\Death.PNG")
-        self.leader = pygame.image.load("images\icon\leader.PNG")
-        self.merlin = pygame.image.load("images\icon\Merlin.PNG")
-        self.member = pygame.image.load("images\icon\member.PNG")
-        self.aim = pygame.image.load("images\icon\Aim.PNG")
-        self.host = pygame.image.load("images\icon\Host.PNG")
-
-        self.evil = pygame.transform.scale(self.evil, (40,40))
-        self.death = pygame.transform.scale(self.death, (40,40))
-        self.leader = pygame.transform.scale(self.leader, (40,40))
-        self.merlin = pygame.transform.scale(self.merlin, (40,40))
-        self.member = pygame.transform.scale(self.member, (40,40))
-        self.aim = pygame.transform.scale(self.aim, (120,120))
-        self.host = pygame.transform.scale(self.host, (40,40))
-
+        # Role icon
         self.iconListAvailable = [False,False,False,False,False,False]
         self.iconList = []
-        self.iconList.append(self.host)
-        self.iconList.append(self.evil)
-        self.iconList.append(self.merlin)
-        self.iconList.append(self.leader)
-        self.iconList.append(self.member)
-        self.iconList.append(self.death)
+        if type(icons) is list:
+            self.iconList = icons
 
         # Name
         self.name = name
@@ -64,7 +44,7 @@ class Player:
         self.__identityReveal = False
         self.__unknownReveal = False
 
-        # Player addr (id)
+        # Player addr
         self.address = None
 
         self.id = None
@@ -152,7 +132,7 @@ class Player:
         widthIcon = 40 * numIcon
         iconX = nameX - (widthIcon//2)
 
-        for i in range(6):
+        for i in range(len(self.iconList)):
             if (self.iconListAvailable[i] == True):
                 screen.blit(self.iconList[i], (iconX, nameY - 50))
                 iconX += 40
