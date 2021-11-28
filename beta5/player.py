@@ -33,6 +33,7 @@ class Player:
         self.merlin = pygame.image.load("images\icon\Merlin.PNG")
         self.member = pygame.image.load("images\icon\member.PNG")
         self.aim = pygame.image.load("images\icon\Aim.PNG")
+        self.host = pygame.image.load("images\icon\Host.PNG")
 
         self.evil = pygame.transform.scale(self.evil, (40,40))
         self.death = pygame.transform.scale(self.death, (40,40))
@@ -40,6 +41,16 @@ class Player:
         self.merlin = pygame.transform.scale(self.merlin, (40,40))
         self.member = pygame.transform.scale(self.member, (40,40))
         self.aim = pygame.transform.scale(self.aim, (120,120))
+        self.host = pygame.transform.scale(self.host, (40,40))
+
+        self.iconListAvailable = [False,False,False,False,False,False]
+        self.iconList = []
+        self.iconList.append(self.host)
+        self.iconList.append(self.evil)
+        self.iconList.append(self.merlin)
+        self.iconList.append(self.leader)
+        self.iconList.append(self.member)
+        self.iconList.append(self.death)
 
         # Name
         self.name = name
@@ -77,7 +88,17 @@ class Player:
     def draw(self, screen):
         
         nameX, nameY = self.playerRect.midtop
-        iconX = nameX - 60
+        iconX = 0
+        aimY = nameY + 50
+        numIcon = 0
+        widthIcon = 0
+
+        # Draw Host
+        if self.host == True:
+            self.iconListAvailable[0] = True
+            numIcon += 1
+            #screen.blit(self.hostIcon, (iconX, nameY - 50))
+            #iconX += 40
 
         # Draw player
         screen.blit(self.playerSkin, self.playerRect)
@@ -91,37 +112,51 @@ class Player:
                 nameY -= 25
         # Identity reveal
             if(self.__identityReveal == True):
-                #pygame.draw.rect(screen, (255,0,0), pygame.Rect(nameX, nameY - 25, 30, 30) )
-                screen.blit(self.evil, (iconX, nameY - 50))
-                iconX += 40
+                self.iconListAvailable[1] = True
+                numIcon += 1
+                #screen.blit(self.evil, (iconX, nameY - 50))
+                #iconX += 40
 
         # Unknown reveal
             if(self.__unknownReveal == True):
-                #pygame.draw.rect(screen, (100,100,100), pygame.Rect(nameX, nameY - 25, 30, 30) )
-                screen.blit(self.merlin, (iconX, nameY - 50))
-                iconX += 40
+                self.iconListAvailable[2] = True
+                numIcon += 1
+                #screen.blit(self.merlin, (iconX, nameY - 50))
+                #iconX += 40
         
         # Party leader
             if(self.partyLeader == True):
-                #pygame.draw.rect(screen, (0,255,0), pygame.Rect(nameX, nameY - 25, 30, 30) )
-                screen.blit(self.leader, (iconX, nameY - 50))
-                iconX += 40
+                self.iconListAvailable[3] = True
+                numIcon += 1
+                #screen.blit(self.leader, (iconX, nameY - 50))
+                #iconX += 40
         
         # Party Member
             if(self.isSelected == True):
-                #pygame.draw.rect(screen, (0,0,255), pygame.Rect(nameX, nameY - 50, 30, 30) )
-                screen.blit(self.member, (iconX, nameY - 50))
-                iconX += 40
+                self.iconListAvailable[4] = True
+                numIcon += 1
+                #screen.blit(self.member, (iconX, nameY - 50))
+                #iconX += 40
         
         # Target
             if(self.isTarget == True):
-                #pygame.draw.rect(screen, (255,0,255), pygame.Rect(nameX, nameY - 50, 30, 30) )
-                screen.blit(self.aim, (nameX - 60, nameY + 50))
+                #self.iconListAvailable[5] = True
+                screen.blit(self.aim, (nameX - 60, aimY))
         
         # Killed
             if(self.isKilled == True):
-                #pygame.draw.rect(screen, (255,255,0), pygame.Rect(nameX, nameY - 50, 30, 30) )
-                screen.blit(self.death, (nameX - 20, nameY - 50))
+                self.iconListAvailable[5] = True
+                numIcon += 1
+                #screen.blit(self.death, (nameX - 20, nameY - 50))
+
+        widthIcon = 40 * numIcon
+        iconX = nameX - (widthIcon//2)
+
+        for i in range(6):
+            if (self.iconListAvailable[i] == True):
+                screen.blit(self.iconList[i], (iconX, nameY - 50))
+                iconX += 40
+                self.iconListAvailable[i] = False
 
         # Draw player's name
         playerNameRect = self.playerName.get_rect(center = (nameX, nameY))

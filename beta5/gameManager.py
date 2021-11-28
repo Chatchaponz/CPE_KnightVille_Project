@@ -287,17 +287,17 @@ class GameManager(GameScreen):
             if self.playersData != [] and hostAddr == None:
                 for player in self.playersData:
                     if player != self.player:
-                        self.player.host = False
+                        player.host = False
         # If I am not a host      
         if foundHost:
             self.player.host = False
             # Set other player as host
             if self.playersData != [] and hostAddr != None:
                 for player in self.playersData:
-                    if player != self.player and thisAddr == self.player.address:
-                        self.player.host = True
+                    if player != self.player and hostAddr == player.address:
+                        player.host = True
                     else:
-                        self.player.host = False
+                        player.host = False
         # set my id
         listOfAllId = list(range(len(self.playersData)))
         myId = list(set(listOfAllId) - set(othersPlayerId))
