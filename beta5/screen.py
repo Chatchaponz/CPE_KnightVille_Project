@@ -4,6 +4,11 @@ from button import Button
 class GameScreen():
 
     def __init__(self, control):
+        '''
+        __init__ - Constructor of GameScreen class
+
+        + control - gameControl variable
+        '''
         self.control = control
 
         self.display = pygame.Surface((self.control.displayWidth, self.control.displayHeight))
@@ -61,14 +66,29 @@ class GameScreen():
 
         
     def blitScreen(self):
+        '''
+        blitScreen - method to draw something into the screen
+        '''
         self.control.screen.blit(self.display, (0, 0))
         pygame.display.update()
     
     def changePageByButton(self, button, page = None):
+        '''
+        changePageByButton - method to change page by button
+
+        + button - button to change page
+        + page - direction page
+        '''
         buttonClick = button.isButtonClick()
         self.changePageByInput(buttonClick, page)
     
     def changePageByInput(self, input, state = None):
+        '''
+        changePageByInput - method to change page by input
+
+        + input -  state that indicates whether to change page or not
+        + state - the direction page
+        '''
         previousStateLength = len(self.control.previousState)
         if input:
             if state == None and previousStateLength > 0:
@@ -84,6 +104,15 @@ class GameScreen():
             self.displayRunning = False
 
     def drawText(self, text, size, x, y, font, color):
+        ''' 
+        drawText - method to draw or display the text
+
+        + text - the text to display 
+        + size - the size of the text
+        + x, y - the coordinate position of the text Rect.
+        + font - the font type of the text
+        + color - the color of the text
+        '''
         font = pygame.font.Font(font, size)
         textSurface = font.render(text, True, color)
         textRect = textSurface.get_rect()
@@ -91,6 +120,9 @@ class GameScreen():
         self.display.blit(textSurface, textRect)
 
     def checkEvent(self):
+        '''
+        checkEvent - method to check the event
+        '''
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.Running = False
@@ -99,6 +131,13 @@ class GameScreen():
                 sys.exit()
 
     def howToPlaySetup(self, x, y, text, pageList = [1,1,1,1,1,1,1,1,1,1]):
+        '''
+        howToPlaySetup - method to set up How to play menu
+
+        + x, y - the coordinate position of an object.
+        + text - the text on an object
+        + pageList - list of the pageg status
+        '''
         self.buttonHowToPlay = Button(x, y, 170, 60)
         self.buttonHowToPlay.addText( text, self.font1, 30, self.control.white, (50,50,50))
         self.buttonHowToPlay.addImage(self.buttonBG)
@@ -111,7 +150,16 @@ class GameScreen():
             n += 1
         self.amountOfHowToPlayPage = len(self.howToPlay)
 
+
     def howToPlayDraw(self, available):
+        '''
+        howToPlayDraw - to displays "How to play" menu
+        + available - the state of the popup (popup is showing or not)
+
+        + return 
+            true - if How to play is showing up
+            false - if How to play menu is closed or close button is clicked
+        '''
         self.buttonHowToPlay.draw(self.display, available)
         if available:
             if self.buttonHowToPlay.isButtonClick(self.clickChoiceSound,self.control.getSoundEffectVol()):
