@@ -133,7 +133,9 @@ class Player:
         iconX = nameX - (widthIcon//2)
 
         for i in range(len(self.iconList)):
-            if (self.iconListAvailable[i] == True):
+            if (len(self.iconListAvailable) == len(self.iconList) and
+                self.iconListAvailable[i] == True):
+                
                 screen.blit(self.iconList[i], (iconX, nameY - 50))
                 iconX += 40
                 self.iconListAvailable[i] = False
