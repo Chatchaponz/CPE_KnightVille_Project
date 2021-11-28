@@ -153,6 +153,7 @@ class GameSetting:
         self.iconList.append(self.leader)
         self.iconList.append(self.member)
         self.iconList.append(self.death)
+        self.iconList.append(self.aim)
 
         # global player object
         self.player = Player(icons = self.iconList)

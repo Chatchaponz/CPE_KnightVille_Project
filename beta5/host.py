@@ -31,7 +31,7 @@ class HostMenu(GameScreen):
         self.buttonRight = Button(self.buttonLeft.rect.right + 70, self.buttonLeft.rect.y, 55, self.buttonLeft.rect.height)
         self.buttonRight.addText('>', self.font1, 20, pygame.Color('white'), pygame.Color('darkgreen'), pygame.Color('darkgrey'))
 
-        self.howToPlaySetup( self.screenWidth - 250, 80, 'Help',  [1,0,0,1,0,0,0,0,0,0])
+        self.howToPlaySetup( self.screenWidth - 250, 80, 'Help',  [1,0,0,1,0,0,0,0,0,0,0])
 
         # Player numbers
         self.numPlayer = 5

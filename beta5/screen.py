@@ -130,7 +130,7 @@ class GameScreen():
                 pygame.quit()
                 sys.exit()
 
-    def howToPlaySetup(self, x, y, text, pageList = [1,1,1,1,1,1,1,1,1,1]):
+    def howToPlaySetup(self, x, y, text, pageList = [1,1,1,1,1,1,1,1,1,1,1]):
         '''
         howToPlaySetup - method to set up How to play menu
 

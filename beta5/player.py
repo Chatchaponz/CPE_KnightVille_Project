@@ -29,8 +29,10 @@ class Player:
         # Role icon
         self.iconListAvailable = [False,False,False,False,False,False]
         self.iconList = []
+        self.aim = None
         if type(icons) is list:
-            self.iconList = icons
+            self.iconList = icons[:6]
+            self.aim = icons[6]
 
         # Name
         self.name = name

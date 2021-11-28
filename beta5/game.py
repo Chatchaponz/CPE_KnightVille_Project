@@ -30,7 +30,7 @@ class Game(GameManager):
         self.available = True
 
         # Button
-        self.howToPlaySetup( 30, 20, 'How to play', [0,0,0,1,1,1,1,1,1,1])
+        self.howToPlaySetup( 30, 20, 'How to play', [0,0,0,1,1,1,1,1,1,1,1])
 
         self.buttonReveal = Button(30, 100, 170, 60)
         self.buttonReveal.addText('Reveal role', self.font1, 30, control.white, (50,50,50))
