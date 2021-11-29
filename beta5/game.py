@@ -247,7 +247,7 @@ class Game(GameManager):
                     self.nameList = self.makeNameList()
                 for id, name in enumerate(self.nameList):
                     name.draw(self.display, self.available)
-                    if name.isButtonClick() and self.available:
+                    if name.isButtonClick(self.soundList[10],self.control.getSoundEffectVol()) and self.available:
                         if id in self.partyMember:
                             self.partyMember.remove(id)
                         elif (id not in self.partyMember and
@@ -258,7 +258,7 @@ class Game(GameManager):
                 self.updateSelectedPlayer(self.partyMember)
                 if len(self.partyMember) == memberLimit:
                     self.summit.draw(self.display, self.available)
-                    if self.summit.isButtonClick() and self.available:
+                    if self.summit.isButtonClick(self.soundList[11],self.control.getSoundEffectVol()) and self.available:
                         self.player.choose = 3
             else:
                 self.updateSelectedPlayer(self.partyMember)
@@ -267,9 +267,9 @@ class Game(GameManager):
             if self.player.choose not in [1, 2]:
                 self.accept.draw(self.display, self.available)
                 self.reject.draw(self.display, self.available)
-                if self.accept.isButtonClick() and self.available:
+                if self.accept.isButtonClick(self.soundList[11],self.control.getSoundEffectVol()) and self.available:
                     self.player.choose = 1
-                if self.reject.isButtonClick() and self.available:
+                if self.reject.isButtonClick(self.soundList[11],self.control.getSoundEffectVol()) and self.available:
                     self.player.choose = 2
         
         if self.gamePhase == 5:
@@ -280,11 +280,11 @@ class Game(GameManager):
             if self.player.id in self.partyMember:
                 if self.player.choose not in [4, 5]:
                     self.success.draw(self.display, self.available)
-                    if self.success.isButtonClick() and self.available:
+                    if self.success.isButtonClick(self.soundList[10],self.control.getSoundEffectVol()) and self.available:
                         self.player.choose = 4
                     if self.player.getRole().getIdentity() == "Evil":
                         self.fail.draw(self.display, self.available)
-                        if self.fail.isButtonClick() and self.available:
+                        if self.fail.isButtonClick(self.soundList[10],self.control.getSoundEffectVol()) and self.available:
                             self.player.choose = 5
         
         if self.gamePhase == 8:
@@ -322,12 +322,12 @@ class Game(GameManager):
                             self.nameList = self.makeNameList()
                         for id, name in enumerate(self.nameList):
                             name.draw(self.display, self.available)
-                            if name.isButtonClick() and self.available:
+                            if name.isButtonClick(self.soundList[10],self.control.getSoundEffectVol()) and self.available:
                                 self.targetPlayer = id
                             self.updateTargetPlayer(self.targetPlayer)
                         if self.targetPlayer != None:
                             self.summit.draw(self.display, self.available)
-                            if self.summit.isButtonClick() and self.available:
+                            if self.summit.isButtonClick(self.soundList[11],self.control.getSoundEffectVol()) and self.available:
                                 self.isKilled = True
                                 killedPlayer = self.killPlayer(self.isKilled)
                     else:
@@ -465,7 +465,7 @@ class Game(GameManager):
             # reveal button
             self.buttonReveal.draw(self.display, self.available)
             if self.available and self.player.getRole() != None and self.playersData != []:
-                if self.buttonReveal.isButtonClick():
+                if self.buttonReveal.isButtonClick(self.clickChoiceSound,self.control.getSoundEffectVol()):
                     if not self.buttonRevealStatus:
                         self.buttonRevealStatus = True
                     elif self.buttonRevealStatus:
