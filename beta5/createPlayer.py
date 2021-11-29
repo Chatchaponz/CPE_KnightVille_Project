@@ -4,15 +4,24 @@ from popup import Popup
 from screen import GameScreen
 from textbox import Textbox
 
-
+'''
+createPlayer.py - page to create player data such as name and skin.
+last updated: 22 nov 2021
+'''
 class CreatePlayer(GameScreen):
-    
+    '''
+    CreatePlayer - Page uses to create player data.
+    '''
     def __init__(self, control):
+        '''
+        __init__ - Constructor of Create player page.
+        + control - gameControl variable.
+        '''
         super(CreatePlayer, self).__init__(control)
         self.network = control.network
         self.player = control.player
 
-        # Image / Button goes here vvvv
+        # Component image.
         self.rightArrow = control.rightArrow
         self.leftArrow = control.leftArrow
         self.arrowWidth = self.rightArrow.get_rect().width
@@ -21,6 +30,7 @@ class CreatePlayer(GameScreen):
         self.dressingCabWidth = self.dressingCab.get_rect().width
         self.dressingRoom = control.dressingRoom
         
+        # Component button.
         self.buttonJoin = Button(self.screenWidth//2 - 40, self.dressingCab.get_height(), 80, 35)
         self.buttonJoin.addText('JOIN', self.font2, 20, (255, 255, 255), 1, (144, 109, 99), (120, 90, 82))
 
@@ -30,22 +40,28 @@ class CreatePlayer(GameScreen):
         self.buttonRight = Button((self.screenWidth//2) + 80, 360, self.arrowWidth, self.arrowHeight)
         self.buttonRight.addImage(self.rightArrow)
 
+        # Input textbox to get player name.
         self.playerName = Textbox(self.screenWidth//2 - 125, 150, 250, 35, 
         pygame.Color('white'), pygame.Color('white'), 15, 'Your In-game name',self.font, 20)
         self.playerName.text = ''
 
+        # Popup for player name error.
         self.popupNoIGN = Popup(self.screenWidth//2 - 250, self.screenHeight//2 - 90, 500, 180, 
         'Please enter your/> In-game name with no spacebar', pygame.Color('white'), pygame.Color('darkblue'))
         self.popupNoIGN.modComponents(self.popupNoIGN.b1, 'button', (97, 63, 45), (130,83,50), 'OK', self.font2)
 
+        # Popup state.
         self.triggerNoIGN = False
 
-        #load skins
-        self.skins = self.control.skins
-
-        self.amountSkins = len(self.skins)
+        # Skins for player.
+        self.skins = self.control.skins # Skins
+        self.amountSkins = len(self.skins) # Amount skins
     
     def checkEvent(self):
+        '''
+        <<overide>>
+        checkEvent - method to check event and input to textbox class.
+        '''
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.Running = False
@@ -55,7 +71,9 @@ class CreatePlayer(GameScreen):
             self.playerName.handleEvent(event)
              
     def displayScreen(self):
-
+        '''
+        displayScreen - method to display the screen page.
+        '''
         self.displayRunning = True
 
         skinRect = []
@@ -69,12 +87,12 @@ class CreatePlayer(GameScreen):
 
             self.checkEvent()
 
-            # page blackground
+            # page blackground.
             self.display.fill((255, 150, 200))
             self.display.blit(self.dressingRoom, (0,0))
             self.display.blit(self.dressingCab, ((self.screenWidth//2) - (self.dressingCabWidth//2),80))
 
-            # Things in page vvv
+            # draw page component.
             self.playerName.draw(self.display)
 
             self.display.blit(self.skins[skin], ((self.screenWidth//2) - 95, 550 - skinRect[skin].bottom))
