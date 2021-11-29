@@ -349,8 +349,6 @@ class GameManager(GameScreen):
                         self.player.syncSignal = self.gamePhase
                         self.roundCount = matchData[2]
 
-                    # if len(matchData) > 3:
-                    #     print(matchData[1], matchData[3])
                     if self.voteText == None:
                         voteString = f"reject vote : 0 / {maxPlayer}"
                         self.voteText = self.scoreFont.render(voteString, True, self.control.white)
@@ -384,11 +382,13 @@ class GameManager(GameScreen):
                                 self.voteText = self.scoreFont.render(voteString, True, self.control.white)
 
                             if self.goodScore < currentGood:
+                                self.control.playSoundWithVol(self.soundList[13],self.control.getSoundEffectVol())
                                 self.round.append(1)
                                 self.goodScore = currentGood
                                 self.missionText.append( self.scoreFont.render(str(0), True, self.control.white) )
                             
                             if self.evilScore < currentEvil:
+                                self.control.playSoundWithVol(self.soundList[12],self.control.getSoundEffectVol())
                                 self.round.append(2)
                                 self.evilScore = currentEvil
                                 self.missionText.append( self.scoreFont.render(str(currentEvilCount), True, self.control.white) )

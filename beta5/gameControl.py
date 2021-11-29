@@ -18,7 +18,7 @@ class GameSetting:
         pygame.display.set_caption('KnightVILLe')
 
         # List of sound effects
-        self.soundList = ['sounds/button-30.wav','sounds/button-1.wav','sounds/clickSound.wav','sounds/back.wav','sounds/select.wav','sounds/aclick.wav','sounds/lock.wav','sounds/paper4.wav','sounds/metal2.wav']
+        self.soundList = ['sounds/button-30.wav','sounds/button-1.wav','sounds/clickSound.wav','sounds/back.wav','sounds/select.wav','sounds/aclick.wav','sounds/lock.wav','sounds/paper4.wav','sounds/metal2.wav','sounds/metalHit.wav.','sounds/missionButt1.wav','sounds/missionButt2.wav','sounds/missionFail.wav','sounds/missionSuccess.wav']
         self.paperSoundList = ['sounds/paper1.wav','sounds/paper4.wav']
 
         self.running = True

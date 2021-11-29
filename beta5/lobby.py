@@ -496,7 +496,7 @@ class Lobby(GameManager):
                         self.popupFail.text = failText.upper()
                         print("[Error] ", failText)
                 
-                if self.buttonEditPlayer.isButtonClick(self.soundList[8],self.control.getSoundEffectVol()):
+                if self.buttonEditPlayer.isButtonClick(self.soundList[9],self.control.getSoundEffectVol()):
                     self.popEdit = True
                     if self.currentName == None and self.currentSkin == None:
                         self.currentSkin = self.player.skin
