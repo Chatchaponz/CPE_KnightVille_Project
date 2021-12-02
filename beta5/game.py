@@ -338,10 +338,10 @@ class Game(GameManager):
                 if killedPlayer != None:
                     self.gameEnded = True
                     if killedPlayer.getRole().getName() == "Merlin":
-                        self.drawText('Evil Win!!!', 50 , 500, 300, self.font, self.control.white)
+                        self.drawText('Evil Win!!!', 50 , self.screenWidth//2, self.screenHeight//2 - 100, self.font, self.control.white)
                     else:
-                        self.drawText('Good Win!!!', 50 , 500, 300, self.font, self.control.white)
-                    self.drawText('Enter to exit', 30 , 500, 700, self.font, self.control.white)
+                        self.drawText('Good Win!!!', 50 , self.screenWidth//2, self.screenHeight//2 - 100, self.font, self.control.white)
+                    self.drawText('Enter to exit', 30 , ((self.screenWidth//5) * 4) + 100 , 690, self.font, self.control.white)
                     self.revealAllPlayerRole()
                     
                     if (self.player.host == True and 
@@ -452,7 +452,7 @@ class Game(GameManager):
 
             self.display.blit(self.town, (0,0))
             self.display.blit(self.blackFilter, (self.screenWidth//2 - 200,0))
-            self.display.blit(self.baseSkip, (self.screenWidth//2 - 130, 85))
+            self.display.blit(self.baseSkip, (self.screenWidth//2 - 120, 95))
 
             # draw mission board
             for i in range(5):
@@ -497,9 +497,11 @@ class Game(GameManager):
                 if i == 1:
                     #pygame.draw.rect(self.display, (0,0,255), pygame.Rect(x, 0, 30, 30) )
                     self.display.blit(self.successMission, (self.screenWidth//2 - 150 + (x*60), 10))
+                    pygame.draw.circle(self.display, (0,255,0), (self.screenWidth//2 - 125 + (x*60), 75), 10)
                 if i == 2:
                     #pygame.draw.rect(self.display, (255,0,0), pygame.Rect(x, 0, 30, 30) )
                     self.display.blit(self.failMission, (self.screenWidth//2 - 150 + (x*60), 10))
+                    pygame.draw.circle(self.display, (255,0,0), (self.screenWidth//2 - 125 + (x*60), 75), 10)
                 x += 1
 
             # draw amount of success / fail
@@ -514,12 +516,12 @@ class Game(GameManager):
             x = 0
             for i in range(self.voteRejected):
                 #pygame.draw.rect(self.display, (255,0,255), pygame.Rect(x, 35, 30, 30) )
-                self.display.blit(self.skip[x], (self.screenWidth//2 - 130, 85))
+                self.display.blit(self.skip[x], (self.screenWidth//2 - 120, 95))
                 x += 1
 
             # draw vote text
             if self.voteText != None:
-                self.display.blit( self.voteText, pygame.Rect( self.screenWidth//2 - 65, 85, 30, 30))
+                self.display.blit( self.voteText, pygame.Rect( self.screenWidth//2 - 25, 95, 30, 30))
             
             # draw how to play button
             checkHowToPlayPrevious = checkHowToPlay

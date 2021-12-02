@@ -40,8 +40,10 @@ class GameManager(GameScreen):
         self.roleAvailable = False
 
         # Text for score
-        self.scoreSize = 20
+        self.scoreSize = 15
+        self.voteResultSize = 20
         self.scoreFont = pygame.font.Font(self.font, self.scoreSize)
+        self.voteResultFont = pygame.font.Font(self.font, self.voteResultSize)
 
         # Chat box 
         self.chatPosX, self.chatPosY = 10, 380
@@ -351,7 +353,7 @@ class GameManager(GameScreen):
 
                     if self.voteText == None:
                         voteString = f"reject vote : 0 / {maxPlayer}"
-                        self.voteText = self.scoreFont.render(voteString, True, self.control.white)
+                        self.voteText = self.voteResultFont.render(voteString, True, self.control.white)
                     
                     if self.gamePhase == 0:
                         if len(matchData) > 3:
@@ -379,7 +381,7 @@ class GameManager(GameScreen):
                                 #acceptScore = maxPlayer - currentRejectCount
                                 rejectScore = currentRejectCount
                                 voteString = f"reject vote : {rejectScore} / {maxPlayer}"
-                                self.voteText = self.scoreFont.render(voteString, True, self.control.white)
+                                self.voteText = self.voteResultFont.render(voteString, True, self.control.white)
 
                             if self.goodScore < currentGood:
                                 self.control.playSoundWithVol(self.soundList[13],self.control.getSoundEffectVol())
