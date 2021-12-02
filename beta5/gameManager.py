@@ -4,9 +4,19 @@ from player import Player
 from role import Role
 from textbox import Textbox
 
+'''
+GameManager.py - game event and player data handling
+last updated: 21 Nov 2021
+'''
+
 class GameManager(GameScreen):
     
     def __init__(self, control):
+        '''
+        __init__ - Constructor of GameManager class
+
+        + GameScreen - GameScreen variable
+        '''
         super(GameManager, self).__init__(control)
         self.network = control.network
         self.player = control.player
@@ -66,6 +76,12 @@ class GameManager(GameScreen):
         self.pressEnter = False
     
     def handleChatBoxEvent(self, event, available = True):
+        '''
+        handleChatBoxEvent - event in the chat box handling
+
+        + event - pygame event object
+        + available - popup status (the popup is showing up or not)
+        '''
         if self.chatText.active:
 
             if event.type == pygame.KEYDOWN:
@@ -102,6 +118,15 @@ class GameManager(GameScreen):
             self.chatText.handleEvent(event)
     
     def getNameByAddr(self, addr):
+        '''
+        getNameByAddr - method to get user in-game name from user address
+
+        + addr - user address
+
+        + return 
+            name - user's name
+            ishost - variable indicates the game owner (not the host of the match)
+        '''
         name = ""
         ishost = False
         if(self.currentPlayerInMatch != None and self.playersData != []):
@@ -118,6 +143,17 @@ class GameManager(GameScreen):
         return name, ishost
 
     def drawMessage(self, message: str, nameWidth, namelen, thisPos):
+        '''
+        drawMessage - method to draw a message
+
+        + message - message to draw
+        + nameWidth - width of the sender's name
+        + namelen - length of the sender's name
+        + thisPos - current position of the message
+
+        + return
+            thisPos - current position of the message
+        '''
         n = 30
         if(len(message) + namelen < n):
             thisPos -= 20
@@ -141,7 +177,11 @@ class GameManager(GameScreen):
         return thisPos
     
     def drawChatBox(self, screen):
-        
+        '''
+        drawChatBox - draw and update the chat box
+
+        + screen - GameScreen object
+        '''
         # draw Text box
         self.chatText.draw(screen)
 
@@ -175,6 +215,9 @@ class GameManager(GameScreen):
             self.lastTextPos = textPos # get end text position
 
     def doSendAndReceiveData(self):
+        '''
+        loop run in child thread, responsible for sending and receiving data operation.
+        '''
         while self.allowSendData:
             if self.network.connectStatus == True and self.sendData != []:
                 self.sendAndReceiveData(self.sendData)
@@ -183,11 +226,21 @@ class GameManager(GameScreen):
             time.sleep(0.001)
     
     def setAllPlayersRole(self, randomRoles):
+        '''
+        setAllPlayersRole - random and set all players role
+
+        + randomRoles - list of role number
+        '''
         for player in self.playersData:
             id = player.id
             player.setRole(Role(randomRoles[id]))
     
     def setPartyLeader(self, leaderId):
+        '''
+        setPartyLeader - set the party leader
+
+        + leaderId - ID of the party leader
+        '''
         for player in self.playersData:
             if player.id == leaderId:
                 player.partyLeader = True
@@ -197,6 +250,9 @@ class GameManager(GameScreen):
             self.partyMember = []
     
     def drawPlayers(self):
+        '''
+        drawPlayers - draw the player in the game
+        '''
         canUpdate = False
         self.playersData.sort(key = lambda player: player.y, reverse = False)
         
@@ -213,7 +269,11 @@ class GameManager(GameScreen):
             self.player.update()
     
     def checkExistPlayer(self, currentPlayerInMatch):
-        # check player in match (if they are leave// remove their data)
+        '''
+        checkExistPlayer - check player in match (if they are leave// remove their data)
+
+        + currentPlayerInMatch - current player in match address
+        '''
         for address in self.othersPlayerInMatch :
             if address not in currentPlayerInMatch :
                 self.othersPlayerInMatch.remove(address)
@@ -223,7 +283,11 @@ class GameManager(GameScreen):
                         break
     
     def updatePlayersData(self, othersPlayerData):
+        '''
+        updatePlayersData - check and update player and elements in match
 
+        + othersPlayerData - The other players data
+        '''
         foundHost = False
         hostAddr = None
         othersPlayerId = []
@@ -308,6 +372,11 @@ class GameManager(GameScreen):
 
 
     def sendAndReceiveData(self, sendData = []):
+        '''
+        sendAndReceiveData - send and receive player and match data
+
+        + sendData - variable store data to send and received
+        '''
         data = self.network.tryGetData(sendData)
         if data != None:
             if len(data) > 3:
@@ -323,15 +392,11 @@ class GameManager(GameScreen):
                 if type(data[3]) is list:
                     self.allMessages.clear()
                     self.allMessages += data[3]
-            # if len(data) > 2 and data[2] != None:
-            #     if self.matchSetting == []:
-            #         self.matchSetting += data[2]
-            #     else:
-            #         self.matchSetting.clear()
-            #         self.matchSetting += data[2]
     
     def updateScreenData(self):
-
+        '''
+        updateScreenData - check and update player and event in the match
+        '''    
         if self.othersPlayerData != None and self.currentPlayerInMatch != None:
 
             if (self.matchSetting != [] and 
