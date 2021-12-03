@@ -2,7 +2,10 @@ import pygame
 
 '''
 volume.py - Create a ocject that can adjust with mouse.
-last updated: 6 nov 2021
+
+[Class] + volumeBar
+
+last updated: 6 Nov 2021
 '''
 class volumeBar():
     '''

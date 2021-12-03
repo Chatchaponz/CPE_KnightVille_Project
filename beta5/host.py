@@ -12,11 +12,12 @@ last updated: 21 Nov 2021
 '''
 
 class HostMenu(GameScreen):
-    
+    '''
+    HostMenu - Class to control the host menu page and extra role configuation.
+    '''
     def __init__(self, control):
         '''
         __init__ - Constructor of HostMenu class
-
         + control - gameControl variable
         '''
         super(HostMenu, self).__init__(control)
@@ -121,7 +122,6 @@ class HostMenu(GameScreen):
     def configRole(self, maxrole, buttonList):
         '''
         configRole - check the number of players in match, manage the extra role.
-
         + maxrole - the maximum of role number
         + buttonList - list of buttons name
         '''

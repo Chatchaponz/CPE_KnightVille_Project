@@ -1,12 +1,21 @@
 import pygame, sys, random
 from button import Button
 
-class GameScreen():
+'''
+GameScreen.py - parent class of all game pages.
 
+[Class] + GameEvent
+
+last updated: 27 Oct 2021
+'''
+
+class GameScreen():
+    '''
+    GameScreen - Parent class for all game screens
+    '''
     def __init__(self, control):
         '''
         __init__ - Constructor of GameScreen class
-
         + control - gameControl variable
         '''
         self.control = control
@@ -75,7 +84,6 @@ class GameScreen():
     def changePageByButton(self, button, page = None):
         '''
         changePageByButton - method to change page by button
-
         + button - button to change page
         + page - direction page
         '''
@@ -106,7 +114,6 @@ class GameScreen():
     def drawText(self, text, size, x, y, font, color):
         ''' 
         drawText - method to draw or display the text
-
         + text - the text to display 
         + size - the size of the text
         + x, y - the coordinate position of the text Rect.
@@ -133,7 +140,6 @@ class GameScreen():
     def howToPlaySetup(self, x, y, text, pageList = [1,1,1,1,1,1,1,1,1,1,1]):
         '''
         howToPlaySetup - method to set up How to play menu
-
         + x, y - the coordinate position of an object.
         + text - the text on an object
         + pageList - list of the pageg status

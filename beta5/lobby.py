@@ -6,7 +6,10 @@ from popup import Popup
 
 '''
 lobby.py - page to display the lobby.
-last updated: 22 nov 2021
+
+[Class] + Lobby
+
+last updated: 22 Nov 2021
 '''
 class Lobby(GameManager):
     '''

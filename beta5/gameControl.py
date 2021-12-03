@@ -186,7 +186,6 @@ class GameSetting:
     def playSoundWithVol(self,soundPath,vol):
         '''
         playSoundWithVol - play sound effect that is able to set the volume
-
         + soundPath - The string name of sound effect to be played
         + vol - local sound effect volume 
         '''
@@ -200,7 +199,6 @@ class StateControl(GameSetting):
     def __init__(self):
         '''
         __init__ - Constructor of StateControl class
-
         + GameSetting - GameSetting variable
         '''
         super(StateControl, self).__init__()

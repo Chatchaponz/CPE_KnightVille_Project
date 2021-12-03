@@ -3,6 +3,13 @@ from button import Button
 from gameManager import GameManager
 from popup import Popup
 
+'''
+game.py - 
+
+[Class] + Game
+        
+last updated: 15 Nov 2021
+'''
 class Game(GameManager):
     
     def __init__(self, control):
