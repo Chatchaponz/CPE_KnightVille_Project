@@ -388,9 +388,6 @@ class Game(GameManager):
         checkHowToPlayPrevious = False
 
         self.buttonRevealStatus = False
-
-        # for thread in threading.enumerate(): 
-        #     print(thread.name)
         
         # Set collision
         self.player.collided = []
@@ -403,14 +400,6 @@ class Game(GameManager):
             if len(self.matchSetting) > 0 and len(self.playersData) != self.matchSetting[0]:
                 self.isError = True
                 self.popupFail.text = "Some player are missing"
-                # print("Some player are missing")
-                # if self.network.connectStatus == True:
-                #     self.allowSendData = False
-                #     self.sendDataThread.join()
-                #     self.resetAll()
-                #     if self.player.host == True:
-                #         self.network.stopThisGame()
-                # self.changePageByInput(True, self.control.lobby)
             
             # if network connection issue occur
             if self.network.connectStatus == False:
@@ -456,7 +445,7 @@ class Game(GameManager):
 
             # draw mission board
             for i in range(5):
-                #print (self.assignment[self.matchSetting[0]][i])
+                
                 if self.matchSetting[0] >= 7 and i >= 3:
                     self.display.blit(self.missionShow[self.assignment[self.matchSetting[0]][i] + 1], (self.screenWidth//2 - 150 + (i*60), 10))
                 else:
@@ -477,7 +466,6 @@ class Game(GameManager):
             if self.buttonRevealStatus and self.playersData != []:
                 self.player.revealRole(self.playersData)
 
-            # if self.waitForOthers():
             if (len(self.matchSetting) > 0 and 
                 len(self.playersData) == self.matchSetting[0] and
                 self.network.connectStatus == True):
@@ -486,7 +474,7 @@ class Game(GameManager):
 
             if self.network.connectStatus == True:
                 self.updateScreenData()
-            #     self.sendAndReceiveData(sendData)
+
             self.drawPlayers()
             self.drawChatBox(self.display)
             
