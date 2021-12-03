@@ -3,16 +3,28 @@ from popup import Popup
 from screen import GameScreen
 import pygame, random
 
+'''
+host.py - Manage the player role and extra role selecting, control the host menu page.
+
+[Class] + HostMenu
+
+last updated: 21 Nov 2021
+'''
+
 class HostMenu(GameScreen):
     
     def __init__(self, control):
+        '''
+        __init__ - Constructor of HostMenu class
+
+        + control - gameControl variable
+        '''
         super(HostMenu, self).__init__(control)
         self.network = control.network
         self.player = control.player
         
 
         # Sound goes here 
-        
         self.lockSoundOn = True
         self.alreadyPlay = False
 
@@ -99,11 +111,20 @@ class HostMenu(GameScreen):
         self.available = True
 
     def resetRole(self):
+        '''
+        resetRole - reset all player role 
+        '''
         # Reset Role
         self.role = [False, False, False, True, False] 
         self.count = 0
         
     def configRole(self, maxrole, buttonList):
+        '''
+        configRole - check the number of players in match, manage the extra role.
+
+        + maxrole - the maximum of role number
+        + buttonList - list of buttons name
+        '''
         # Draw role selector button
         for button, name in buttonList:
             self.display.blit(self.roleFrame, (button.rect.centerx - self.roleFrame.get_width()//2, 
@@ -191,7 +212,9 @@ class HostMenu(GameScreen):
             self.alreadyPlay = True
     
     def displayScreen(self):
-
+        '''
+        displayScreen - loop to display the host menu screen
+        '''
         self.hostSuccess = True
         buttonList = [self.buttonBack, self.buttonCreateLobby, self.buttonLeft, self.buttonRight]
         specialRoleList = [[self.buttonRole1, 'Oberon'], [self.buttonRole2, 'Mordred'], [self.buttonRole3, 'Morgana and Percival']]
