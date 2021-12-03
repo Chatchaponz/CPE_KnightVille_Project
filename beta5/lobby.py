@@ -4,21 +4,30 @@ from gameManager import GameManager
 from textbox import Textbox
 from popup import Popup
 
+'''
+lobby.py - page to display the lobby.
+last updated: 22 nov 2021
+'''
 class Lobby(GameManager):
-    
+    '''
+    Lobby - Page uses to display the lobby.
+    '''
     def __init__(self, control):
+        '''
+        __init__ - Constructor of lobby page.
+        + control - gameControl variable.
+        '''
         super(Lobby, self).__init__(control)
 
         # Music
         self.currentMusic = control.currentMusic
         self.musicList = control.musicList
 
-        # Sound Effect
-        
+        # Sound Effect state
         self.lockSoundOn = False
         self.alreadyPlay = False
         
-        # Image / Button goes here vvvv
+        # Components image
         self.lobbyWall = control.lobbyWall
         self.lobbyFloor = control.lobbyFloor
         self.startShadow = control.startShadow
@@ -37,8 +46,10 @@ class Lobby(GameManager):
         self.lobbyTableWidth = self.lobbyTable.get_rect().width
         self.popupBackground = control.popupBackground
         
-        self.howToPlaySetup( self.screenWidth - 200, 20, 'How to play')
+        # How to play Popup
+        self.howToPlaySetup(self.screenWidth - 200, 20, 'How to play')
 
+        # Button
         self.buttonLeave = Button(22, 259, self.startShadowWidth, self.startShadowHeight)
         self.buttonLeave.addImage(self.leaveShadow, self.leaveLight)
 
@@ -56,7 +67,7 @@ class Lobby(GameManager):
         self.popSetting = False
 
 
-        # Setup edit player
+        # Setup Edit player
         self.popEditBg = control.dressingCab.get_rect()
         self.popEditBg.x, self.popEditBg.y = self.screenWidth/2 - self.popEditBg.centerx, self.screenHeight/2 - self.popEditBg.centery
         self.popEditSummit = Button(self.popEditBg.centerx - 50, self.popEditBg.y + 515, 100, 50)
@@ -70,23 +81,30 @@ class Lobby(GameManager):
         self.control.rightArrow.get_height())
         self.buttonRight.addImage(self.control.rightArrow)
 
+        # Text Map Button
         self.topicMap = pygame.font.Font(self.font1, 30).render('Match Setting', True, self.control.black)
         self.topicMapRect = self.topicMap.get_rect()
+        # Text Edit player Button
         self.topicKnight = pygame.font.Font(self.font1, 30).render('Edit Player', True, self.control.black)
         self.topicKnightRect = self.topicKnight.get_rect()
 
-        self.currentSkin = None
-        self.currentName = None
-        self.skins = self.control.skins
-        self.amountSkins = len(self.skins)
+        # Player Information
+        self.currentSkin = None # Current skin.
+        self.currentName = None # Current name.
+        self.skins = self.control.skins # list of skins.
+        self.amountSkins = len(self.skins) # skins number.
         
+        # Textbox to get Player's new name.
         self.newPlayername = Textbox(self.popEditBg.centerx - 110, self.popEditBg.y + 70, 220, 30, pygame.Color('white'), 
         pygame.Color('white'), 15, fontPath = self.font, size = 20)
 
-        self.popupNoIGN = Popup(self.screenWidth//2 - 250, self.screenHeight//2 - 90, 500, 180, 'Please enter your/> In-game name with no spacebar', 
-        pygame.Color('white'), pygame.Color('darkblue'))
-        self.popupNoIGN.modComponents(self.popupNoIGN.b1, 'button', pygame.Color('darkseagreen4'), pygame.Color('darkslategray'), 'Understand', self.font2)
+        # Popup Error for textbox newPlayername.
+        self.popupNoIGN = Popup(self.screenWidth//2 - 250, self.screenHeight//2 - 90, 500, 180, 
+        'Please enter your/> In-game name with no spacebar', pygame.Color('white'), pygame.Color('darkblue'))
+        self.popupNoIGN.modComponents(self.popupNoIGN.b1, 'button', pygame.Color('darkseagreen4'), pygame.Color('darkslategray'), 
+        'Understand', self.font2)
 
+        # Popup Error of lobby.
         self.popupFail = Popup((self.display.get_width() - 500)//2, (self.display.get_height() - 200)//2, 500, 200, 
         'Unknown Error', pygame.Color('white'), pygame.Color('cyan3'), type = 0)
         self.popupFail.adjustComponents(bWidth = 70, fontPath = self.font1)
@@ -94,7 +112,6 @@ class Lobby(GameManager):
         self.isError = False
 
         # Setup match setting
-
         roleWidth, roleHeight = 80, 80
         self.closeSetting = Button(self.screenWidth - 370, self.screenHeight - 168 - 40, 100, 35)
         self.closeSetting.addText('SAVE', self.font2, 30, bgColor = pygame.Color('grey35'), bgColorOver = pygame.Color('grey27'))
@@ -144,8 +161,14 @@ class Lobby(GameManager):
         # Popup state
         self.available = True
         self.triggerNoIGN = False
-        
+    
     def configRole(self, maxrole, specialRoleList, standardRoleList):
+        '''
+        configRole - method to config role.
+        + maxrole - max number of role can be selects.
+        + specialRoleList - List of special role button object.
+        + standardRoleList - List of standard role surface.
+        '''
         # Draw role selector button
         for spRole, name in specialRoleList:
             self.display.blit(self.roleFrame, (spRole.rect.centerx - self.roleFrame.get_width()//2, 
@@ -237,16 +260,20 @@ class Lobby(GameManager):
             self.control.playSoundWithVol(self.soundList[6],self.control.getSoundEffectVol())
             self.alreadyPlay = True
 
-    # override
     def editMatch(self, maxPlayer, roleList):
-
+        '''
+        editMatch - method to edit match setting.
+        + maxPlayer - max number of player can be in the match.
+        + roleList - List of role.
+        '''
         self.available = False
-        # Popup background
+        # Popup background.
         self.display.blit(self.control.boardSetting, ((self.screenWidth - 800)/2, (self.screenHeight - 450)/2))
         self.drawText('MATCH  SETTING', 40, self.screenWidth/2, (self.screenHeight - 450)/2 + 55, self.font2, self.control.black)
-
+        # Popup button.
         self.closeSetting.draw(self.display)
         
+        # Setting match due to the max number player.
         if maxPlayer <= 6:
             self.configRole(1, roleList[0], roleList[1])
         if maxPlayer > 6 and maxPlayer < 10:
@@ -264,12 +291,14 @@ class Lobby(GameManager):
         
     
     def editPlayer(self):
-
+        '''
+        editPlayer - method to edit player data.
+        '''
         self.available = False
         # Popup background
         self.display.blit(self.control.dressingCab, (self.popEditBg.x, self.popEditBg.y))
         
-        # Skin
+        # Skin.
         self.display.blit(self.skins[self.currentSkin], (self.popEditBg.centerx - self.skins[self.currentSkin].get_width()/2, 
         self.popEditBg.bottom - self.skins[self.currentSkin].get_rect().bottom - 125))
 
@@ -278,6 +307,7 @@ class Lobby(GameManager):
 
         self.newPlayername.draw(self.display)
 
+        # Previous skin in list of skin.
         self.buttonLeft.draw(self.display)
         if self.buttonLeft.isButtonClick(self.soundList[4],self.control.getSoundEffectVol()):
             if self.currentSkin == 0:
@@ -285,6 +315,7 @@ class Lobby(GameManager):
             else:
                 self.currentSkin -= 1
 
+        # Next skin in list of skin.
         self.buttonRight.draw(self.display)
         if self.buttonRight.isButtonClick(self.soundList[4],self.control.getSoundEffectVol()):
             if self.currentSkin == self.amountSkins-1:
@@ -312,7 +343,10 @@ class Lobby(GameManager):
                 self.triggerNoIGN = False
     
     def resetLobby(self, leaveToMain = False):
-        
+        '''
+        resetLobby - method to reset data in the lobby.
+        + leaveToMain - is the player leave the lobby to main menu state.
+        '''
         # join thread
         self.allowSendData = False
         self.sendDataThread.join()
@@ -350,6 +384,9 @@ class Lobby(GameManager):
             self.changePageByInput(True, self.control.menu)
 
     def isAllPlayerReady(self):
+        '''
+        isAllPlayerReady - method to check whether player is in ready state to start the match.
+        '''
         ready = True
         for player in self.playersData:
             if player.isPlaying == True:
@@ -357,9 +394,11 @@ class Lobby(GameManager):
                 break
         return ready
 
-
-    # override
     def checkEvent(self):
+        '''
+        <<overide>>
+        checkEvent - method to check event and input to textbox class.
+        '''
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -381,7 +420,9 @@ class Lobby(GameManager):
             self.handleChatBoxEvent(event, self.available)
 
     def displayScreen(self):
-
+        '''
+        displayScreen - method to display the screen page.
+        '''
         self.displayRunning = True
 
         self.player.isPlaying = False
@@ -404,9 +445,6 @@ class Lobby(GameManager):
         self.sendDataThread.daemon = True
         self.sendDataThread.start()
 
-        # for thread in threading.enumerate(): 
-        #     print(thread.name)
-
         # all buttons
         buttonList = [self.buttonEditPlayer, self.buttonMatchSetting, self.buttonStart, self.buttonLeave]
 
@@ -426,12 +464,12 @@ class Lobby(GameManager):
                             self.player.name,
                             self.player.isPlaying]
             
-            # page blackground
+            # page blackground.
             self.display.fill((0, 0, 0))
             self.display.blit(self.lobbyFloor, (0,0))
             self.display.blit(self.lobbyWall, (0,0))
 
-            # draw all button
+            # draw all button.
             for roomButton in buttonList:
                 roomButton.draw(self.display, self.available)
             
@@ -443,7 +481,7 @@ class Lobby(GameManager):
             
             self.drawChatBox(self.display)
 
-            # if network connection issue occur
+            # if network connection issue occur.
             if self.network.connectStatus == False:
                 self.isError = True
                 self.available = False
@@ -451,23 +489,22 @@ class Lobby(GameManager):
 
             if self.available:
 
-                #if self.buttonHowToPlay.isButtonClick(self.clickChoiceSound,self.control.getSoundEffectVol()):
-                    #howToPlayStatus = True
                 if self.buttonLeave.isButtonClick():
                     self.resetLobby(leaveToMain = True)
 
+                # display the shadow text on top of the button edit match and player.
                 for i in range(5):
                     self.display.blit(self.topicKnight, ((self.buttonEditPlayer.rect.centerx + 2 + i) - 
                     self.topicKnightRect.centerx, self.buttonEditPlayer.rect.y - 33 + i))
                     self.display.blit(self.topicMap, ((self.buttonMatchSetting.rect.centerx + 2 + i) - 
                     self.topicMapRect.centerx, self.buttonMatchSetting.rect.y - 63 + i))
-
+            
+                # display the text on top of the button edit match and player.
                 self.drawText('Edit Player', 30, self.buttonEditPlayer.rect.centerx, self.buttonEditPlayer.rect.y - 15, 
                 self.font1, self.control.white)
                 self.drawText('Match Setting', 30, self.buttonMatchSetting.rect.centerx, self.buttonMatchSetting.rect.y - 45, 
                 self.font1, self.control.white)
             
-                
                 if self.buttonStart.isButtonClick():
                     if self.player.host == True:
                         self.isError = False
@@ -526,7 +563,7 @@ class Lobby(GameManager):
                 gameStart = self.matchSetting[2]
                 maxPlayer = self.matchSetting[0]
 
-                # Pop edit player
+                # Popup edit player
                 if self.popEdit == True and not gameStart:
                     self.editPlayer()
                 
@@ -539,7 +576,6 @@ class Lobby(GameManager):
                     self.changePageByInput(True, self.control.game)
 
             if self.isError:
-
                 self.popupFail.draw(self.display, self.font2, 30, textAlign= 'centerAlign',  bgColor = None, 
                 image = self.popupBackground)
                 self.available = False
