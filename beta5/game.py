@@ -3,9 +3,22 @@ from button import Button
 from gameManager import GameManager
 from popup import Popup
 
+'''
+game.py - Create and display in the game state
+          Including game phases and displaying all game objects
+
+[Class] + Game
+        
+last updated: 15 Nov 2021
+'''
 class Game(GameManager):
     
     def __init__(self, control):
+        '''
+        __init__ - Constructor of Game class.
+       
+       + control - gameControl variable
+        '''
         super(Game, self).__init__(control)
 
         # Image
@@ -80,8 +93,11 @@ class Game(GameManager):
             10: [3, 4, 4, 5, 5]
         }
     
-    # override
     def checkEvent(self):
+        '''
+        <<overide>>
+        checkEvent - method to check matchsetting,game status, and input from player
+        '''
         for event in pygame.event.get():
 
             gameStart = True
@@ -119,6 +135,9 @@ class Game(GameManager):
                 self.player.resetMovement()
     
     def resetAll(self):
+        '''
+        resetAll - reaet all variables
+        '''
         self.buttonRevealStatus = False
         self.available = True
         self.sendData = []
@@ -152,8 +171,13 @@ class Game(GameManager):
             player.isKilled = False
             player.setRoleReveal(False)
 
-    # vvv Name list make here (Can Change)
     def makeNameList(self):
+        '''
+        makeNameList - make a list of names for selection
+
+        + return
+            nameList - list of all player name buttons.
+        '''
         initPositionY = 100
         nameList = []
         self.playersData.sort(key = lambda player: player.id, reverse = False)
@@ -166,6 +190,9 @@ class Game(GameManager):
         return nameList
 
     def revealAllPlayerRole(self):
+        '''
+        revealAllPlayerRole - method for display all player roles
+        '''
         player_x = 10
         self.playersData.sort(key = lambda player: player.id, reverse = False)
         for player in self.playersData:
@@ -174,6 +201,10 @@ class Game(GameManager):
             player_x += 150
     
     def updateSelectedPlayer(self, partyMember):
+        '''
+        updateSelectedPlayer - update the status of players (party member)
+        + partyMember - a list of selected players for Party
+        '''
         for player in self.playersData:
             if player.id in partyMember:
                 player.isSelected = True
@@ -181,6 +212,10 @@ class Game(GameManager):
                 player.isSelected = False
     
     def updateTargetPlayer(self, id):
+        '''
+        updateTargetPlayer - update the status of players (assassin target)
+        + id - id of the player that is targeted by assassin
+        '''
         for player in self.playersData:
             if player.id == id:
                 player.isTarget = True
@@ -188,6 +223,14 @@ class Game(GameManager):
                 player.isTarget = False
     
     def killPlayer(self, killStatus = False):
+        '''
+        killPlayer - update player status when is killed by assassin
+        + killStatus - the status of player if is killed or not
+
+        + return
+            player - the player object that is selected to be killed (return when the player is targeted)
+            None - return when it not in the assassin phase and the assassin targeting others and not kill yet
+        '''
         if killStatus:
             for player in self.playersData:
                 if player.id == self.targetPlayer and player.isTarget:
@@ -197,6 +240,9 @@ class Game(GameManager):
             return None
     
     def revealAssassin(self):
+        '''
+        revealAssassin - reveal the assassin role player
+        '''
         for player in self.playersData:
             if player.getRole() != None:
                 if player.getRole().getName() == "Assassin":
@@ -204,6 +250,13 @@ class Game(GameManager):
                     break
     
     def isOthersGameEnded(self):
+        '''
+        isOthersGameEnded - for checking if other players game ended
+
+        + return
+            status - return true when player game end
+                     return false when player game does not end yet
+        '''
         status = True
         for gameStatus in self.othersGameStatus:
             if gameStatus == False:
@@ -219,6 +272,9 @@ class Game(GameManager):
     # choose = 5 : fail
     
     def phaseEvent(self):
+        '''
+        phaseEvent - containing each phase's tasks and what should be done in each phase
+        '''
 
         if len(self.matchSetting) > 2:
             playerNumber = self.matchSetting[0]
@@ -372,6 +428,9 @@ class Game(GameManager):
     # Phase 9 : Conclusion
     
     def displayScreen(self):
+        '''
+        displayScreen - display all required objects in the game phase
+        '''
 
         self.displayRunning = True
         # inintial

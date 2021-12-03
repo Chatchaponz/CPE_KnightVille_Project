@@ -3,8 +3,18 @@ from button import Button
 from screen import GameScreen
 from volume import volumeBar
 
-class OptionMenu(GameScreen):
+'''
+option.py - Manage the option page
 
+[Class] + OptionMenu
+
+last updated: 27 Oct 2021
+'''
+
+class OptionMenu(GameScreen):
+    '''
+    Option - Class to manage the option page
+    '''
     def __init__(self, control):
         '''
         __init__ - Constructor of OptionMenu class.

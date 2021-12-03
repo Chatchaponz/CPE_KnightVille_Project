@@ -6,9 +6,23 @@ from screen import GameScreen
 from button import Button
 from popup import Popup
 
+'''
+menu.py - control the main menu screen 
+
+[Class] + MainMenu
+
+last updated: 27 Oct 2021
+'''
+
 class MainMenu(GameScreen):
-    
+    '''
+    MainMenu - control the main menu screen
+    '''
     def __init__(self, control):
+        '''
+        __init__ - Constructor of MainMenu class
+        + control - gameControl variable
+        '''
         super(MainMenu, self).__init__(control)
         self.network = control.network
 
@@ -89,6 +103,10 @@ class MainMenu(GameScreen):
         self.errorMessage = ""
 
     def checkEvent(self):
+        '''
+        <<overide>>
+        checkEvent - method to check event for hosting and joining
+        '''
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.Running = False
@@ -103,20 +121,31 @@ class MainMenu(GameScreen):
                 self.popupHost.t2.handleEvent(event, False)
     
     def makeConnection(self, ip, port):
+        '''
+        makeConnection - check and make a connection 
+        + ip - IPv4 of the server that user want to host or join
+        + port - port of the server that user want to host or join
+        '''
         self.connecting = True
         self.connectResult, self.errorMessage = self.network.tryConnectServer(str(ip), int(port))
         self.connecting = False
         self.finishConnection = True
 
-
     def doConnection(self, ip, port):
+        '''
+        doConnection - make child thread to connect to the server with the provided IPv4 and port
+        + ip - IPv4 of the server that user want to host or join
+        + port - port of the server that user want to host or join
+        '''
         if not self.connecting:
             connectionThread = threading.Thread(target= self.makeConnection, args=(ip, port,))
             connectionThread.daemon = True
             connectionThread.start()
     
     def displayScreen(self):
-
+        '''
+        displayScreen - method to displays elements in the main menu screen 
+        '''
         self.displayRunning = True
         
         buttonList = [self.buttonHost, self.buttonJoin, self.buttonOption, self.buttonQuit]

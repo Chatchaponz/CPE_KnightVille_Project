@@ -5,7 +5,10 @@ pygame.key.set_repeat(500, 80)
 
 '''
 textbox.py - Create a textbox object which can get input text on an object.
-last updated: 29 oct 2021
+
+[Class] + Textbox
+
+last updated: 29 Oct 2021
 '''
 
 class Textbox():

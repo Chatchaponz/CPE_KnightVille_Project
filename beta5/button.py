@@ -2,6 +2,8 @@ import pygame
 '''
 button.py - Create a button object with button property.
 
+[Class] + Button
+
 last updated: 30 oct 2021
 '''
 

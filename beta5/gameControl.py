@@ -8,7 +8,19 @@ from createPlayer import CreatePlayer
 from lobby import Lobby
 from game import Game
 
+'''
+gameControl.py - main game controller and local variable
+
+[Class] + GameSetting
+        + GameControl
+
+last updated: 27 Oct 2021
+'''
+
 class GameSetting:
+    '''
+    GameSetting - main setting of the game and match
+    '''
     def __init__(self):
         '''
         __init__ - Constructor of GameSetting class
@@ -179,14 +191,13 @@ class GameSetting:
         '''
         getSoundEffectVol - method to get sound effect volume
 
-        + return - soundEffectVol which is in 0.0 - 1.0
+        + return - soundEffectVol which is in 0.0 - 1.0 range
         '''
         return self.soundEffectVol
 
     def playSoundWithVol(self,soundPath,vol):
         '''
         playSoundWithVol - play sound effect that is able to set the volume
-
         + soundPath - The string name of sound effect to be played
         + vol - local sound effect volume 
         '''
@@ -196,11 +207,12 @@ class GameSetting:
         
 
 class StateControl(GameSetting):
-
+    '''
+    StateControl - Screen's state controller
+    '''
     def __init__(self):
         '''
         __init__ - Constructor of StateControl class
-
         + GameSetting - GameSetting variable
         '''
         super(StateControl, self).__init__()
@@ -218,15 +230,24 @@ class StateControl(GameSetting):
     
 
     def saveState(self):
+        '''
+        saveState - Save the current state of the game (state of the screen)
+        '''
         self.previousState.append(self.currentState)
     
     def changeState(self, state):
-        # reset all previous state when come back to main manu
+        '''
+        chaneState - change to the direction state, reset all previous state when come back to main manu
+        + state - the direction state 
+        '''
         if state == self.menu:
             self.previousState.clear()
         self.currentState = state
 
     def goBack(self):
+        '''
+        goBack - method to return to the previous state
+        '''
         try:
             returnState = self.previousState.pop()
         except Exception as e:

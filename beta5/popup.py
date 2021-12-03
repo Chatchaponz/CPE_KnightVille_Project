@@ -7,7 +7,8 @@ popup.py - Create a popup object contain word textbox and button.
            1. Popup that let user know the information.
            2. Popup that ask user on a certian information.
            3. Popup that ask user permision.
-last updated: 10 nov 2021
+           
+last updated: 10 Nov 2021
 '''
 class Popup:
     '''

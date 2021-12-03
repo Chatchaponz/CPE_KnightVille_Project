@@ -6,11 +6,16 @@ from textbox import Textbox
 
 '''
 GameManager.py - game event and player data handling
+
+[Class] + GameManager
+
 last updated: 21 Nov 2021
 '''
 
 class GameManager(GameScreen):
-    
+    '''
+    GameManager - Class to manage the event in the game 
+    '''
     def __init__(self, control):
         '''
         __init__ - Constructor of GameManager class

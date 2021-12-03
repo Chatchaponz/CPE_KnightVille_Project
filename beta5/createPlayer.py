@@ -6,6 +6,9 @@ from textbox import Textbox
 
 '''
 createPlayer.py - page to create player data such as name and skin.
+
+[Class] + CreatePlayer
+
 last updated: 22 nov 2021
 '''
 class CreatePlayer(GameScreen):
