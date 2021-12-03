@@ -2,9 +2,22 @@ from sys import path
 import pygame
 import os
 
-
+'''
+player.py - create player data.
+last updated: 17 nov 2021
+'''
 class Player:
+    '''
+    Player - Player data.
+    '''
     def __init__(self, x = 0, y = 0, skin = 0, name = "Unknown", icons = None):
+        '''
+        ___init__ - Contructor of player data.
+        + x, y - Coordinate whereabouts of player.
+        + skin - Skin of player.
+        + name - Player name.
+        + icons - Role icon of player
+        '''
         # Position
         self.x = int(x)
         self.y = int(y)
@@ -68,7 +81,10 @@ class Player:
         self.isKilled = False
 
     def draw(self, screen):
-        
+        '''
+        draw - method to draw player.
+        + screen - surface object.
+        '''
         nameX, nameY = self.playerRect.midtop
         iconX = 0
         aimY = nameY + 50
@@ -79,8 +95,6 @@ class Player:
         if self.host == True:
             self.iconListAvailable[0] = True
             numIcon += 1
-            #screen.blit(self.hostIcon, (iconX, nameY - 50))
-            #iconX += 40
 
         # Draw player
         screen.blit(self.playerSkin, self.playerRect)
@@ -96,41 +110,30 @@ class Player:
             if(self.__identityReveal == True):
                 self.iconListAvailable[1] = True
                 numIcon += 1
-                #screen.blit(self.evil, (iconX, nameY - 50))
-                #iconX += 40
 
         # Unknown reveal
             if(self.__unknownReveal == True):
                 self.iconListAvailable[2] = True
                 numIcon += 1
-                #screen.blit(self.merlin, (iconX, nameY - 50))
-                #iconX += 40
         
         # Party leader
             if(self.partyLeader == True):
                 self.iconListAvailable[3] = True
                 numIcon += 1
-                #screen.blit(self.leader, (iconX, nameY - 50))
-                #iconX += 40
         
         # Party Member
             if(self.isSelected == True):
                 self.iconListAvailable[4] = True
                 numIcon += 1
-                #screen.blit(self.member, (iconX, nameY - 50))
-                #iconX += 40
         
         # Target
             if(self.isTarget == True):
-                #self.iconListAvailable[5] = True
                 screen.blit(self.aim, (nameX - 60, aimY))
         
         # Killed
             if(self.isKilled == True):
                 self.iconListAvailable[5] = True
                 numIcon += 1
-                #screen.blit(self.death, (nameX - 20, nameY - 50))
-
         widthIcon = 40 * numIcon
         iconX = nameX - (widthIcon//2)
 
@@ -153,8 +156,11 @@ class Player:
         screen.blit(self.playerName, playerNameRect)
     
     def update(self):
-        self.velX = 0
-        self.velY = 0
+        '''
+        update - method to update player data.
+        '''
+        self.velX = 0 # X Coordinate.
+        self.velY = 0 # Y Coordinate.
 
         if self.goLeft and not self.goRight:
             self.velX = -self.speed
@@ -165,6 +171,7 @@ class Player:
         if self.goDown and not self.goUp:
             self.velY = self.speed
         
+        # Collide of player coordinate.
         if self.collided != [] and len(self.collided) > 1:
             if (self.x + self.velX > self.collided[0][0] and 
                 self.x + self.velX < (self.collided[0][1] - self.playerRect.width)):
@@ -179,21 +186,44 @@ class Player:
         self.playerRect = self.playerSkin.get_rect(bottomleft = (int(self.x), int(self.y)))
     
     def setRole(self, role):
+        '''
+        setRole - method to set player role.
+        + role - role being given.
+        '''
         self.__role = role
 
     def getRole(self):
+        '''
+        getRole - method to get player role.
+        '''
         return self.__role
     
     def setRoleReveal(self, boolean = False):
+        '''
+        setRoleReveal - method to reveal role.
+        + boolean - reveal role state.
+        '''
         self.__roleReveal = boolean
     
     def setIdentityReveal(self, boolean = False):
+        '''
+        setIdentityReveal - method to reveal faction.
+        + boolean - reveal identity state.
+        '''
         self.__identityReveal = boolean
     
     def setUnknownReveal(self, boolean = False):
+        '''
+        setUnknownReveal - method to reveal merlin candidate for percival
+        + boolean - percival reveal merlin candidate state.
+        '''
         self.__unknownReveal = boolean
     
     def revealRole(self, otherPlayers):
+        '''
+        revealRole - method to reveal role of other players.
+        + otherPlayers - other players data.
+        '''
         self.__roleReveal = True
         if self.__role != None:
             if self.__role.getName() == "Oberon":
@@ -201,6 +231,10 @@ class Player:
             self.__role.doSpecial(otherPlayers)
     
     def unrevealRole(self, otherPlayers):
+        '''
+        unrevealRole - method to cancel reveal role.
+        + otherPlayers - other players data.
+        '''
         self.__roleReveal = False
         self.__identityReveal = False
         for player in otherPlayers:
@@ -209,17 +243,30 @@ class Player:
             player.setUnknownReveal(False)
     
     def updateByPosition(self, x, y):
+        '''
+        updateByPosition - method to update players position by being move.
+        + x, y - Coordinate.
+        '''
         self.x = x
         self.y = y
         self.playerRect = self.playerSkin.get_rect(bottomleft = (int(self.x), int(self.y)))
     
     def resetMovement(self):
+        '''
+        resetMovement - method to update players position by not being move.
+        '''
         self.goLeft = False
         self.goRight = False
         self.goUp = False
         self.goDown = False
     
     def setAttribute(self, x = 0, y = 0, skin = 0, name = "Unknown"):
+        '''
+        setAttribute - method to set player attribute.
+        + x, y - Coordinate.
+        + skin - Player skin.
+        + name - Player name.
+        '''
         self.x = x
         self.y = y
 
@@ -233,16 +280,27 @@ class Player:
         self.resetMovement()
     
     def updateSkin(self, skin = 0):
+        '''
+        updateSkin - method to update player skin.
+        + skin - Skin address in list of skins.
+        '''
         self.skin = skin
         self.playerSkin = pygame.image.load( self.imagePath + self.skinList[self.skin]).convert_alpha()
         self.playerRect = self.playerSkin.get_rect(bottomleft = (self.x, self.y))
 
     def updateName(self, name = "Unknown"):
+        '''
+        updateName - method to update player name.
+        + name - Player name.
+        '''
         self.name = name
         self.playerName = self.font.render(self.name, True, self.fontColor)
 
-    # 'event' should be event in pygame.event.get()
     def playerMovement(self, event):
+        '''
+        playerMovement - method to check whether player is being move.
+        + event - event object.
+        '''
         if event.type == pygame.KEYDOWN:
             if event.key in [pygame.K_LEFT, pygame.K_a]:
                 self.goLeft = True
