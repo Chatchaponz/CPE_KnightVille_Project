@@ -37,6 +37,7 @@ class Player:
         self.imagePath = "images/skins/"
         self.skinList = os.listdir(self.imagePath)
         self.playerSkin = pygame.image.load( self.imagePath + self.skinList[self.skin]).convert_alpha()
+        self.initPlayerSkin = self.playerSkin
         self.playerRect = self.playerSkin.get_rect(bottomleft = (self.x, self.y))
 
         # Role icon
@@ -97,6 +98,10 @@ class Player:
             numIcon += 1
 
         # Draw player
+        if self.goLeft:
+            self.playerSkin = self.initPlayerSkin
+        elif self.goRight:
+            self.playerSkin = pygame.transform.flip(self.initPlayerSkin, True, False)
         screen.blit(self.playerSkin, self.playerRect)
 
         if(self.__role != None):

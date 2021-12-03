@@ -356,8 +356,8 @@ class Game(GameManager):
                 
             if self.evilScore == 3:
                 self.gameEnded = True
-                self.drawText('Evil Win!!!', 50 , 500, 300, self.font, self.control.white)
-                self.drawText('Enter to exit', 30 , 500, 700, self.font, self.control.white)
+                self.drawText('Evil Win!!!', 50 ,self.screenWidth//2, self.screenHeight//2 - 100, self.font, self.control.white)
+                self.drawText('Enter to exit', 30 , ((self.screenWidth//5) * 4) + 100 , 690, self.font, self.control.white)
                 self.revealAllPlayerRole()
 
                 if (self.player.host == True and 
