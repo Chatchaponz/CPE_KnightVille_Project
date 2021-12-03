@@ -237,8 +237,8 @@ class StateControl(GameSetting):
     
     def changeState(self, state):
         '''
-        chaneState - reset all previous state when come back to main manu
-        + state - the state that is changing to
+        chaneState - change to the direction state, reset all previous state when come back to main manu
+        + state - the direction state 
         '''
         if state == self.menu:
             self.previousState.clear()
