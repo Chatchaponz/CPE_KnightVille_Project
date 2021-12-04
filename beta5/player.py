@@ -37,7 +37,7 @@ class Player:
         self.imagePath = "images/skins/"
         self.skinList = os.listdir(self.imagePath)
         self.playerSkin = pygame.image.load( self.imagePath + self.skinList[self.skin]).convert_alpha()
-        self.initPlayerSkin = self.playerSkin
+        self.flipPlayerSkin = self.playerSkin
         self.playerRect = self.playerSkin.get_rect(bottomleft = (self.x, self.y))
 
         # Role icon
@@ -99,9 +99,9 @@ class Player:
 
         # Draw player
         if (self.goLeft and not self.goRight) or self.px > self.x:
-            self.playerSkin = self.initPlayerSkin
+            self.playerSkin = self.flipPlayerSkin
         elif (self.goRight and not self.goLeft) or self.px < self.x:
-            self.playerSkin = pygame.transform.flip(self.initPlayerSkin, True, False)
+            self.playerSkin = pygame.transform.flip(self.flipPlayerSkin, True, False)
         self.px = self.x
         screen.blit(self.playerSkin, self.playerRect)
 
@@ -278,6 +278,7 @@ class Player:
 
         self.skin = skin
         self.playerSkin = pygame.image.load( self.imagePath + self.skinList[self.skin]).convert_alpha()
+        self.flipPlayerSkin = self.playerSkin
         self.playerRect = self.playerSkin.get_rect(bottomleft = (self.x, self.y))
         
         self.name = name
@@ -292,6 +293,7 @@ class Player:
         '''
         self.skin = skin
         self.playerSkin = pygame.image.load( self.imagePath + self.skinList[self.skin]).convert_alpha()
+        self.flipPlayerSkin = self.playerSkin
         self.playerRect = self.playerSkin.get_rect(bottomleft = (self.x, self.y))
 
     def updateName(self, name = "Unknown"):
