@@ -104,15 +104,14 @@ class Game(GameManager):
             if len(self.matchSetting) > 2:
                 gameStart = self.matchSetting[2]
             else:
-                print("No matchsetting") # temp
+                print("No matchsetting")
 
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
             
-            #[TEMP]
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_z and self.player.getRole() != None:
+                if event.key == pygame.K_z and self.player.getRole() != None and not self.gameEnded:
                     self.player.revealRole(self.playersData)
 
                 if event.key == pygame.K_RETURN and self.gameEnded and gameStart == False:
@@ -125,7 +124,7 @@ class Game(GameManager):
             self.handleChatBoxEvent(event)
 
             if event.type == pygame.KEYUP:
-                if event.key == pygame.K_z and self.player.getRole() != None:
+                if event.key == pygame.K_z and self.player.getRole() != None and not self.gameEnded:
                     self.player.unrevealRole(self.playersData)
 
             if (gameStart == True and 
@@ -161,6 +160,7 @@ class Game(GameManager):
         self.roleAvailable = False
         self.player.isPlaying = False 
         self.player.updateByPosition(50, 700)
+        self.player.unrevealRole(self.playersData)
         for player in self.playersData:   
             player.setRole(None)
             player.choose = 0
@@ -194,10 +194,13 @@ class Game(GameManager):
         revealAllPlayerRole - method for display all player roles
         '''
         player_x = 10
+        self.buttonRevealStatus = False # Reset reveal role button status
         self.playersData.sort(key = lambda player: player.id, reverse = False)
         for player in self.playersData:
             player.updateByPosition(player_x, 700)
             player.setRoleReveal(True)
+            player.setIdentityReveal(False)
+            player.setUnknownReveal(False)
             player_x += 150
     
     def updateSelectedPlayer(self, partyMember):
@@ -462,6 +465,7 @@ class Game(GameManager):
         checkHowToPlayPrevious = False
 
         self.buttonRevealStatus = False
+        self.player.unrevealRole(self.playersData)
         
         # Set collision
         self.player.collided = []
