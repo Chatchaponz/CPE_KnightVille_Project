@@ -98,10 +98,6 @@ class Player:
             numIcon += 1
 
         # Draw player
-        if self.goLeft or self.px > self.x:
-            self.playerSkin = self.initPlayerSkin
-        elif self.goRight or self.px < self.x:
-            self.playerSkin = pygame.transform.flip(self.initPlayerSkin, True, False)
         self.px = self.x
         screen.blit(self.playerSkin, self.playerRect)
 
@@ -170,8 +166,10 @@ class Player:
 
         if self.goLeft and not self.goRight:
             self.velX = -self.speed
+            self.playerSkin = self.initPlayerSkin
         if self.goRight and not self.goLeft:
             self.velX = self.speed
+            self.playerSkin = pygame.transform.flip(self.initPlayerSkin, True, False)
         if self.goUp and not self.goDown:
             self.velY = -self.speed
         if self.goDown and not self.goUp:
