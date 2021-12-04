@@ -37,8 +37,9 @@ Summary of steps
 5. Play !!!
 
 [Suggession] You can create your own game mode to increase difficulty.
-For example: - Every user use the same name / same skin
-	     - Every user use name same as role name (but actually your name is not the same as your role)
+For example: 
+- Every user use the same name / same skin
+- Every user use name same as role name (but actually your name is not the same as your role)
 So, Be creative!
 
 Have Fun!!!
