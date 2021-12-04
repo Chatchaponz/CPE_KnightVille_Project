@@ -110,6 +110,12 @@ class Player:
             if(self.__roleReveal == True):
                 roleName = self.font.render("<" + self.__role.getName() + ">", False, self.fontColor)
                 roleNameRect = roleName.get_rect(center = (nameX, nameY))
+                # Role's background
+                bgRoleName = pygame.Surface((roleNameRect.width + 8, roleNameRect.height - 8))
+                bgRoleNameRect = bgRoleName.get_rect(center = roleNameRect.center)
+                bgRoleName.set_alpha(100)
+                bgRoleName.fill((0, 0, 0))
+                screen.blit(bgRoleName, bgRoleNameRect)
                 screen.blit(roleName, roleNameRect)
                 nameY -= 25
         # Identity reveal

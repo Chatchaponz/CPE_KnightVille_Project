@@ -451,7 +451,7 @@ class GameManager(GameScreen):
                             if self.totalReject != currentRejectCount:
                                 # update count
                                 self.totalReject = currentRejectCount
-                                
+
                                 rejectScore = currentRejectCount
                                 voteString = f"reject vote : {rejectScore} / {maxPlayer}"
                                 self.voteText = self.voteResultFont.render(voteString, True, self.control.white)
@@ -460,7 +460,7 @@ class GameManager(GameScreen):
                                 self.control.playSoundWithVol(self.soundList[13],self.control.getSoundEffectVol())
                                 self.round.append(1)
                                 self.goodScore = currentGood
-                                self.missionText.append( self.scoreFont.render(str(0), True, self.control.white) )
+                                self.missionText.append( self.scoreFont.render(str(currentEvilCount), True, self.control.white) )
                             
                             if self.evilScore < currentEvil:
                                 self.control.playSoundWithVol(self.soundList[12],self.control.getSoundEffectVol())

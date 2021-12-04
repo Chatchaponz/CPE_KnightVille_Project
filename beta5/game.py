@@ -52,8 +52,8 @@ class Game(GameManager):
         # List for all button of name
         self.nameList = []
 
-        self.summit = Button( self.screenWidth//2 - 50 , 145, 100, 30)
-        self.summit.addText("Summit", self.font, 20, self.control.white, 1, (50,50,50))
+        self.submit = Button( self.screenWidth//2 - 50 , 145, 100, 30)
+        self.submit.addText("Submit", self.font, 20, self.control.white, 1, (50,50,50))
 
         self.accept = Button( self.screenWidth//2 - 100 , 145, 100, 30)
         self.accept.addText("Accept", self.font, 20, self.control.white, 1, (50,50,50))
@@ -322,8 +322,8 @@ class Game(GameManager):
                             print("[GAME] Error assign party member")
                 self.updateSelectedPlayer(self.partyMember)
                 if len(self.partyMember) == memberLimit:
-                    self.summit.draw(self.display, self.available)
-                    if self.summit.isButtonClick(self.soundList[11],self.control.getSoundEffectVol()) and self.available:
+                    self.submit.draw(self.display, self.available)
+                    if self.submit.isButtonClick(self.soundList[11],self.control.getSoundEffectVol()) and self.available:
                         self.player.choose = 3
             else:
                 self.updateSelectedPlayer(self.partyMember)
@@ -400,8 +400,8 @@ class Game(GameManager):
                                 name.textColor = (255, 255, 255)
                             self.updateTargetPlayer(self.targetPlayer)
                         if self.targetPlayer != None:
-                            self.summit.draw(self.display, self.available)
-                            if self.summit.isButtonClick(self.soundList[11],self.control.getSoundEffectVol()) and self.available:
+                            self.submit.draw(self.display, self.available)
+                            if self.submit.isButtonClick(self.soundList[11],self.control.getSoundEffectVol()) and self.available:
                                 self.isKilled = True
                                 killedPlayer = self.killPlayer(self.isKilled)
                     else:
@@ -544,16 +544,16 @@ class Game(GameManager):
             if self.buttonRevealStatus and self.playersData != []:
                 self.player.revealRole(self.playersData)
 
+            if self.network.connectStatus == True:
+                self.updateScreenData()
+
+            self.drawPlayers()
+
             if (len(self.matchSetting) > 0 and 
                 len(self.playersData) == self.matchSetting[0] and
                 self.network.connectStatus == True):
                     self.phaseEvent()
 
-
-            if self.network.connectStatus == True:
-                self.updateScreenData()
-
-            self.drawPlayers()
             self.drawChatBox(self.display)
             
             # TEMP
