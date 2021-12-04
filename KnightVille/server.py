@@ -655,4 +655,4 @@ while True:
     # Start separate thread using "threadedClient" function
     thread = threading.Thread(target= threadedClient, args= (conn, addr))
     thread.start()
-    print(f"[SERVER] ACTIVE CONNECTIONS {threading.activeCount() - 2}")
+    print(f"[SERVER] ACTIVE CONNECTIONS {threading.active_count() - 2}")
