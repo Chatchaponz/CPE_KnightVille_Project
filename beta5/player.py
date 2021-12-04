@@ -1,4 +1,3 @@
-from sys import path
 import pygame
 import os
 
@@ -60,7 +59,7 @@ class Player:
         self.__identityReveal = False
         self.__unknownReveal = False
 
-        # Player addr
+        # Player's status
         self.address = None
 
         self.id = None

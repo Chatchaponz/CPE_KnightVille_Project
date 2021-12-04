@@ -19,7 +19,7 @@ class OptionMenu(GameScreen):
         '''
         __init__ - Constructor of OptionMenu class.
        
-       + control - gameControl variable
+        + control - gameControl variable
         '''
         super(OptionMenu, self).__init__(control)
 
@@ -60,6 +60,7 @@ class OptionMenu(GameScreen):
             self.checkEvent()
             self.display.blit(self.control.hostBoard, (0, 0))
 
+            # Set background music / sound effect volumn
             for volumeBar, text in self.volumeList:
                 volumeBar.draw(self.display, self.control.offFilter, text, None, 26)
             self.control.currentMusic.set_volume(self.music.value/100)

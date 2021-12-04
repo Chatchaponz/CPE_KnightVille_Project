@@ -1,7 +1,4 @@
-import sys
-import threading
-import pygame
-import random
+import pygame, sys, threading
 from screen import GameScreen
 from button import Button
 from popup import Popup
@@ -236,7 +233,7 @@ class MainMenu(GameScreen):
 
                     if self.finishConnection:
                         
-                        # reset
+                        # Reset host status
                         self.hosting = False
                         self.hostClicked = False
                         self.finishConnection = False
@@ -257,7 +254,7 @@ class MainMenu(GameScreen):
             if self.joining: #JOINING
                 self.popupJoin.draw(self.display, self.font2, 52, textAlign = 'centerAlign', bgColor = None, 
                 image = self.popupBackground)
-                # self.popupJoin.b4.draw(self.display) # OPTIONAL TO DRAWN GUIDE BUTTON ON POPUP
+
                 if not self.connecting:
 
                     if (self.popupJoin.b1.isButtonClick(self.clickChoiceSound,self.control.getSoundEffectVol()) and 
@@ -280,7 +277,7 @@ class MainMenu(GameScreen):
 
                     if self.finishConnection:
 
-                        # reset
+                        # Reset join status
                         self.joining = False
                         self.joinClicked = False
                         self.finishConnection = False

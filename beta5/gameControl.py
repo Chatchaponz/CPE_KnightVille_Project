@@ -30,7 +30,21 @@ class GameSetting:
         pygame.display.set_caption('KnightVILLe')
 
         # List of sound effects
-        self.soundList = ['sounds/button-30.wav','sounds/button-1.wav','sounds/clickSound.wav','sounds/back.wav','sounds/select.wav','sounds/aclick.wav','sounds/lock.wav','sounds/paper4.wav','sounds/metal2.wav','sounds/metalHit.wav.','sounds/missionButt1.wav','sounds/missionButt2.wav','sounds/missionFail.wav','sounds/missionSuccess.wav']
+        self.soundList = ['sounds/button-30.wav',
+                        'sounds/button-1.wav',
+                        'sounds/clickSound.wav',
+                        'sounds/back.wav',
+                        'sounds/select.wav',
+                        'sounds/aclick.wav',
+                        'sounds/lock.wav',
+                        'sounds/paper4.wav',
+                        'sounds/metal2.wav',
+                        'sounds/metalHit.wav.',
+                        'sounds/missionButt1.wav',
+                        'sounds/missionButt2.wav',
+                        'sounds/missionFail.wav',
+                        'sounds/missionSuccess.wav']
+
         self.paperSoundList = ['sounds/paper1.wav','sounds/paper4.wav']
 
         self.running = True
@@ -45,10 +59,10 @@ class GameSetting:
         self.white = (255, 255, 255)
         self.black = (0, 0, 0)
 
-        # network
+        # Network
         self.network = Network()
 
-        # global data
+        # Global data
         # 0 -> players in match
         # 1 -> players data
         # 2 -> current match setting
@@ -57,7 +71,7 @@ class GameSetting:
         # 5 -> other player's data
         self.globalData = [[], [], [], [], [], []]
 
-        #load game image
+        # Load game image
         self.knightCover = pygame.image.load("images\menuUI\knightCover.PNG")
         self.BGCover = pygame.image.load("images\menuUI\BGCover.PNG")
         self.skyCover = pygame.image.load("images\menuUI\skyCover.JPG")
@@ -80,7 +94,7 @@ class GameSetting:
         self.tapeLeftArrow = pygame.image.load("images\icon\TapeLeftArrow.PNG")
         self.tapeClose = pygame.image.load("images\icon\TapeClose.PNG")
 
-        # lobby elements 
+        # Lobby elements 
         self.lobbyFloor = pygame.image.load("images\lobby\lobbyFloor.JPG")
         self.lobbyWall = pygame.image.load("images\lobby\lobbyWall.PNG")
         self.startShadow = pygame.image.load("images\lobby\startShadow.PNG")
@@ -131,16 +145,17 @@ class GameSetting:
         self.success = pygame.image.load("images/game/success.PNG")
         self.fail = pygame.image.load("images/game/fail.PNG")
 
+        # Game icon
         pygame.display.set_icon(self.oberonIcon)
 
-        #load How-to-play material
+        # Load How-to-play material
         self.howToPlay = []
         howToPlayPath = "images/howToPlay/"
         howToPlayList = os.listdir(howToPlayPath)
         for howToPlayPage in howToPlayList:
             self.howToPlay.append(pygame.image.load( howToPlayPath + howToPlayPage).convert_alpha())
 
-        #load skins
+        # Load skins
         self.skins = []
         imagePath = "images/skins/"
         skinList = os.listdir(imagePath)
@@ -148,7 +163,7 @@ class GameSetting:
             self.skins.append(pygame.image.load( imagePath + nameSkin).convert_alpha())
 
         
-        #load icons
+        # Load icons
         self.evil = pygame.image.load("images\icon\Evil.PNG")
         self.death = pygame.image.load("images\icon\Death.PNG")
         self.leader = pygame.image.load("images\icon\leader.PNG")
@@ -174,13 +189,14 @@ class GameSetting:
         self.iconList.append(self.death)
         self.iconList.append(self.aim)
 
-        # global player object
+        # Global player object
         self.player = Player(icons = self.iconList)
         
         # Initialize music player
         pygame.mixer.init(frequency = 44100, size = -16, channels = 2, buffer = 512)
         self.currentMusic = pygame.mixer.music
         self.musicList = ['musics/JOAK_Final.wav','musics/BGM.wav']
+        
         # Set default volume to 50%
         self.currentMusic.set_volume(0.25)
 
@@ -208,7 +224,7 @@ class GameSetting:
 
 class StateControl(GameSetting):
     '''
-    StateControl - Screen's state controller
+    StateControl - Screen's state controller inherited from GameSetting
     '''
     def __init__(self):
         '''
@@ -217,7 +233,7 @@ class StateControl(GameSetting):
         '''
         super(StateControl, self).__init__()
 
-        # add state here
+        # All game's state
         self.menu = MainMenu(self)
         self.option = OptionMenu(self)
         self.host = HostMenu(self)

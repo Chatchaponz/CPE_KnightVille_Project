@@ -1,4 +1,4 @@
-import pygame, sys, threading, random
+import pygame, sys, threading
 from button import Button 
 from gameManager import GameManager
 from textbox import Textbox
@@ -448,7 +448,7 @@ class Lobby(GameManager):
         self.sendDataThread.daemon = True
         self.sendDataThread.start()
 
-        # all buttons
+        # All buttons
         buttonList = [self.buttonEditPlayer, self.buttonMatchSetting, self.buttonStart, self.buttonLeave]
 
         # Set collision
@@ -467,12 +467,12 @@ class Lobby(GameManager):
                             self.player.name,
                             self.player.isPlaying]
             
-            # page blackground.
+            # Page blackground
             self.display.fill((0, 0, 0))
             self.display.blit(self.lobbyFloor, (0,0))
             self.display.blit(self.lobbyWall, (0,0))
 
-            # draw all button.
+            # Draw all button
             for roomButton in buttonList:
                 roomButton.draw(self.display, self.available)
             
@@ -484,7 +484,7 @@ class Lobby(GameManager):
             
             self.drawChatBox(self.display)
 
-            # if network connection issue occur.
+            # If network connection issue occur
             if self.network.connectStatus == False:
                 self.isError = True
                 self.available = False
@@ -495,14 +495,14 @@ class Lobby(GameManager):
                 if self.buttonLeave.isButtonClick():
                     self.resetLobby(leaveToMain = True)
 
-                # display the shadow text on top of the button edit match and player.
+                # Display the shadow text on top of the button edit match and player
                 for i in range(5):
                     self.display.blit(self.topicKnight, ((self.buttonEditPlayer.rect.centerx + 2 + i) - 
                     self.topicKnightRect.centerx, self.buttonEditPlayer.rect.y - 33 + i))
                     self.display.blit(self.topicMap, ((self.buttonMatchSetting.rect.centerx + 2 + i) - 
                     self.topicMapRect.centerx, self.buttonMatchSetting.rect.y - 63 + i))
             
-                # display the text on top of the button edit match and player.
+                # Display the text on top of the button edit match and player
                 self.drawText('Edit Player', 30, self.buttonEditPlayer.rect.centerx, self.buttonEditPlayer.rect.y - 15, 
                 self.font1, self.control.white)
                 self.drawText('Match Setting', 30, self.buttonMatchSetting.rect.centerx, self.buttonMatchSetting.rect.y - 45, 

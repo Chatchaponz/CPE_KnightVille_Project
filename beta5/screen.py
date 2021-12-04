@@ -60,6 +60,7 @@ class GameScreen():
         self.currentPage = 0
         self.howToPlayStatus = False
 
+        # Button
         self.buttonTapeRight = Button(self.screenWidth - self.tapeArrowWidth - 80, self.screenHeight//2 - 20, self.tapeArrowWidth, self.tapeArrowHeight)
         self.buttonTapeRight.addImage(self.tapeRightArrow)
 

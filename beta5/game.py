@@ -67,7 +67,7 @@ class Game(GameManager):
         self.fail = Button( self.screenWidth//2 , 145, 100, 30)
         self.fail.addText("Fail", self.font, 20, self.control.white, 1, (50,50,50))
 
-        # render font
+        # Render font
         signSize = 12
         signFont = pygame.font.Font(self.font, signSize)
         self.signText = signFont.render("select your team member", True, self.control.white)
@@ -83,7 +83,7 @@ class Game(GameManager):
         # Reveal Role
         self.buttonRevealStatus = False
 
-        # number of assignment in each round per maxplayer
+        # Number of assignment in each round per maxplayer
         self.assignment = {
             5: [2, 3, 2, 3, 3],
             6: [2, 3, 4, 3, 4],
@@ -136,7 +136,7 @@ class Game(GameManager):
     
     def resetAll(self):
         '''
-        resetAll - reaet all variables
+        resetAll - reaet all nessessary variables
         '''
         self.buttonRevealStatus = False
         self.available = True
@@ -276,22 +276,26 @@ class Game(GameManager):
         phaseEvent - containing each phase's tasks and what should be done in each phase
         '''
 
+        # Check match setting
         if len(self.matchSetting) > 2:
             playerNumber = self.matchSetting[0]
             gameStart = self.matchSetting[2]
 
+        # Check current role (is this player already have a role?)
         if self.gamePhase == 0:
             if self.player.getRole() != None:
                 self.roleAvailable = True
             else:
                 self.roleAvailable = False
 
+        # Reset party member list and party member selected sign 
         if self.gamePhase == 1:
             if self.partyMember != []:
                 self.partyMember = []
             if self.player.isSelected == True:
                 self.player.isSelected = False
 
+        # List of name to select party member
         if self.gamePhase == 2:
             if self.player.partyLeader == True:
                 pygame.draw.rect( self.display, (255, 255, 255), pygame.Rect(self.screenWidth-200, 0, 5,  50 + 50*len(self.nameList)) )
@@ -306,9 +310,11 @@ class Game(GameManager):
                     if name.isButtonClick(self.soundList[10],self.control.getSoundEffectVol()) and self.available:
                         if id in self.partyMember:
                             self.partyMember.remove(id)
+                            name.textColor = (255, 255, 255)
                         elif (id not in self.partyMember and
                             len(self.partyMember) < memberLimit):
                             self.partyMember.append(id)
+                            name.textColor = (0, 255, 0)
                         else:
                             print("[GAME] Error assign party member")
                 self.updateSelectedPlayer(self.partyMember)
@@ -319,6 +325,7 @@ class Game(GameManager):
             else:
                 self.updateSelectedPlayer(self.partyMember)
         
+        # Button for select accept or reject
         if self.gamePhase == 3:
             if self.player.choose not in [1, 2]:
                 self.accept.draw(self.display, self.available)
@@ -328,10 +335,12 @@ class Game(GameManager):
                 if self.reject.isButtonClick(self.soundList[11],self.control.getSoundEffectVol()) and self.available:
                     self.player.choose = 2
         
+        # Reset player choice
         if self.gamePhase == 5:
             if self.player.choose != 0:
                 self.player.choose = 0
         
+        # Select success or fail (if you are evil)
         if self.gamePhase == 6:
             if self.player.id in self.partyMember:
                 if self.player.choose not in [4, 5]:
@@ -343,10 +352,12 @@ class Game(GameManager):
                         if self.fail.isButtonClick(self.soundList[10],self.control.getSoundEffectVol()) and self.available:
                             self.player.choose = 5
         
+        # Reset player choice
         if self.gamePhase == 8:
             if self.player.choose != 0:
                 self.player.choose = 0
         
+        # End game phase Evil win or Assassin select to kill and/or Good win 
         if self.gamePhase == 9:
 
             if self.player.partyLeader == True:
@@ -380,6 +391,10 @@ class Game(GameManager):
                             name.draw(self.display, self.available)
                             if name.isButtonClick(self.soundList[10],self.control.getSoundEffectVol()) and self.available:
                                 self.targetPlayer = id
+                            if id == self.targetPlayer:
+                                name.textColor = (255, 0, 0)
+                            else:
+                                name.textColor = (255, 255, 255)
                             self.updateTargetPlayer(self.targetPlayer)
                         if self.targetPlayer != None:
                             self.summit.draw(self.display, self.available)
@@ -393,7 +408,7 @@ class Game(GameManager):
                     
                 if killedPlayer != None:
                     self.gameEnded = True
-                    if killedPlayer.getRole().getName() == "Merlin":
+                    if killedPlayer.getRole() != None and killedPlayer.getRole().getName() == "Merlin":
                         self.drawText('Evil Win!!!', 50 , self.screenWidth//2, self.screenHeight//2 - 100, self.font, self.control.white)
                     else:
                         self.drawText('Good Win!!!', 50 , self.screenWidth//2, self.screenHeight//2 - 100, self.font, self.control.white)
@@ -431,9 +446,9 @@ class Game(GameManager):
         '''
         displayScreen - display all required objects in the game phase
         '''
-
-        self.displayRunning = True
         # inintial
+        self.displayRunning = True
+
         self.player.updateByPosition(50, 700)
         self.player.isPlaying = True
         self.isError = False

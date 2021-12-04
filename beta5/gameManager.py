@@ -26,6 +26,7 @@ class GameManager(GameScreen):
         self.network = control.network
         self.player = control.player
 
+        # Global data
         self.othersPlayerInMatch = control.globalData[0]
         self.playersData = control.globalData[1]
         self.matchSetting = control.globalData[2]
@@ -33,9 +34,11 @@ class GameManager(GameScreen):
         self.currentPlayerInMatch = control.globalData[4]
         self.othersPlayerData = control.globalData[5]
 
+        # List of data to be send
         self.sendData = []
         self.sendDataThread = None
 
+        # General data (game phase, round, score, member, role)
         self.gamePhase = 0
         self.targetPlayer = None
         self.isKilled = False
@@ -314,12 +317,14 @@ class GameManager(GameScreen):
                     foundHost = True
                     hostAddr = thisAddr
                     
+                # vvv When see player first time (will create new object of player)
                 if thisAddr not in self.othersPlayerInMatch and thisPlayer != "":
                     tempPlayer = Player(thisPlayer[0], thisPlayer[1], thisPlayer[2], thisPlayer[3], icons= self.control.iconList)
                     tempPlayer.address = thisAddr
                     tempPlayer.id = thisPlayerId
                     self.playersData.append(tempPlayer)
                     self.othersPlayerInMatch.append(thisAddr)
+                # vvv When that player already in match (will up data only data not create player anew)
                 elif thisAddr in self.othersPlayerInMatch:
                     for player in self.playersData:
                         if player != self.player and player.address == thisAddr:
@@ -348,7 +353,7 @@ class GameManager(GameScreen):
                     if thisPlayer != "":
                         print("[GAME] Something wrong with update player data")
 
-        # check that others already end there game
+        # Check that others already end there game
         self.othersGameStatus = othersStatus
 
         # If I am a host
@@ -369,7 +374,7 @@ class GameManager(GameScreen):
                         player.host = True
                     else:
                         player.host = False
-        # set my id
+        # Set my id
         listOfAllId = list(range(len(self.playersData)))
         myId = list(set(listOfAllId) - set(othersPlayerId))
         if len(myId) > 0:
@@ -407,13 +412,12 @@ class GameManager(GameScreen):
             if (self.matchSetting != [] and 
                 type(self.matchSetting) is list and
                 len(self.matchSetting) > 2):
-            # print(self.matchSetting)
 
                 gameStart = self.matchSetting[2]
                 matchData = self.matchSetting[1]
                 maxPlayer = self.matchSetting[0]
                 
-                # sync game phase and update match data
+                # Sync game phase and update match data
                 if gameStart:
 
                     if len(matchData) > 2:
@@ -422,7 +426,7 @@ class GameManager(GameScreen):
                         self.roundCount = matchData[2]
 
                     if self.voteText == None:
-                        voteString = f"reject vote : 0 / {maxPlayer}"
+                        voteString = f"Reject vote : 0 / {maxPlayer}"
                         self.voteText = self.voteResultFont.render(voteString, True, self.control.white)
                     
                     if self.gamePhase == 0:
@@ -447,8 +451,7 @@ class GameManager(GameScreen):
                             if self.totalReject != currentRejectCount:
                                 # update count
                                 self.totalReject = currentRejectCount
-
-                                #acceptScore = maxPlayer - currentRejectCount
+                                
                                 rejectScore = currentRejectCount
                                 voteString = f"reject vote : {rejectScore} / {maxPlayer}"
                                 self.voteText = self.voteResultFont.render(voteString, True, self.control.white)

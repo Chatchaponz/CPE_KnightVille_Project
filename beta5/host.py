@@ -1,7 +1,7 @@
 from button import Button
 from popup import Popup 
 from screen import GameScreen
-import pygame, random
+import pygame
 
 '''
 host.py - Manage the player role and extra role selecting, control the host menu page.
@@ -23,7 +23,6 @@ class HostMenu(GameScreen):
         super(HostMenu, self).__init__(control)
         self.network = control.network
         self.player = control.player
-        
 
         # Sound goes here 
         self.lockSoundOn = True
@@ -100,7 +99,6 @@ class HostMenu(GameScreen):
         self.count = 0
 
         # Popup
-        
         popWidth, popHeight = 500, 130
         self.hostFailed = Popup((self.screenWidth - popWidth)//2, (self.screenHeight - popHeight)//2, popWidth, popHeight, 'Unknown Error',
         self.control.white, pygame.Color('darkblue'))
