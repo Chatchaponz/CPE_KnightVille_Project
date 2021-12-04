@@ -98,9 +98,9 @@ class Player:
             numIcon += 1
 
         # Draw player
-        if self.goLeft or self.px > self.x:
+        if (self.goLeft and not self.goRight) or self.px > self.x:
             self.playerSkin = self.initPlayerSkin
-        elif self.goRight or self.px < self.x:
+        elif (self.goRight and not self.goLeft) or self.px < self.x:
             self.playerSkin = pygame.transform.flip(self.initPlayerSkin, True, False)
         self.px = self.x
         screen.blit(self.playerSkin, self.playerRect)
