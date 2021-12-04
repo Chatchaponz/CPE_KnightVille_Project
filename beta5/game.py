@@ -319,12 +319,15 @@ class Game(GameManager):
                             self.partyMember.append(id)
                             name.textColor = (0, 255, 0)
                         else:
-                            print("[GAME] Error assign party member")
+                            print("[GAME] Cannot assign party member")
                 self.updateSelectedPlayer(self.partyMember)
                 if len(self.partyMember) == memberLimit:
                     self.submit.draw(self.display, self.available)
                     if self.submit.isButtonClick(self.soundList[11],self.control.getSoundEffectVol()) and self.available:
                         self.player.choose = 3
+                        if self.nameList != []: # Reset name's color
+                            for name in self.nameList:
+                                name.textColor = (255, 255, 255)
             else:
                 self.updateSelectedPlayer(self.partyMember)
         
