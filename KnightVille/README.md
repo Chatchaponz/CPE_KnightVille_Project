@@ -29,7 +29,7 @@ Must already install in your computer (and maybe more | see full constraint in d
 
 P.S. KnightVille is the Avalon-like game the tutorial is already in "How to play" button within game
 
-Summary of step
+Summary of steps
 1. Run "server.py"
 2. Run "main.py"
 3. Host
@@ -42,3 +42,10 @@ For example: - Every user use the same name / same skin
 So, Be creative!
 
 Have Fun!!!
+
+Create by Computer Engineering Student:
+Nithi Piyaphonnarinthon	 	62070503430
+Romtam Tanpituckpong		62070503444
+Wagee Jr. Nanta Aree 		62070503445
+Chatchapon Sukitporn-udom 	62070503455
+Kantawit Chatdamrongmongkol 	62070503457
