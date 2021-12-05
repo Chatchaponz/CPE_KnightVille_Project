@@ -9,7 +9,7 @@ Must already install in your computer (and maybe more | see full constraint in d
      Server's IPv4 in "server_config.ini" file then restart the server.
    - If "server_config.ini" file damaged, User can simply delete current "server_config.ini" and run "server.py"
      it will generate "server_config.ini" anew.
-   - We recommended not to change the port number if not nessessary.
+   - We recommended not to change the port number if not necessary.
 
 2. - Any user can run game by run "main.py"** as a Player.
    - Number of players should be at least 5 players and can only have a maximum of 10 players.
