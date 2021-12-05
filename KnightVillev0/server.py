@@ -5,7 +5,7 @@ import time
 import random
 import configparser
 from os import path
-from gameSystem.client import Signal
+from client import Signal
 '''
 server - Create server and handle request from clients
 

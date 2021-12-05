@@ -12,6 +12,7 @@ Must already install in your computer (and maybe more | see full constraint in d
 
 2. - Any user can run game by run "main.py"** as a Player
    - Number of players should be at least 5 players and can only have a maximum of 10 players
+   [WARNING] Don't be confuse "main.py" with "menu.py"
 
 3. - One of player need to 'host' the game by click 'host' button in main menu
      then put IPv4 and Port of the server in.

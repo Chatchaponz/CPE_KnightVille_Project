@@ -1,12 +1,12 @@
 import pygame, os
-from gameSystem.network import Network
-from gameSystem.scene.player import Player
-from gameSystem.scene.host import HostMenu
-from gameSystem.scene.menu import MainMenu
-from gameSystem.scene.option import OptionMenu
-from gameSystem.scene.createPlayer import CreatePlayer
-from gameSystem.scene.lobby import Lobby
-from gameSystem.scene.game import Game
+from network import Network
+from player import Player
+from host import HostMenu
+from menu import MainMenu
+from option import OptionMenu
+from createPlayer import CreatePlayer
+from lobby import Lobby
+from game import Game
 
 '''
 gameControl.py - main game controller and local variable
