@@ -453,7 +453,7 @@ class GameManager(GameScreen):
                                 self.totalReject = currentRejectCount
 
                                 rejectScore = currentRejectCount
-                                voteString = f"reject vote : {rejectScore} / {maxPlayer}"
+                                voteString = f"Reject vote : {rejectScore} / {maxPlayer}"
                                 self.voteText = self.voteResultFont.render(voteString, True, self.control.white)
 
                             if self.goodScore < currentGood:
