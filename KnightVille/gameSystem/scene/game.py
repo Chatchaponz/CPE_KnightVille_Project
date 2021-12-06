@@ -21,9 +21,6 @@ class Game(GameManager):
         '''
         super(Game, self).__init__(control)
 
-        # Music
-        self.currentMusic = control.currentMusic
-
         # Image
         self.popupBackground = control.popupBackground
         self.town = control.town
