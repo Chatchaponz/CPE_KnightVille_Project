@@ -21,6 +21,9 @@ class Game(GameManager):
         '''
         super(Game, self).__init__(control)
 
+        # Music
+        self.currentMusic = control.currentMusic
+
         # Image
         self.popupBackground = control.popupBackground
         self.town = control.town
@@ -527,7 +530,7 @@ class Game(GameManager):
             # draw mission board
             for i in range(5):
                 
-                if self.matchSetting[0] >= 7 and i >= 3:
+                if self.matchSetting[0] >= 7 and i == 3:
                     self.display.blit(self.missionShow[self.assignment[self.matchSetting[0]][i] + 1], (self.screenWidth//2 - 150 + (i*60), 10))
                 else:
                     self.display.blit(self.missionShow[self.assignment[self.matchSetting[0]][i] - 1], (self.screenWidth//2 - 150 + (i*60), 10))

@@ -360,7 +360,7 @@ class GameEvent:
                         if self.missionSuccess == None:
                             self.totalEvil = self.countScore(5)
                             if self.totalEvil > 0:
-                                if thisMatch['maxPlayer'] > 6 and self.round == 4:
+                                if thisMatch['maxPlayer'] > 6 and self.round == 3:
                                     if self.totalEvil > 1:
                                         self.missionSuccess = False
                                     else:
